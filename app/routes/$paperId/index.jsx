@@ -10,13 +10,23 @@ import { PaperData } from "~/components/PaperViewer/paper-data.js"
 export const loader = async ({
   params
 }) => {
-  const abstract = await getAbstractFromPaperId(params.paperId)
-  const metadata = await getMetadataFromPaperId(params.paperId)
+  let abstractPromise = getAbstractFromPaperId(params.paperId)
+  let metadataPromise = getMetadataFromPaperId(params.paperId)
+
+  let [abstract, metadata] = await Promise.all([
+    abstractPromise,
+    metadataPromise
+  ])
+
   const data = {
     abstract: abstract,
     metadata: metadata,
   }
   return json(data)
+}
+
+export const action = async({ request }) => {
+  return null
 }
 
 export default function PaperIdIndex(){
