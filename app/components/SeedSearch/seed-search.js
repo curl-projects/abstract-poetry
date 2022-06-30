@@ -1,3 +1,5 @@
+import { Link } from "@remix-run/react"
+
 export function SeedSearch(){
   return(
     <div style={{border: '2px dashed red',
@@ -7,7 +9,7 @@ export function SeedSearch(){
                  justifyContent: "center",
                  alignItems: "center"
                }}>
-      <h1>Start Searching!</h1>
+      <Link to="/exampleId"><h1>Start Searching!</h1></Link>
     </div>
   )
 }
