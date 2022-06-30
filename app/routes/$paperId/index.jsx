@@ -25,17 +25,11 @@ export const loader = async ({
   return json(data)
 }
 
-export const action = async({ request }) => {
-  return null
-}
-
 export default function PaperIdIndex(){
   const params = useParams();
   const data = useLoaderData();
 
-  useEffect(()=>{
-    console.log("DATA:", data)
-  }, [data])
+
 
   return(
     <PaperData

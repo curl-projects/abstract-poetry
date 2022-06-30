@@ -1,8 +1,21 @@
-import { Outlet } from "@remix-run/react"
+import { useEffect } from "react";
+import { Outlet, useActionData } from "@remix-run/react"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 
+export const action = async({ request }) => {
+  const formData = await request.formData();
+  const impression = formData.get('impression')
+  return impression
+}
+
 export default function PaperId(){
+  const actionData = useActionData();
+
+  useEffect(()=>{
+    console.log("ACTION DATA:", actionData)
+  }, [actionData])
+
   return(
     <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center"}}>
       <div className="ComponentWrapper" style={{border: '2px dashed black',
