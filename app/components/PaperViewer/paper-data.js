@@ -11,11 +11,14 @@ export function PaperData(props){
         justifyContent: "center",
         alignItems: "center"
       }}>
+
       <PaperMetadata
         paperId={props.paperId}
+        metadata={props.metadata}
         />
       <PaperAbstract
         paperId={props.paperId}
+        abstract={props.abstract}
         />
     </div>
   )
