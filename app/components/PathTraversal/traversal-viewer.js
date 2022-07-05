@@ -1,4 +1,4 @@
-export function TraversalViewer(){
+export function TraversalViewer(props){
   return(
     <div className="TraversalViewer" style={{
         flex: 1,

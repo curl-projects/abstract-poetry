@@ -1,19 +1,5 @@
-import { useEffect } from "react";
-import { Outlet, useActionData, useParams } from "@remix-run/react"
-import { json } from "@remix-run/node"
-import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
-import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
-import { processImpressions } from "~/models/process-impressions.server.js"
+import { useActionData, useParams } from "@remix-run/react"
 
-export const action = async({ request }) => {
-  const formData = await request.formData();
-  const impression = formData.get('impression')
-  const nearestVector = await processImpressions(impression, [])
-  const data = {
-    nearestVector: nearestVector
-  }
-  return json(data)
-}
 
 export default function PaperId(){
   const params = useParams();

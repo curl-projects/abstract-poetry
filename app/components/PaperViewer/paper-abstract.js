@@ -10,8 +10,8 @@ export function PaperAbstract(props){
       alignItems: "center"
     }}>
       <h1>Paper Abstract</h1>
-      <p>PaperId: {props.paperId}</p>
-      {props.abstract ? <p>{props.abstract.abstract}</p> : <p>No abstract found for paperId "{props.paperId}"</p>}
+      <p>DOI: {props.doi}</p>
+      {props.abstract ? <p>{props.abstract}</p> : <p>No abstract found for Paper "{props.doi}"</p>}
     </div>
   )
 }

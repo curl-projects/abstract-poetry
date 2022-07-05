@@ -1,25 +1,17 @@
 import { useEffect } from "react";
 import { useParams, useLoaderData } from "@remix-run/react"
 import { json } from "@remix-run/node"
-
-import { getAbstractFromPaperId } from "~/models/abstracts.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
+import { deslugifyDoi } from "~/utils/doi-manipulation"
 
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 
 export const loader = async ({
   params
 }) => {
-  let abstractPromise = getAbstractFromPaperId(params.paperId)
-  let metadataPromise = getMetadataFromPaperId(params.paperId)
-
-  let [abstract, metadata] = await Promise.all([
-    abstractPromise,
-    metadataPromise
-  ])
+  let metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
 
   const data = {
-    abstract: abstract,
     metadata: metadata,
   }
   return json(data)
@@ -29,13 +21,14 @@ export default function PaperIdIndex(){
   const params = useParams();
   const data = useLoaderData();
 
-
+  useEffect(()=>{
+    console.log("METADATA:", data)
+  }, [data])
 
   return(
     <PaperData
-      paperId={params.paperId}
-      abstract={data.abstract}
-      metadata={data.metadata}
+      doi={deslugifyDoi(params.paperId)}
+      metadata={data.metadata ? data.metadata : {}}
     />
   )
 }

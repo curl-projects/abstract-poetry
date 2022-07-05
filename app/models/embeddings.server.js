@@ -1,8 +1,17 @@
+import { Redis } from "@upstash/redis"
+
+const redis = new Redis({
+  url: 'https://global-sterling-marlin-30591.upstash.io',
+  token: 'AXd_ASQgOTZkNTJkOGUtNzM3MC00YzRlLThjN2EtOTI3OTljYTc4YTZlODZjNmU1MjMxMWQ1NGRlMGFmMWJmZDdjMjFkNTIwNTY=',
+})
+
+
 export async function getKNNFromVector(vector, topK=1){
   let url = "https://embedding-db-ea3137b.svc.us-west1-gcp.pinecone.io/query"
   let data = {
-    vector: vector,
-    topK: topK
+    "vector": vector,
+    "includeValues": true,
+    "topK": topK,
   }
 
   const res = await fetch(url, {
@@ -13,17 +22,19 @@ export async function getKNNFromVector(vector, topK=1){
       },
       body: JSON.stringify(data)
   })
-  return res
+
+  return res.json()
 }
 
-export async function getKNNFromId(id, topK=1){
+export async function getKNNFromDoi(doi, topK=1){
   let url = "https://embedding-db-ea3137b.svc.us-west1-gcp.pinecone.io/query"
   let data = {
-    id: id,
-    topK: topK
+    "id": doi,
+    "includeValues": true,
+    "topK": 10,
   }
 
-  const res = await fetch(url, {
+  let res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,5 +43,10 @@ export async function getKNNFromId(id, topK=1){
       body: JSON.stringify(data)
   })
 
-  return res
+  return res.json()
+}
+
+export async function checkDoi(doi){
+  let exists = await redis.exists(doi)
+  return exists
 }

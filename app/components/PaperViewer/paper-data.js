@@ -13,12 +13,13 @@ export function PaperData(props){
       }}>
 
       <PaperMetadata
-        paperId={props.paperId}
+        doi={props.doi}
         metadata={props.metadata}
         />
       <PaperAbstract
-        paperId={props.paperId}
-        abstract={props.abstract}
+        doi={props.doi}
+        title={props.metadata.title ? props.metadata.title : ""}
+        abstract={props.metadata.abstract ? props.metadata.abstract : ""}
         />
     </div>
   )
