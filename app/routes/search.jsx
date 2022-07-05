@@ -4,6 +4,7 @@ import { useActionData } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 import { getKNNFromVector, getKNNFromDoi, checkDoi } from "~/models/embeddings.server.js"
 import { slugifyDoi } from "~/utils/doi-manipulation";
+import ls from "local-storage";
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -24,6 +25,10 @@ export const action = async ({ request }) => {
 
 export default function Search(){
   const actionData = useActionData();
+
+  useEffect(()=>{
+    ls.clear()
+  }, [])
 
   useEffect(()=>{
     console.log("actionData:", actionData)

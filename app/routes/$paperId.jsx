@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { Outlet, useActionData, useParams } from "@remix-run/react"
-import { json } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { processImpressions } from "~/models/process-impressions.server.js"
+import { slugifyDoi } from "~/utils/doi-manipulation"
 
 export const action = async({ request }) => {
   const formData = await request.formData();
@@ -47,3 +48,7 @@ export default function PaperId(){
     </div>
   )
 }
+// 
+// export const ErrorBoundary = ({error}) => {
+//   return redirect(`/${slugifyDoi(params.paperId)}`)
+// }
