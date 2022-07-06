@@ -6,15 +6,6 @@ import { nearestNewPaper } from "~/utils/algorithms"
 
 export function ControlPanel(props){
   const params = useParams();
-  const [visitedPapers, setVisitedPapers] = useState([])
-
-  useEffect(()=>{
-    updateVisitedPapers(deslugifyDoi(params.paperId), setVisitedPapers)
-  }, [params.paperId])
-
-  useEffect(()=>{
-    console.log(visitedPapers)
-  }, [visitedPapers])
 
   return(
     <div className="ControlPanel" style={{
@@ -31,7 +22,7 @@ export function ControlPanel(props){
           display: 'flex',
         }}>
         <Form method="post">
-          <input type="hidden" name="visitedPapers" value={visitedPapers}/>
+          <input type="hidden" name="visitedPapers" value={props.visitedPapers}/>
           <button
             name="impression"
             type="submit"

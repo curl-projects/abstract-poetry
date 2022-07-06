@@ -6,9 +6,16 @@ export function TraversalViewer(props){
         border: '2px dashed pink',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        overflow: "scroll"
       }}>
-      <h1>Semantic Traversal</h1>
+      <ol>
+      {props.visitedPapers.map((paper, index) =>
+        <li key={index}>
+          <p>{paper}</p>
+        </li>
+      )}
+      </ol>
     </div>
   )
 }

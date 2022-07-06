@@ -10,6 +10,14 @@ export async function updateVisitedPapers(doi, setter=null){
     }
   }
   else{
+    console.log("HELLO!:", visitedPapers[visitedPapers.length - 1])
+    if(visitedPapers[visitedPapers.length - 1] === deslugifyDoi(doi)){
+      ls.set("visitedPapers", visitedPapers)
+      if(setter !== null){
+        setter(visitedPapers)
+      }
+      return visitedPapers
+    }
     visitedPapers.push(deslugifyDoi(doi))
     ls.set("visitedPapers", visitedPapers)
     if(setter !== null){

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
@@ -32,6 +32,15 @@ export default function PaperId(){
   const params = useParams();
   const data = useLoaderData();
   const actionData = useActionData();
+  const [visitedPapers, setVisitedPapers] = useState([])
+
+  useEffect(()=>{
+    updateVisitedPapers(deslugifyDoi(params.paperId), setVisitedPapers)
+  }, [params.paperId])
+
+  useEffect(()=>{
+    console.log(visitedPapers)
+  }, [visitedPapers])
 
   useEffect(()=>{
     console.log("DATA:", data)
@@ -59,13 +68,17 @@ export default function PaperId(){
           }}>
           <ControlPanel
             actionData={actionData}
+            visitedPapers={visitedPapers}
             />
             <PaperData
               doi={deslugifyDoi(params.paperId)}
               metadata={data.metadata ? data.metadata : {}}
             />
         </div>
-        <TraversalViewer params={params}/>
+        <TraversalViewer
+          visitedPapers={visitedPapers}
+
+          />
       </div>
     </div>
   )
