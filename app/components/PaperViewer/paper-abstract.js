@@ -7,7 +7,8 @@ export function PaperAbstract(props){
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems: "center"
+      alignItems: "center",
+      overflow: 'scroll'
     }}>
       <h1>Paper Abstract</h1>
       <p>DOI: {props.doi}</p>

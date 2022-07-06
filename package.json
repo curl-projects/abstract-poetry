@@ -14,8 +14,13 @@
     "@remix-run/serve": "^1.6.3",
     "@upstash/redis": "^1.7.0",
     "local-storage": "^2.0.0",
+    "localforage": "^1.10.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-d3-tree": "^3.3.2",
+    "react-dom": "^17.0.2",
+    "reactjs-localstorage": "^1.0.1",
+    "tree-model": "^1.0.7",
+    "tree-util": "^1.0.7"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.6.3",

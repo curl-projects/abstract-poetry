@@ -7,7 +7,7 @@ import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
-import { updateVisitedPapers } from "~/utils/visited-papers"
+import { updateVisitedPapers, updateTraversalPath } from "~/utils/visited-papers"
 import ls from "local-storage"
 
 export const loader = async ({
@@ -33,14 +33,21 @@ export default function PaperId(){
   const data = useLoaderData();
   const actionData = useActionData();
   const [visitedPapers, setVisitedPapers] = useState([])
+  const [traversalPath, setTraversalPath] = useState({})
 
   useEffect(()=>{
     updateVisitedPapers(deslugifyDoi(params.paperId), setVisitedPapers)
+    updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath)
   }, [params.paperId])
 
   useEffect(()=>{
     console.log(visitedPapers)
   }, [visitedPapers])
+
+  useEffect(()=>{
+    console.log("TRAVERSAL PATH:", traversalPath)
+  }, [traversalPath])
+
 
   useEffect(()=>{
     console.log("DATA:", data)
@@ -77,7 +84,7 @@ export default function PaperId(){
         </div>
         <TraversalViewer
           visitedPapers={visitedPapers}
-
+          traversalPath={traversalPath}
           />
       </div>
     </div>
