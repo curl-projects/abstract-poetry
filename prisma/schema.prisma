@@ -1,0 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId BigInt @id @default(autoincrement())
+  emailAddress String @unique()
+  traversalPaths TraversalPath[]
+}
+
+model TraversalPath {
+  pathId BigInt @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [userId])
+  userId BigInt
+}

@@ -1,3 +1,6 @@
+import { Link } from "@remix-run/react"
+import { slugifyDoi } from "~/utils/doi-manipulation"
+
 export function TraversalViewer(props){
   return(
     <div className="TraversalViewer" style={{
@@ -11,9 +14,11 @@ export function TraversalViewer(props){
       }}>
       <ol>
       {props.visitedPapers.map((paper, index) =>
-        <li key={index}>
-          <p>{paper}</p>
-        </li>
+        <Link key={index} to={`/${slugifyDoi(paper)}`}>
+          <li>
+            <p>{paper}</p>
+          </li>
+        </Link>
       )}
       </ol>
     </div>
