@@ -5,7 +5,6 @@ const redis = new Redis({
   token: 'AXd_ASQgOTZkNTJkOGUtNzM3MC00YzRlLThjN2EtOTI3OTljYTc4YTZlODZjNmU1MjMxMWQ1NGRlMGFmMWJmZDdjMjFkNTIwNTY=',
 })
 
-
 export async function getKNNFromVector(vector, topK=1){
   let url = "https://embedding-db-ea3137b.svc.us-west1-gcp.pinecone.io/query"
   let data = {
@@ -31,7 +30,7 @@ export async function getKNNFromDoi(doi, topK=1){
   let data = {
     "id": doi,
     "includeValues": true,
-    "topK": 10,
+    "topK": topK,
   }
 
   let res = await fetch(url, {

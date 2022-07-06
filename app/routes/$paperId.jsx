@@ -1,24 +1,41 @@
 import { useEffect } from "react";
-import { Outlet, useActionData, useParams } from "@remix-run/react"
+import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
-import { processImpressions } from "~/models/process-impressions.server.js"
-import { slugifyDoi } from "~/utils/doi-manipulation"
+import { PaperData } from "~/components/PaperViewer/paper-data.js"
+import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
+import { getMetadataFromPaperId } from "~/models/metadata.server.js"
+import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
+import { updateVisitedPapers } from "~/utils/visited-papers"
+import ls from "local-storage"
 
-export const action = async({ request }) => {
-  const formData = await request.formData();
-  const impression = formData.get('impression')
-  const nearestVector = await processImpressions(impression, [])
+export const loader = async ({
+  params
+}) => {
+  let metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
   const data = {
-    nearestVector: nearestVector
+    metadata: metadata,
   }
   return json(data)
 }
 
+export const action = async({ request, params }) => {
+  const formData = await request.formData();
+  const impression = formData.get('impression')
+  const visitedPapers = formData.get('visitedPapers')
+  let nearestVectors = await nearestNewPaper(deslugifyDoi(params.paperId), impression, visitedPapers, 5)
+  return(redirect(`/${slugifyDoi(nearestVectors[0]['id'])}`))
+}
+
 export default function PaperId(){
   const params = useParams();
+  const data = useLoaderData();
   const actionData = useActionData();
+
+  useEffect(()=>{
+    console.log("DATA:", data)
+  }, [data])
 
   useEffect(()=>{
     console.log("ACTION DATA:", actionData)
@@ -40,15 +57,20 @@ export default function PaperId(){
             border: '2px dashed purple',
             display: "flex",
           }}>
-          <ControlPanel />
-          <Outlet />
+          <ControlPanel
+            actionData={actionData}
+            />
+            <PaperData
+              doi={deslugifyDoi(params.paperId)}
+              metadata={data.metadata ? data.metadata : {}}
+            />
         </div>
         <TraversalViewer params={params}/>
       </div>
     </div>
   )
 }
-// 
+//
 // export const ErrorBoundary = ({error}) => {
 //   return redirect(`/${slugifyDoi(params.paperId)}`)
 // }

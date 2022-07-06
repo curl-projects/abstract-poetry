@@ -1,4 +1,5 @@
-import { Form } from "@remix-run/react"
+import { Form, useSubmit } from "@remix-run/react"
+import { updateVisitedPapers } from "~/utils/visited-papers"
 
 export function SeedSearch(props){
     return(
@@ -12,7 +13,7 @@ export function SeedSearch(props){
                }}>
       <h1>Start Searching!</h1>
 
-      <Form method='post'>
+      <Form method="post">
         <input
           name="doi"
           type="text"

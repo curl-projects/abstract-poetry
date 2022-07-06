@@ -1,19 +1,18 @@
 import { SeedSearch } from "~/components/SeedSearch/seed-search.js"
 import { useEffect } from 'react';
 import { useActionData } from "@remix-run/react"
-import { json, redirect } from "@remix-run/node"
+import { json, redirect, createSession } from "@remix-run/node"
 import { getKNNFromVector, getKNNFromDoi, checkDoi } from "~/models/embeddings.server.js"
-import { slugifyDoi } from "~/utils/doi-manipulation";
-import ls from "local-storage";
+import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation";
+import {clearVisitedPapers } from "~/utils/visited-papers"
 
-export const action = async ({ request }) => {
+export const action = async ({ request, params }) => {
   const formData = await request.formData();
   const doi = formData.get('doi')
-
   const exists = await checkDoi(doi)
   if(exists){
     return redirect(`/${slugifyDoi(doi)}`)
-  }
+    }
   else{
     const data = {
       errorCode: 404,
@@ -27,12 +26,8 @@ export default function Search(){
   const actionData = useActionData();
 
   useEffect(()=>{
-    ls.clear()
+    clearVisitedPapers()
   }, [])
-
-  useEffect(()=>{
-    console.log("actionData:", actionData)
-  }, [actionData])
 
   return(
     <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center"}}>
