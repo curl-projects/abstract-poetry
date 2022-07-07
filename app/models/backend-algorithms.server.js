@@ -19,12 +19,12 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
 
   if(knn.matches){
     const tree = new TreeModel();
-    const parsedNode = JSON.parse(nodeState)
+    const nodeId = JSON.parse(nodeState)
     const root = tree.parse(JSON.parse(traversedPapers))
 
     // Find the current active node
     const node = root.first(function(node){
-      return node.model.attributes.doi === parsedNode.attributes.doi
+      return node.model.attributes.nodeId === nodeId
     })
 
     // use the current active node to generate a path of all visited papers
