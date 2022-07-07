@@ -60,7 +60,6 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
 export function clearVisitedPapers(){
   localforage.clear()
 }
-
 export async function getTraversalPath(setter=null){
   let root = await ls.getObject('traversalPath')
   if(setter === null){
