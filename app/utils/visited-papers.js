@@ -2,7 +2,7 @@ import ls from "local-storage"
 import {reactLocalStorage} from 'reactjs-localstorage';
 import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
-import TreeModel, { Node } from 'tree-model';
+import TreeModel from 'tree-model';
 
 export async function updateVisitedPapers(doi, setter=null){
   const visitedPapers = ls.get('visitedPapers')
@@ -30,7 +30,7 @@ export async function updateVisitedPapers(doi, setter=null){
   return visitedPapers
 }
 
-export async function updateTraversalPath(doi, algParams, setter=null){
+export async function updateTraversalPath(doi, algParams, pathSetter=null, recentNodeSetter=null){
   try{
     const rootModel = await localforage.getItem("traversalPath")
     if(rootModel === null){
@@ -40,8 +40,9 @@ export async function updateTraversalPath(doi, algParams, setter=null){
     console.log("MOST RECENT NODE SCHEMA:", mostRecentNodeSchema)
     // If the most recently visited path is the current path, don't update the tree
     if(mostRecentNodeSchema.attributes.doi === deslugifyDoi(doi)){
-      if(setter !== null){
-        setter(rootModel)
+      if(pathSetter !== null){
+        pathSetter(rootModel)
+        recentNodeSetter(mostRecentNodeSchema)
       }
       return rootModel
     }
@@ -61,8 +62,9 @@ export async function updateTraversalPath(doi, algParams, setter=null){
     const currentNode = mostRecentNode.addChild(tree.parse({name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}}))
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("mostRecentNode", {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}})
-    if(setter !== null){
-      setter(root.model)
+    if(pathSetter !== null){
+      pathSetter(root.model)
+      recentNodeSetter({name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}})
     }
     return rootModel
   }
@@ -80,13 +82,13 @@ export async function updateTraversalPath(doi, algParams, setter=null){
 
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("mostRecentNode", {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}})
-    if(setter !== null){
-      setter(root.model)
+    if(pathSetter !== null){
+      pathSetter(root.model)
+      recentNodeSetter({name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}})
     }
     return root
   }
 }
-
 
 export function clearVisitedPapers(){
   localforage.clear()

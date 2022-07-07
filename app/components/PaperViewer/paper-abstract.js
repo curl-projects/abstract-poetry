@@ -1,4 +1,8 @@
 export function PaperAbstract(props){
+
+  // FUNCTIONALITY
+    // POTENTIAL: Abstracts highlight keywords
+
   return(
     <div className="PaperAbstract" style={{
       flex: 1,

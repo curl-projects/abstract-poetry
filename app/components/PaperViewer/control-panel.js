@@ -7,6 +7,12 @@ import { nearestNewPaper } from "~/utils/algorithms"
 export function ControlPanel(props){
   const params = useParams();
 
+  // FUNCTIONALITY
+    // buttons in the control panel should be linked to keypresses
+      // Right Arrow: Positive impression
+      // Left Arrow: Negative impression
+      // P: Pin
+
   return(
     <div className="ControlPanel" style={{
         border: '2px solid yellow',
@@ -23,6 +29,8 @@ export function ControlPanel(props){
         }}>
         <Form method="post">
           <input type="hidden" name="visitedPapers" value={props.visitedPapers}/>
+          <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)}/>
+          <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)}/>
           <button
             name="impression"
             type="submit"

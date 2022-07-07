@@ -23,6 +23,19 @@ const traversalNode = ({ nodeDatum }) => (
   </React.Fragment>
 );
 
+// TREE UPDATE:
+  // When you click on a node, update the most recently visited node to that node
+  // Also redirect to that DOI's endpoint
+
+  // The tree update logic should then automatically give the tree a branching structure
+
+  // Use the "mostRecentlyVisitedNode" id to define the active node
+
+  // Build in translate logic that automatically focuses the graph onto the most recently visited node
+
+  // We probably need an internal id for each node -- this needs to count upwards with local storage so that it persists alongside the tree
+    // Change the tree search so that it uses the id rather than the DOI to find this
+    // This will definitely be required if we only guarantee that the same paper won't show up in the same path twice, which makes a lot of intuitive sense to me
 
 export function TraversalViewer(props){
   const [dimensions, translate, containerRef] = useCenteredTree();
@@ -43,9 +56,9 @@ export function TraversalViewer(props){
         depthFactor={300}
         collapsible={false}
         dimensions={dimensions}
-        // translate={translate}
+        translate={translate}
         zoomable={false}
-        // renderCustomNodeElement={traversalNode}
+        renderCustomNodeElement={traversalNode}
        />
     </div>
   )

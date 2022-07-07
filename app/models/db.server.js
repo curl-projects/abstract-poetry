@@ -21,3 +21,13 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export { db };
+
+// USER DATA:
+  // Primary user data will be stored into cockroachdb
+  // There's a many-to-one relationship between the user model amd a TraversalPaths model
+  // The traversalPaths associated with a user will contain all of the Redis keys used to store the actual path
+  // These are retrieved and loaded into localstorage when the user initiates a session
+
+
+  // SAVING:
+    // Initially, we set up manual saves with Command S and a Save button

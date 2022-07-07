@@ -24,8 +24,13 @@ export const action = async({ request, params }) => {
   const formData = await request.formData();
   const impression = formData.get('impression')
   const visitedPapers = formData.get('visitedPapers')
-  let nearestVectors = await nearestNewPaper(deslugifyDoi(params.paperId), impression, visitedPapers, 5)
-  return(redirect(`/${slugifyDoi(nearestVectors[0]['id'])}`))
+  const traversedPapers = formData.get('traversalPath')
+  const nodeState = formData.get('mostRecentNode')
+
+  // the final version of this needs to return a DOI and the updated algorithm parameters
+  let nearestVectors = await nearestNewPaper(deslugifyDoi(params.paperId), impression, visitedPapers, traversedPapers, 5, nodeState)
+  console.log("NEAREST VECTORS:", nearestVectors)
+  return(redirect(`/${slugifyDoi(nearestVectors['id'])}`))
 }
 
 export default function PaperId(){
@@ -34,10 +39,17 @@ export default function PaperId(){
   const actionData = useActionData();
   const [visitedPapers, setVisitedPapers] = useState([])
   const [traversalPath, setTraversalPath] = useState({})
+  const [nodeState, setNodeState] = useState({})
 
   useEffect(()=>{
+    // The VISITED_PAPERS code is now redundant, and should be entirely removed
+    // as soon as all of the functionality has been implemented into the tree structure
+
     updateVisitedPapers(deslugifyDoi(params.paperId), setVisitedPapers)
-    updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath)
+
+    // the nearestNewPaper algorithm should return the new algorithm parameters, which are
+    // then used here to update the traversal pat
+    updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath, setNodeState)
   }, [params.paperId])
 
   useEffect(()=>{
@@ -52,6 +64,10 @@ export default function PaperId(){
   useEffect(()=>{
     console.log("DATA:", data)
   }, [data])
+
+  useEffect(()=>{
+    console.log("NODE STATE:", nodeState)
+  }, [nodeState])
 
   useEffect(()=>{
     console.log("ACTION DATA:", actionData)
@@ -76,6 +92,8 @@ export default function PaperId(){
           <ControlPanel
             actionData={actionData}
             visitedPapers={visitedPapers}
+            traversalPath={traversalPath}
+            mostRecentNode={nodeState}
             />
             <PaperData
               doi={deslugifyDoi(params.paperId)}
