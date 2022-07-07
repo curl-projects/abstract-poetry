@@ -1,12 +1,12 @@
 import { Form, useSubmit, useParams } from "@remix-run/react";
 import { useRef, useState, useEffect } from "react"
-import { getVisitedPapers, updateVisitedPapers } from "~/utils/visited-papers"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import { nearestNewPaper } from "~/utils/algorithms"
 
 export function ControlPanel(props){
   const params = useParams();
 
+  // TODO
   // FUNCTIONALITY
     // buttons in the control panel should be linked to keypresses
       // Right Arrow: Positive impression
@@ -28,7 +28,6 @@ export function ControlPanel(props){
           display: 'flex',
         }}>
         <Form method="post">
-          <input type="hidden" name="visitedPapers" value={props.visitedPapers}/>
           <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)}/>
           <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)}/>
           <button

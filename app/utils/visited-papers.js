@@ -4,32 +4,6 @@ import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
-export async function updateVisitedPapers(doi, setter=null){
-  const visitedPapers = ls.get('visitedPapers')
-  if(visitedPapers === null){
-    ls.set("visitedPapers", [deslugifyDoi(doi)])
-    if(setter !== null){
-      setter([deslugifyDoi(doi)])
-    }
-  }
-  else{
-    console.log("HELLO!:", visitedPapers[visitedPapers.length - 1])
-    if(visitedPapers[visitedPapers.length - 1] === deslugifyDoi(doi)){
-      ls.set("visitedPapers", visitedPapers)
-      if(setter !== null){
-        setter(visitedPapers)
-      }
-      return visitedPapers
-    }
-    visitedPapers.push(deslugifyDoi(doi))
-    ls.set("visitedPapers", visitedPapers)
-    if(setter !== null){
-      setter(visitedPapers)
-    }
-  }
-  return visitedPapers
-}
-
 export async function updateTraversalPath(doi, algParams, pathSetter=null, recentNodeSetter=null){
   try{
     const rootModel = await localforage.getItem("traversalPath")
@@ -47,8 +21,7 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
       return rootModel
     }
 
-    // Otherwise, update the path and most recent node
-
+  // Otherwise, update the path and most recent node
     // First, build the tree from the data
     const tree = new TreeModel();
     const root = tree.parse(rootModel)
@@ -74,12 +47,6 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     var tree = new TreeModel();
     var root = tree.parse({name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}})
 
-    // root.addChild(tree.parse({doi: "test", algParams: "finnTest"}))
-    // const temp = JSON.stringify(root.model)
-    //
-    // console.log("STRING TEMP:", temp)
-    // console.log("TEMP:", JSON.parse(temp))
-
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("mostRecentNode", {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams}})
     if(pathSetter !== null){
@@ -92,16 +59,6 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
 
 export function clearVisitedPapers(){
   localforage.clear()
-  ls.clear()
-}
-
-export async function getVisitedPapers(setter=null){
-  let visitedPapers = await localforage.setItem('visitedPapers')
-  if(setter === null){
-    return visitedPapers
-  }
-  setter(visitedPapers)
-  return visitedPapers
 }
 
 export async function getTraversalPath(setter=null){

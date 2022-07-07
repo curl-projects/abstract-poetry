@@ -7,8 +7,7 @@ import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
-import { updateVisitedPapers, updateTraversalPath } from "~/utils/visited-papers"
-import ls from "local-storage"
+import { updateTraversalPath } from "~/utils/visited-papers"
 
 export const loader = async ({
   params
@@ -23,13 +22,11 @@ export const loader = async ({
 export const action = async({ request, params }) => {
   const formData = await request.formData();
   const impression = formData.get('impression')
-  const visitedPapers = formData.get('visitedPapers')
   const traversedPapers = formData.get('traversalPath')
   const nodeState = formData.get('mostRecentNode')
 
   // the final version of this needs to return a DOI and the updated algorithm parameters
-  let nearestVectors = await nearestNewPaper(deslugifyDoi(params.paperId), impression, visitedPapers, traversedPapers, 5, nodeState)
-  console.log("NEAREST VECTORS:", nearestVectors)
+  let nearestVectors = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, 5, nodeState)
   return(redirect(`/${slugifyDoi(nearestVectors['id'])}`))
 }
 
@@ -37,24 +34,16 @@ export default function PaperId(){
   const params = useParams();
   const data = useLoaderData();
   const actionData = useActionData();
-  const [visitedPapers, setVisitedPapers] = useState([])
   const [traversalPath, setTraversalPath] = useState({})
   const [nodeState, setNodeState] = useState({})
 
   useEffect(()=>{
-    // The VISITED_PAPERS code is now redundant, and should be entirely removed
-    // as soon as all of the functionality has been implemented into the tree structure
-
-    updateVisitedPapers(deslugifyDoi(params.paperId), setVisitedPapers)
-
+    // TODO:
     // the nearestNewPaper algorithm should return the new algorithm parameters, which are
     // then used here to update the traversal pat
     updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath, setNodeState)
   }, [params.paperId])
 
-  useEffect(()=>{
-    console.log(visitedPapers)
-  }, [visitedPapers])
 
   useEffect(()=>{
     console.log("TRAVERSAL PATH:", traversalPath)
@@ -91,7 +80,6 @@ export default function PaperId(){
           }}>
           <ControlPanel
             actionData={actionData}
-            visitedPapers={visitedPapers}
             traversalPath={traversalPath}
             mostRecentNode={nodeState}
             />
@@ -101,7 +89,6 @@ export default function PaperId(){
             />
         </div>
         <TraversalViewer
-          visitedPapers={visitedPapers}
           traversalPath={traversalPath}
           />
       </div>
