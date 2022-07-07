@@ -8,6 +8,7 @@ import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
+import { pinCurrentPaper } from "~/utils/visited-papers"
 
 export const loader = async ({
   params
@@ -36,6 +37,7 @@ export default function PaperId(){
   const actionData = useActionData();
   const [traversalPath, setTraversalPath] = useState({})
   const [nodeState, setNodeState] = useState({})
+  const [pinningPaper, setPinningPaper] = useState(false)
 
   useEffect(()=>{
     // TODO:
@@ -83,6 +85,7 @@ export default function PaperId(){
             actionData={actionData}
             traversalPath={traversalPath}
             mostRecentNode={nodeState}
+            setTraversalPath={setTraversalPath}
             />
             <PaperData
               doi={deslugifyDoi(params.paperId)}

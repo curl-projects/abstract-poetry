@@ -2,6 +2,7 @@ import { Form, useSubmit, useParams } from "@remix-run/react";
 import { useRef, useState, useEffect } from "react"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import { nearestNewPaper } from "~/utils/algorithms"
+import { pinCurrentPaper } from "~/utils/visited-papers"
 
 export function ControlPanel(props){
   const params = useParams();
@@ -47,7 +48,7 @@ export function ControlPanel(props){
               height: "40px"
             }}>More Like This</button>
         </Form>
-        <button >Pin Paper</button>
+          <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
         </div>
 
     </div>

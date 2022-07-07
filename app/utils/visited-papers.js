@@ -34,7 +34,7 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   // Otherwise, update the path and most recent node
     // Create a new node associated with the current position
     const nodeIdCounter = await localforage.getItem("nodeIdCounter")
-    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1}}
+    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1, pinned: false}}
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("mostRecentNode", childObject)
@@ -51,7 +51,7 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   catch(error){
     console.log("CATCH ERROR:", error)
     var tree = new TreeModel();
-    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1}}
+    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1, pinned: false}}
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
@@ -65,9 +65,10 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   }
 }
 
-export function clearVisitedPapers(){
+export function clearTraversalPath(){
   localforage.clear()
 }
+
 export async function getTraversalPath(setter=null){
   let root = await ls.getObject('traversalPath')
   if(setter === null){
@@ -75,4 +76,19 @@ export async function getTraversalPath(setter=null){
   }
   setter(root)
   return root
+}
+
+export async function pinCurrentPaper(pathSetter){
+  const activeNodeId = await localforage.getItem("activeNodeId")
+  const rootModel = await localforage.getItem("traversalPath")
+  const tree = new TreeModel();
+  const root = tree.parse(rootModel)
+  const activeNode = root.first(function(node){
+    return node.model.attributes.nodeId === activeNodeId
+  })
+
+  activeNode.model.attributes.pinned = true
+
+  localforage.setItem('traversalPath', root.model)
+  pathSetter(root.model)
 }

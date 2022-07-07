@@ -4,7 +4,7 @@ import { useActionData } from "@remix-run/react"
 import { json, redirect, createSession } from "@remix-run/node"
 import { getKNNFromVector, getKNNFromDoi, checkDoi } from "~/models/embeddings.server.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation";
-import {clearVisitedPapers } from "~/utils/visited-papers"
+import { clearTraversalPath } from "~/utils/visited-papers"
 
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
@@ -26,7 +26,7 @@ export default function Search(){
   const actionData = useActionData();
 
   useEffect(()=>{
-    clearVisitedPapers()
+    clearTraversalPath()
   }, [])
 
   return(
