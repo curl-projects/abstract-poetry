@@ -21,11 +21,5 @@ export async function handleSearch(searchString){
       // Find the DOI of the top result, and redirect to the appropriate page using return redirect(`/${slugifyDoi(doi)}`)
 
 
-
-
-    // If it's not a DOI, then
-
-
-
   return null
 }

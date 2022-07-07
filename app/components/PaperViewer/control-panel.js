@@ -47,6 +47,7 @@ export function ControlPanel(props){
               height: "40px"
             }}>More Like This</button>
         </Form>
+        <button >Pin Paper</button>
         </div>
 
     </div>

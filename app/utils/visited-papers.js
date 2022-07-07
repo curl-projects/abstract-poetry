@@ -13,8 +13,6 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     const mostRecentNodeSchema = await localforage.getItem("mostRecentNode")
     const mostRecentNodeId = await localforage.getItem("activeNodeId")
 
-    console.log("ACTIVE NODE ID:", mostRecentNodeId)
-
     const tree = new TreeModel();
     const root = tree.parse(rootModel)
 
@@ -36,9 +34,10 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   // Otherwise, update the path and most recent node
     // Create a new node associated with the current position
     const nodeIdCounter = await localforage.getItem("nodeIdCounter")
-    const currentNode = mostRecentNode.addChild(tree.parse({name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1}}))
+    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1}}
+    const currentNode = mostRecentNode.addChild(tree.parse(childObject))
     localforage.setItem("traversalPath", root.model)
-    localforage.setItem("mostRecentNode", {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1}})
+    localforage.setItem("mostRecentNode", childObject)
 
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
@@ -52,10 +51,11 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   catch(error){
     console.log("CATCH ERROR:", error)
     var tree = new TreeModel();
-    var root = tree.parse({name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1}})
+    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1}}
+    var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
-    localforage.setItem("mostRecentNode", {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1}})
+    localforage.setItem("mostRecentNode", childObject)
     localforage.setItem("activeNodeId", 1)
     if(pathSetter !== null){
       pathSetter(root.model)
