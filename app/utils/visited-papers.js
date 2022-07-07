@@ -4,31 +4,31 @@ import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
-export async function updateVisitedPapers(doi, setter=null){
-  const visitedPapers = ls.get('visitedPapers')
-  if(visitedPapers === null){
-    ls.set("visitedPapers", [deslugifyDoi(doi)])
-    if(setter !== null){
-      setter([deslugifyDoi(doi)])
-    }
-  }
-  else{
-    console.log("HELLO!:", visitedPapers[visitedPapers.length - 1])
-    if(visitedPapers[visitedPapers.length - 1] === deslugifyDoi(doi)){
-      ls.set("visitedPapers", visitedPapers)
-      if(setter !== null){
-        setter(visitedPapers)
-      }
-      return visitedPapers
-    }
-    visitedPapers.push(deslugifyDoi(doi))
-    ls.set("visitedPapers", visitedPapers)
-    if(setter !== null){
-      setter(visitedPapers)
-    }
-  }
-  return visitedPapers
-}
+// export async function updateVisitedPapers(doi, setter=null){
+//   const visitedPapers = ls.get('visitedPapers')
+//   if(visitedPapers === null){
+//     ls.set("visitedPapers", [deslugifyDoi(doi)])
+//     if(setter !== null){
+//       setter([deslugifyDoi(doi)])
+//     }
+//   }
+//   else{
+//     console.log("HELLO!:", visitedPapers[visitedPapers.length - 1])
+//     if(visitedPapers[visitedPapers.length - 1] === deslugifyDoi(doi)){
+//       ls.set("visitedPapers", visitedPapers)
+//       if(setter !== null){
+//         setter(visitedPapers)
+//       }
+//       return visitedPapers
+//     }
+//     visitedPapers.push(deslugifyDoi(doi))
+//     ls.set("visitedPapers", visitedPapers)
+//     if(setter !== null){
+//       setter(visitedPapers)
+//     }
+//   }
+//   return visitedPapers
+// }
 
 export async function updateTraversalPath(doi, algParams, pathSetter=null, recentNodeSetter=null){
   try{
@@ -92,17 +92,17 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
 
 export function clearVisitedPapers(){
   localforage.clear()
-  ls.clear()
+  // ls.clear()
 }
 
-export async function getVisitedPapers(setter=null){
-  let visitedPapers = await localforage.setItem('visitedPapers')
-  if(setter === null){
-    return visitedPapers
-  }
-  setter(visitedPapers)
-  return visitedPapers
-}
+// export async function getVisitedPapers(setter=null){
+//   let visitedPapers = await localforage.setItem('visitedPapers')
+//   if(setter === null){
+//     return visitedPapers
+//   }
+//   setter(visitedPapers)
+//   return visitedPapers
+// }
 
 export async function getTraversalPath(setter=null){
   let root = await ls.getObject('traversalPath')

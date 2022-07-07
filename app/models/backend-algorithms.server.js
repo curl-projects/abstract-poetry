@@ -1,7 +1,7 @@
 import { getKNNFromDoi } from "~/models/embeddings.server"
 import TreeModel from 'tree-model';
 
-export async function nearestNewPaper(doi, impression, visitedPapers, traversedPapers, topK, nodeState){
+export async function nearestNewPaper(doi, impression, traversedPapers, topK, nodeState){
 
   // TODO:
   // ALGORITHM:
@@ -18,7 +18,6 @@ export async function nearestNewPaper(doi, impression, visitedPapers, traversedP
   const knn = await getKNNFromDoi(doi, topK);
 
   if(knn.matches){
-    const visitedPapersArray = visitedPapers.split(",")
     const tree = new TreeModel();
     const parsedNode = JSON.parse(nodeState)
     const root = tree.parse(JSON.parse(traversedPapers))

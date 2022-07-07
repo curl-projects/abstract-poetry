@@ -1,5 +1,4 @@
 import { Form, useSubmit } from "@remix-run/react"
-import { updateVisitedPapers } from "~/utils/visited-papers"
 
 export function SeedSearch(props){
     return(
