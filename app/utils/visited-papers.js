@@ -78,6 +78,11 @@ export async function getTraversalPath(setter=null){
   return root
 }
 
+export async function checkIfActiveNode(id){
+  const activeNodeId = await localforage.getItem("activeNodeId")
+  return activeNodeId === id
+}
+
 export async function pinCurrentPaper(pathSetter){
   const activeNodeId = await localforage.getItem("activeNodeId")
   const rootModel = await localforage.getItem("traversalPath")

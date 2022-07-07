@@ -1,25 +1,35 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { Link } from "@remix-run/react"
+import { Link, useParams } from "@remix-run/react"
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import Tree from 'react-d3-tree'
 import { useCenteredTree } from "~/utils/tree-visualisation"
+import { checkIfActiveNode } from "~/utils/visited-papers"
 
-const traversalNode = ({ nodeDatum }) => (
+async function fillEval(event){
+  console.log("EVENT:", event)
+  // const activeNode = await checkIfActiveNode(id)
+  // if(activeNode){
+  //   return "red"
+  // }
+  // else{
+  //   return "yellow"
+  // }
+  return "blue"
+}
+
+const traversalNode = ({ nodeDatum, nodeState }) => (
   <React.Fragment>
-    <g>
     <circle
       r={15}
-      onClick={evt => {
-        toggleNode();
-        onNodeClick(evt);
+      onClick={async evt => {
+        console.log("NODE STATE:", nodeState)
       }}
-      // onMouseOver={onNodeMouseOver}
-      // onMouseOut={onNodeMouseOut}
-    ></circle>
+      fill={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"}
+      >
+      </circle>
       <text>
         {nodeDatum.name}
       </text>
-    </g>
   </React.Fragment>
 );
 
@@ -39,6 +49,11 @@ const traversalNode = ({ nodeDatum }) => (
 
 export function TraversalViewer(props){
   const [dimensions, translate, containerRef] = useCenteredTree();
+  const [nodeState, setNodeState] = useState("hello")
+
+  useEffect(()=>{
+    setNodeState(props.nodeState)
+  }, [props.nodeState])
 
   useEffect(()=>{
     console.log("PROPS TRAVERSAL_VIEWER:", props.traversalPath)
@@ -51,15 +66,16 @@ export function TraversalViewer(props){
         border: '2px dashed pink',
         display: 'flex',
       }}>
-      <Tree
-        data={props.traversalPath}
-        depthFactor={300}
-        collapsible={false}
-        dimensions={dimensions}
-        translate={translate}
-        zoomable={false}
-        renderCustomNodeElement={traversalNode}
-       />
+        <Tree
+          data={props.traversalPath}
+          depthFactor={300}
+          collapsible={false}
+          dimensions={dimensions}
+          translate={translate}
+          zoomable={false}
+          renderCustomNodeElement={(rd3tProps) =>
+            traversalNode({ ...rd3tProps, nodeState })}
+         />
     </div>
   )
 }

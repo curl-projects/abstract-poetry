@@ -94,6 +94,7 @@ export default function PaperId(){
         </div>
         <TraversalViewer
           traversalPath={traversalPath}
+          nodeState={nodeState}
           />
       </div>
     </div>
