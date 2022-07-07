@@ -1,9 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { Link, useParams } from "@remix-run/react"
+import { Link, useParams, Form, useSubmit } from "@remix-run/react"
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import Tree from 'react-d3-tree'
 import { useCenteredTree } from "~/utils/tree-visualisation"
 import { checkIfActiveNode } from "~/utils/visited-papers"
+import * as localforage from "localforage";
+import NoSSR from 'react-no-ssr-depup';
 
 async function fillEval(event){
   console.log("EVENT:", event)
@@ -17,12 +19,25 @@ async function fillEval(event){
   return "blue"
 }
 
-const traversalNode = ({ nodeDatum, nodeState }) => (
+function handleNodeClick(){
+  if(nodeDatum.attributes){
+  localforage.setItem('mostRecentNode', nodeDatum.attributes.nodeId)
+  return `/${slugifyDoi(doi)}`
+  }
+  else{
+    return
+  }
+}
+
+const traversalNode = ({ nodeDatum, nodeState, submit }) => (
   <React.Fragment>
+    <g>
+    <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}` : ""}>
     <circle
       r={15}
       onClick={async evt => {
-        console.log("NODE STATE:", nodeState)
+        await localforage.setItem("activeNodeId", nodeDatum.attributes?.nodeId)
+        // handleNodeClick(nodeDatum.attributes?.nodeId)
       }}
       fill={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"}
       >
@@ -30,6 +45,8 @@ const traversalNode = ({ nodeDatum, nodeState }) => (
       <text>
         {nodeDatum.name}
       </text>
+    </Link>
+    </g>
   </React.Fragment>
 );
 
@@ -50,14 +67,12 @@ const traversalNode = ({ nodeDatum, nodeState }) => (
 export function TraversalViewer(props){
   const [dimensions, translate, containerRef] = useCenteredTree();
   const [nodeState, setNodeState] = useState("hello")
+  const submit = useSubmit();
 
   useEffect(()=>{
     setNodeState(props.nodeState)
   }, [props.nodeState])
 
-  useEffect(()=>{
-    console.log("PROPS TRAVERSAL_VIEWER:", props.traversalPath)
-  }, [props.traversalPath])
 
   return(
     <div className="TraversalViewer" ref={containerRef} style={{
@@ -66,16 +81,18 @@ export function TraversalViewer(props){
         border: '2px dashed pink',
         display: 'flex',
       }}>
+      <NoSSR>
         <Tree
-          data={props.traversalPath}
           depthFactor={300}
           collapsible={false}
           dimensions={dimensions}
           translate={translate}
           zoomable={false}
+          data={props.traversalPath}
           renderCustomNodeElement={(rd3tProps) =>
-            traversalNode({ ...rd3tProps, nodeState })}
+            traversalNode({ ...rd3tProps, nodeState, useSubmit})}
          />
+      </NoSSR>
     </div>
   )
 }

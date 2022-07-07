@@ -32,7 +32,7 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
 
     // find the first closest paper that hasn't already been visited
     const result = knn.matches.find(function(element){
-      return path.filter(node => node.model.name === element.id).length === 0
+      return path.filter(node => node.model.attributes.doi === element.id).length === 0
     })
 
     // TODO

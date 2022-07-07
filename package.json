@@ -18,6 +18,7 @@
     "react": "^17.0.2",
     "react-d3-tree": "^3.3.2",
     "react-dom": "^17.0.2",
+    "react-no-ssr-depup": "^2.0.1",
     "reactjs-localstorage": "^1.0.1",
     "tree-model": "^1.0.7",
     "tree-util": "^1.0.7"

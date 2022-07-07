@@ -10,23 +10,27 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     if(rootModel === null){
       throw "Root does not exist -- you might be beginning your search"
     }
-    const mostRecentNodeSchema = await localforage.getItem("mostRecentNode")
     const mostRecentNodeId = await localforage.getItem("activeNodeId")
 
     const tree = new TreeModel();
     const root = tree.parse(rootModel)
-
 
     // Find the active node
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === mostRecentNodeId
     })
 
+    console.log("FINN MOST RECENT NODE:", mostRecentNode)
     // If the most recently visited path is the current path, don't update the tree
-    if(mostRecentNode.model.attributes.doi === deslugifyDoi(doi)){
+    // If the current path contains the doi, don't update the tree
+    const path = mostRecentNode.getPath()
+    // if(mostRecentNode.model.attributes.doi === deslugifyDoi(doi)){
+    if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
+      console.log("TRIGGERED!")
+      localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
       if(pathSetter !== null){
         pathSetter(rootModel)
-        recentNodeSetter(mostRecentNodeId)
+        recentNodeSetter(mostRecentNode.model.attributes.nodeId)
       }
       return rootModel
     }
@@ -34,10 +38,10 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   // Otherwise, update the path and most recent node
     // Create a new node associated with the current position
     const nodeIdCounter = await localforage.getItem("nodeIdCounter")
-    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1, pinned: false}}
+    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1, pinned: false}}
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
     localforage.setItem("traversalPath", root.model)
-    localforage.setItem("mostRecentNode", childObject)
+    // localforage.setItem("mostRecentNode", childObject)
 
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
@@ -51,7 +55,7 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   catch(error){
     console.log("CATCH ERROR:", error)
     var tree = new TreeModel();
-    const childObject = {name: deslugifyDoi(doi), attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1, pinned: false}}
+    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1, pinned: false}}
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
@@ -96,4 +100,14 @@ export async function pinCurrentPaper(pathSetter){
 
   localforage.setItem('traversalPath', root.model)
   pathSetter(root.model)
+}
+
+export async function findDOIFromNodeId(nodeId){
+  const rootModel = await localforage.getItem("traversalPath")
+  const tree = new TreeModel();
+  const root = tree.parse(rootModel)
+  const node = root.first(function(node){
+    node.model.attributes.nodeId === nodeId
+  })
+  return node.model.attributes.doi
 }

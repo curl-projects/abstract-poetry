@@ -46,7 +46,6 @@ export default function PaperId(){
     updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath, setNodeState)
   }, [params.paperId])
 
-
   useEffect(()=>{
     console.log("TRAVERSAL PATH:", traversalPath)
   }, [traversalPath])
