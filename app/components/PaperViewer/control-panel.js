@@ -49,6 +49,7 @@ export function ControlPanel(props){
             }}>More Like This</button>
         </Form>
           <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
+          <button onClick={()=> window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")}>Read Paper</button>
         </div>
 
     </div>
