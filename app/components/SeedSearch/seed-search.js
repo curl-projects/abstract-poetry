@@ -1,4 +1,8 @@
+import React from 'react';
 import { Form, useSubmit } from "@remix-run/react"
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 export function SeedSearch(props){
     return(
@@ -11,12 +15,11 @@ export function SeedSearch(props){
                  alignItems: "center"
                }}>
       <h1>Start Searching!</h1>
-
       <Form method="post">
         <input
-          name="doi"
+          name="searchString"
           type="text"
-          placeholder={"Start search with paper DOI!"}
+          placeholder={"Start search with DOI or Search Term!"}
           style={{
             height: "30px",
             width: "300px"
@@ -24,7 +27,24 @@ export function SeedSearch(props){
           />
         <button type="submit">Search!</button>
       </Form>
-      {props.errorCode === 404 && <p>Paper not found in database</p> }
+      <Snackbar
+        open={props.errorExists}
+        autoHideDuration={4000}
+        message={props.errorData ? props.errorData.message : ""}
+        onClose={()=>props.setErrorExists(false)}
+        action={
+          <React.Fragment>
+            <IconButton
+              aria-label="close"
+              sx={{ p: 0.5 }}
+              color="inherit"
+              onClick={() => props.setErrorExists(false)}
+              >
+              <CloseIcon />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
     </div>
   )
 }

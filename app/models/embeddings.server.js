@@ -44,8 +44,3 @@ export async function getKNNFromDoi(doi, topK=1){
 
   return res.json()
 }
-
-export async function checkDoi(doi){
-  let exists = await redis.exists(doi)
-  return exists
-}

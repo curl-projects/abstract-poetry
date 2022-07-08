@@ -10,16 +10,23 @@ import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import * as localforage from "localforage";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { caseToMessage } from "~/utils/messages-and-alerts"
 
 export const loader = async ({
   params, request
 }) => {
+
   const url = new URL(request.url)
   const search = new URLSearchParams(url.search)
   let metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
   const data = {
     metadata: metadata,
-    search: search.get('nodeId')
+    search: search.get('nodeId'),
+    message: search.get('message'),
+    searchString: search.get('searchString')
   }
   return json(data)
 }
@@ -42,6 +49,7 @@ export default function PaperId(){
   const [traversalPath, setTraversalPath] = useState({})
   const [nodeState, setNodeState] = useState({})
   const [pinningPaper, setPinningPaper] = useState(false)
+  const [messageExists, setMessageExists] = useState(false)
 
   useEffect(async()=>{
     // TODO:
@@ -60,6 +68,13 @@ export default function PaperId(){
 
   useEffect(()=>{
     console.log("DATA:", data)
+  }, [data])
+
+  useEffect(()=>{
+    if(data.message){
+      setMessageExists(true)
+      console.log(caseToMessage(data.messsage, data.searchString))
+    }
   }, [data])
 
   useEffect(()=>{
@@ -101,6 +116,24 @@ export default function PaperId(){
         <TraversalViewer
           traversalPath={traversalPath}
           nodeState={nodeState}
+          />
+          <Snackbar
+            open={messageExists}
+            autoHideDuration={6000}
+            message={data.message && data.searchString ? caseToMessage(data.message, data.searchString) : ""}
+            onClose={()=>setMessageExists(false)}
+            action={
+              <React.Fragment>
+                <IconButton
+                  aria-label="close"
+                  sx={{ p: 0.5 }}
+                  color="inherit"
+                  onClick={() => setMessageExists(false)}
+                  >
+                  <CloseIcon />
+                </IconButton>
+              </React.Fragment>
+            }
           />
       </div>
     </div>
