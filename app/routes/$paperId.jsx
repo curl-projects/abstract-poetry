@@ -72,14 +72,14 @@ export default function PaperId(){
   }, [actionData])
 
   return(
-    <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center"}}>
+    <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", overflow: 'hidden'}}>
       <div className="ComponentWrapper" style={{border: '2px dashed black',
                    height: "90%",
                    width: "80%",
                    display: "flex",
                    flexDirection: "column",
                    justifyContent: "center",
-                   alignItems: "center"
+                   alignItems: "center",
                  }}>
         <div className="PaperViewer"style={{
             flex: 1.5,
