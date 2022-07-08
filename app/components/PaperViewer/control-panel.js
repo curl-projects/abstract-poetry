@@ -1,10 +1,9 @@
-import { Form, useSubmit, useParams } from "@remix-run/react";
+import { Form, useSubmit, useParams, useFetcher } from "@remix-run/react";
 import { useRef, useState, useEffect } from "react"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import { nearestNewPaper } from "~/utils/algorithms"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress"
-
 
 
 export function ControlPanel(props){
@@ -76,11 +75,11 @@ export function ControlPanel(props){
         </Form>
           <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
           <button onClick={()=> window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")}>Read Paper</button>
-        <Form method="post" action="/createReadingList">
+        <form method="post" action="/createReadingList">
           <input type="hidden" name="doi" value={deslugifyDoi("10.1371$journal.pcbi.1008777")} />
           <input type="hidden" name="citationStyle" value="apa" />
           <button type="submit">Export Reading List</button>
-        </Form>
+        </form>
         </div>
 
     </div>

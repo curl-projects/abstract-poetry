@@ -4,11 +4,14 @@ export async function action({ request }){
   const formData = await request.formData();
   const doi = formData.get('doi')
   const citationStyle = formData.get('citationStyle')
-  const citation = await doiToCitation(doi, citationStyle)
-  return new Response(citation, {
-    status: 200,
+
+  const citation = await doiToCitation(doi, citationStyle);
+  const text = await citation.text();
+  console.log("CITATION TEXT:", text);
+  return new Response(text, {
     headers: {
-      "Content-Type": "application/json"
+      "content-type": "text/plain",
+      "content-disposition": "attachment; filename=feedback.txt"
     }
   })
 }

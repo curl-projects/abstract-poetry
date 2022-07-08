@@ -11,8 +11,8 @@ export async function doiToCitation(doi, citationStyle){
     method: "GET",
     headers: {
       "Accept": "text/x-bibliography",
-      "style": citationStyle,
+      "style": citationStyle
     }
   })
-  return JSON.stringify(res)
+  return res
 }
