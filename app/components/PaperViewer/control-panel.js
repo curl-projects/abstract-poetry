@@ -5,6 +5,8 @@ import { nearestNewPaper } from "~/utils/algorithms"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress"
 
+
+
 export function ControlPanel(props){
   const params = useParams();
   const keys = ['p', "P", 'r', "R", 'ArrowLeft', "ArrowRight"]
@@ -35,10 +37,6 @@ export function ControlPanel(props){
       positiveSubmitRef.current.click()
     }
   })
-
-  // functionhandleKeyDown(event){
-  //   console.log("EVENT KEY:", event)
-  // }
 
   return(
     <div className="ControlPanel" style={{
@@ -78,6 +76,11 @@ export function ControlPanel(props){
         </Form>
           <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
           <button onClick={()=> window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")}>Read Paper</button>
+        <Form method="post" action="/createReadingList">
+          <input type="hidden" name="doi" value={deslugifyDoi("10.1371$journal.pcbi.1008777")} />
+          <input type="hidden" name="citationStyle" value="apa" />
+          <button type="submit">Export Reading List</button>
+        </Form>
         </div>
 
     </div>
