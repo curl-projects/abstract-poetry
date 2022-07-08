@@ -16,8 +16,10 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     const root = tree.parse(rootModel)
 
     // Find the active node
+    console.log("MOST RECENT NODE ID:", mostRecentNodeId)
+    console.log("TEST ROOT:", root)
     const mostRecentNode = root.first(function(node){
-      return node.model.attributes.nodeId === mostRecentNodeId
+      return node.model.attributes.nodeId === parseInt(mostRecentNodeId)
     })
 
     console.log("FINN MOST RECENT NODE:", mostRecentNode)

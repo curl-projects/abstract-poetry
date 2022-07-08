@@ -7,37 +7,15 @@ import { checkIfActiveNode } from "~/utils/visited-papers"
 import * as localforage from "localforage";
 import NoSSR from 'react-no-ssr-depup';
 
-async function fillEval(event){
-  console.log("EVENT:", event)
-  // const activeNode = await checkIfActiveNode(id)
-  // if(activeNode){
-  //   return "red"
-  // }
-  // else{
-  //   return "yellow"
-  // }
-  return "blue"
-}
 
-function handleNodeClick(){
-  if(nodeDatum.attributes){
-  localforage.setItem('mostRecentNode', nodeDatum.attributes.nodeId)
-  return `/${slugifyDoi(doi)}`
-  }
-  else{
-    return
-  }
-}
-
-const traversalNode = ({ nodeDatum, nodeState, submit }) => (
+const traversalNode = ({ nodeDatum, nodeState }) => (
   <React.Fragment>
     <g>
-    <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}` : ""}>
+    <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}?nodeId=${nodeDatum.attributes.nodeId}` : ""}>
     <circle
       r={15}
-      onClick={async evt => {
-        await localforage.setItem("activeNodeId", nodeDatum.attributes?.nodeId)
-        // handleNodeClick(nodeDatum.attributes?.nodeId)
+      onClick={() => {
+        localforage.setItem("activeNodeId", nodeDatum.attributes?.nodeId)
       }}
       fill={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"}
       >
@@ -90,9 +68,26 @@ export function TraversalViewer(props){
           zoomable={false}
           data={props.traversalPath}
           renderCustomNodeElement={(rd3tProps) =>
-            traversalNode({ ...rd3tProps, nodeState, useSubmit})}
+            traversalNode({ ...rd3tProps, nodeState})}
          />
       </NoSSR>
     </div>
   )
 }
+//
+// <foreignObject width={300} height={300} y={-15} x={-15} style={{cursor: "grab"}}>
+//   <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}` : ""}>
+//     <button style={{ width: "30px",
+//                   cursor: "pointer",
+//                   height: '30px',
+//                   borderRadius: "100px",
+//                   border: '2px solid black',
+//                   backgroundColor: nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"
+//                 }}>
+//     </button>
+//   </Link>
+//     <div>
+//       <p style={{whiteSpace: "nowrap", overflow: "auto"}}>{nodeDatum.name}</p>
+//     </div>
+// </foreignObject>
+//

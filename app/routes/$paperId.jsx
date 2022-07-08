@@ -9,13 +9,17 @@ import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
+import * as localforage from "localforage";
 
 export const loader = async ({
-  params
+  params, request
 }) => {
+  const url = new URL(request.url)
+  const search = new URLSearchParams(url.search)
   let metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
   const data = {
     metadata: metadata,
+    search: search.get('nodeId')
   }
   return json(data)
 }
@@ -39,10 +43,13 @@ export default function PaperId(){
   const [nodeState, setNodeState] = useState({})
   const [pinningPaper, setPinningPaper] = useState(false)
 
-  useEffect(()=>{
+  useEffect(async()=>{
     // TODO:
     // the nearestNewPaper algorithm should return the new algorithm parameters, which are
     // then used here to update the traversal pat
+    if(data.search){
+      await localforage.setItem("activeNodeId", data.search)
+    }
     updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath, setNodeState)
   }, [params.paperId])
 
