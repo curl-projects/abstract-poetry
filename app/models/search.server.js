@@ -31,6 +31,7 @@ export async function handleSearch(searchString){
         // Find the closest DOI to the one that was entered that is in our database\
 
         // TODO: Improve this: really bad search
+        // let url=`http://api.crossref.org/works?query=${searchString}&filter=prefix:10.1371&select=DOI,subject,title&rows=20`
         let url=`http://api.crossref.org/works?query=${searchString}&filter=prefix:10.1371&select=DOI&rows=1`
         console.log("URL:", url)
 
@@ -39,6 +40,7 @@ export async function handleSearch(searchString){
         })
 
         let jsonResponse = await response.json()
+        console.log("JSON_RESPONSE", jsonResponse)
         if(jsonResponse.message.items.length === 0){
           return { action: 'error', case: "not-in-db", message: `We couldn't find any close matches in our database to the DOI '${extractedDoi}'.`, doiString: ""}
         }
@@ -49,6 +51,7 @@ export async function handleSearch(searchString){
     }
     else{
       let url=`http://api.crossref.org/works?query=${searchString}&filter=prefix:10.1371&select=DOI&rows=1`
+      // let url=`http://api.crossref.org/works?query=${searchString}&filter=prefix:10.1371&select=DOI,subject,title&rows=20`
       console.log("URL:", url)
 
       const response = await fetch(url, {
@@ -56,12 +59,13 @@ export async function handleSearch(searchString){
       })
 
       let jsonResponse = await response.json()
-
+      console.log("JSON_RESPONSE", jsonResponse)
       if(jsonResponse.message.items.length === 0){
         return { action: 'error', case: "no-search-matches", message: `We couldn't find any papers in our database closely related to the search '${searchString}'`, doiString: "" }
       }
       else{
         return { action: 'redirect', case: "closest-search-match", message: `Here's the paper in our database most closely related to the search '${searchString}'`, doiString: slugifyDoi(jsonResponse.message.items[0].DOI) }
+        // return { action: 'error', case: "closest-search-match", items: jsonResponse.message.items, message: `Here's the paper in our database most closely related to the search '${searchString}'`, doiString: slugifyDoi(jsonResponse.message.items[0].DOI) }
       }
     }
 }

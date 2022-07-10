@@ -29,6 +29,10 @@ export default function Search(){
     }, [])
 
   useEffect(()=>{
+    console.log("ACTIONDATA:", actionData)
+  }, [actionData])
+  
+  useEffect(()=>{
     if(actionData?.action === 'error'){
       setErrorExists(true)
     }
