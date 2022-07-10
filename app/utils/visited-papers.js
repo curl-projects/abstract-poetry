@@ -8,6 +8,7 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   try{
     const rootModel = await localforage.getItem("traversalPath")
     if(rootModel === null){
+      // This error is desired: it's thrown when the tree doesn't exist
       throw "Root does not exist -- you might be beginning your search"
     }
     const mostRecentNodeId = await localforage.getItem("activeNodeId")
@@ -15,14 +16,14 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     const tree = new TreeModel();
     const root = tree.parse(rootModel)
 
-    // Find the active node
+    // Find the active node in the tree from its id
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === parseInt(mostRecentNodeId)
     })
-    // If the most recently visited path is the current path, don't update the tree
-    // If the current path contains the doi, don't update the tree
+
+    // If the current path (root to active node) contains a node with the active doi
+    // don't update the tree
     const path = mostRecentNode.getPath()
-    // if(mostRecentNode.model.attributes.doi === deslugifyDoi(doi)){
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
       localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
       if(pathSetter !== null){
@@ -38,7 +39,6 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1, pinned: false}}
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
     localforage.setItem("traversalPath", root.model)
-    // localforage.setItem("mostRecentNode", childObject)
 
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
@@ -56,7 +56,6 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
-    localforage.setItem("mostRecentNode", childObject)
     localforage.setItem("activeNodeId", 1)
     if(pathSetter !== null){
       pathSetter(root.model)

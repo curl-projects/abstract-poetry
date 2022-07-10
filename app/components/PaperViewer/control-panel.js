@@ -1,42 +1,41 @@
-import { Form, useSubmit, useParams, useFetcher } from "@remix-run/react";
+import { Form, useParams } from "@remix-run/react";
 import { useRef, useState, useEffect } from "react"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
-import { nearestNewPaper } from "~/utils/algorithms"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress"
 
 
 export function ControlPanel(props){
   const params = useParams();
-  const keys = ['p', "P", 'r', "R", 'ArrowLeft', "ArrowRight"]
+  const keys = ['p', "P", 'r', "R", "e", "E", 'ArrowLeft', "ArrowRight"]
   const positiveSubmitRef = useRef();
   const negativeSubmitRef = useRef();
+  const exportRef = useRef();
 
-  // TODO
-  // FUNCTIONALITY
-    // buttons in the control panel should be linked to keypresses
-      // Right Arrow: Positive impression
-      // Left Arrow: Negative impression
-      // P: Pin
-
+  // Key-Press Control
   useKeyPress(keys, event=>{
-    console.log(event.key)
-
-    if(event.key === 'p' || event.key === 'P'){
-      pinCurrentPaper(props.setTraversalPath)
-    }
-    if(event.key === 'r' || event.key === "R"){
-      window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
-    }
-
-    if(event.key === "ArrowLeft"){
-      negativeSubmitRef.current.click()
-    }
     if(event.key === "ArrowRight"){
       positiveSubmitRef.current.click()
     }
+
+    else if(event.key === "ArrowLeft"){
+      negativeSubmitRef.current.click()
+    }
+
+    else if(event.key === 'p' || event.key === 'P'){
+      pinCurrentPaper(props.setTraversalPath)
+    }
+    else if(event.key === 'r' || event.key === "R"){
+      window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
+    }
+
+    else if(event.key === 'e' || event.key === "E"){
+      exportRef.current.click()
+    }
   })
 
+  // TODO: citationStyle needs a drop-down
+  
   return(
     <div className="ControlPanel" style={{
         border: '2px solid yellow',
@@ -75,10 +74,10 @@ export function ControlPanel(props){
         </Form>
           <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
           <button onClick={()=> window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")}>Read Paper</button>
-        <form method="post" action="/createReadingList">
-          <input type="hidden" name="doi" value={deslugifyDoi("10.1371$journal.pcbi.1008777")} />
+        <form method="post" action="/create-reading-list">
+          <input type="hidden" name="rootModel" value={JSON.stringify(props.traversalPath)} />
           <input type="hidden" name="citationStyle" value="apa" />
-          <button type="submit">Export Reading List</button>
+          <button type="submit" ref={exportRef}>Export Reading List</button>
         </form>
         </div>
 

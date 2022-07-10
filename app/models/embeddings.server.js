@@ -1,10 +1,3 @@
-import { Redis } from "@upstash/redis"
-
-const redis = new Redis({
-  url: 'https://global-sterling-marlin-30591.upstash.io',
-  token: 'AXd_ASQgOTZkNTJkOGUtNzM3MC00YzRlLThjN2EtOTI3OTljYTc4YTZlODZjNmU1MjMxMWQ1NGRlMGFmMWJmZDdjMjFkNTIwNTY=',
-})
-
 export async function getKNNFromVector(vector, topK=1){
   let url = "https://embedding-db-ea3137b.svc.us-west1-gcp.pinecone.io/query"
   let data = {

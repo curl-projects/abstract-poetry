@@ -1,10 +1,8 @@
 import { SeedSearch } from "~/components/SeedSearch/seed-search.js"
 import { useEffect, useState } from 'react';
-import { useActionData, useLoaderData } from "@remix-run/react"
-import { json, redirect, createSession } from "@remix-run/node"
-import { getKNNFromVector, getKNNFromDoi } from "~/models/embeddings.server.js"
-import { checkDoi, handleSearch } from "~/models/search.server"
-import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation";
+import { useActionData } from "@remix-run/react"
+import { json, redirect } from "@remix-run/node"
+import { handleSearch } from "~/models/search.server"
 import { clearTraversalPath } from "~/utils/visited-papers"
 
 export const action = async ({ request, params }) => {
@@ -13,10 +11,11 @@ export const action = async ({ request, params }) => {
   const handleSearchOutput = await handleSearch(searchString)
 
   if(handleSearchOutput.action === 'redirect'){
-    console.log("MESSAGE:", handleSearchOutput.message)
+    // Search params are used to carry messages from the search route to the $paperId route
     return redirect(`/${handleSearchOutput.doiString}?message=${handleSearchOutput.case}&searchString=${searchString}`, {
     })
   }
+  // If anything's returned here, it means there's an error, which is displayed in the Snackbar in seed-search
   return json(handleSearchOutput)
 }
 
@@ -25,14 +24,16 @@ export default function Search(){
   const [errorExists, setErrorExists] = useState(false)
 
   useEffect(()=>{
+    // Clears local storage whenever the search page loads, resetting the algorithm
       clearTraversalPath()
     }, [])
 
   useEffect(()=>{
     console.log("ACTIONDATA:", actionData)
   }, [actionData])
-  
+
   useEffect(()=>{
+    // Keeps track of search error state, opening and closing the snackbar
     if(actionData?.action === 'error'){
       setErrorExists(true)
     }

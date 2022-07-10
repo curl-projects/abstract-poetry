@@ -27,7 +27,6 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
       return node.model.attributes.nodeId === nodeId
     })
 
-    // use the current active node to generate a path of all visited papers
     const path = node.getPath()
 
     // find the first closest paper that hasn't already been visited
@@ -38,6 +37,7 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
     // TODO
     // if the result is null (i.e. you've exhausted all of the most recent papers)
     // then expand the search and repeat until you have a result to return
+    // The exact implementation depends on the
     return result
   }
   return knn

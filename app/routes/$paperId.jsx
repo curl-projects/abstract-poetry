@@ -54,7 +54,7 @@ export default function PaperId(){
   useEffect(async()=>{
     // TODO:
     // the nearestNewPaper algorithm should return the new algorithm parameters, which are
-    // then used here to update the traversal pat
+    // then used here to update the traversal path
     if(data.search){
       await localforage.setItem("activeNodeId", data.search)
     }
@@ -71,6 +71,7 @@ export default function PaperId(){
   }, [data])
 
   useEffect(()=>{
+    // Handle info messages passed from search
     if(data.message){
       setMessageExists(true)
       console.log(caseToMessage(data.messsage, data.searchString))

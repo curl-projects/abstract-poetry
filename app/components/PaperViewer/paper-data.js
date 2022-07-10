@@ -18,7 +18,6 @@ export function PaperData(props){
         />
       <PaperAbstract
         doi={props.doi}
-        title={props.metadata.title ? props.metadata.title : ""}
         abstract={props.metadata.abstract ? props.metadata.abstract : ""}
         />
     </div>

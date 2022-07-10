@@ -9,8 +9,6 @@ export function ReadingList(){
       // Should be exportable as raw JSON
       // Should be exportable to Zotero and Mendeley (any others? ask Ellie)
 
-      /
-
 
   return(
     <div>
