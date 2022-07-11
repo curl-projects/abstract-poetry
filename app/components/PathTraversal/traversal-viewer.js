@@ -6,27 +6,24 @@ import { useCenteredTree } from "~/utils/tree-visualisation"
 import { checkIfActiveNode } from "~/utils/visited-papers"
 import * as localforage from "localforage";
 import NoSSR from 'react-no-ssr-depup';
+import { traversalNode } from "~/components/PathTraversal/traversal-node"
 
-
-const traversalNode = ({ nodeDatum, nodeState }) => (
-  <React.Fragment>
-    <g>
-    <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}?nodeId=${nodeDatum.attributes.nodeId}` : ""}>
-    <circle
-      r={15}
-      onClick={() => {
-        localforage.setItem("activeNodeId", nodeDatum.attributes?.nodeId)
-      }}
-      fill={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"}
-      >
-      </circle>
-      <text>
-        {nodeDatum.name}
-      </text>
-    </Link>
-    </g>
-  </React.Fragment>
-);
+// export const traversalNode = ({ nodeDatum, nodeState }) => (
+//   <React.Fragment>
+//     <g>
+//     <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}?nodeId=${nodeDatum.attributes.nodeId}` : ""}>
+//     <circle
+//       r={15}
+//       fill={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"}
+//       >
+//       </circle>
+//       <text>
+//         {nodeDatum.name}
+//       </text>
+//     </Link>
+//     </g>
+//   </React.Fragment>
+// );
 
 // TREE UPDATE:
   // When you click on a node, update the most recently visited node to that node
@@ -44,8 +41,7 @@ const traversalNode = ({ nodeDatum, nodeState }) => (
 
 export function TraversalViewer(props){
   const [dimensions, translate, containerRef] = useCenteredTree();
-  const [nodeState, setNodeState] = useState("hello")
-  const submit = useSubmit();
+  const [nodeState, setNodeState] = useState("")
 
   useEffect(()=>{
     setNodeState(props.nodeState)
@@ -74,20 +70,3 @@ export function TraversalViewer(props){
     </div>
   )
 }
-//
-// <foreignObject width={300} height={300} y={-15} x={-15} style={{cursor: "grab"}}>
-//   <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}` : ""}>
-//     <button style={{ width: "30px",
-//                   cursor: "pointer",
-//                   height: '30px',
-//                   borderRadius: "100px",
-//                   border: '2px solid black',
-//                   backgroundColor: nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"
-//                 }}>
-//     </button>
-//   </Link>
-//     <div>
-//       <p style={{whiteSpace: "nowrap", overflow: "auto"}}>{nodeDatum.name}</p>
-//     </div>
-// </foreignObject>
-//
