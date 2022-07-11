@@ -1,5 +1,10 @@
+import { Redis } from "@upstash/redis";
 import TreeModel from 'tree-model';
-import { redis } from "~/models/redis.server"
+
+const redis = new Redis({
+  url: 'https://global-sterling-marlin-30591.upstash.io',
+  token: 'AXd_ASQgOTZkNTJkOGUtNzM3MC00YzRlLThjN2EtOTI3OTljYTc4YTZlODZjNmU1MjMxMWQ1NGRlMGFmMWJmZDdjMjFkNTIwNTY=',
+})
 
 export async function doiToCitation(doi, citationStyle){
 
@@ -16,7 +21,7 @@ export async function doiToCitation(doi, citationStyle){
 
 export async function extractPinnedDOIs(rootModel){
   const tree = new TreeModel();
-  const root = tree.parse(rootModel)
+  const root = tree.parse(JSON.parse(rootModel))
 
   // Push the DOIs of all pinned papers into a list
   let doiList = []
@@ -25,19 +30,15 @@ export async function extractPinnedDOIs(rootModel){
       doiList.push(node.model.attributes.doi)
     }
   })
-
   return doiList
 }
 
 export async function generateBasicMetadata(rootModel){
   const readingListDOI = await extractPinnedDOIs(rootModel)
-
-  let metadataArray = []
+  const metadataArray = []
   for(let doi of readingListDOI){
-    // TODO Maybe replace this so it uses a batch get request instead
     let metadata = await redis.get(doi)
-    let metadataJSON = JSON.parse(metadata)
-    metadataArray.push(`doi:${doi}, title:${metadataJSON.title}`)
+    metadataArray.push(`doi:${doi}, title:${metadata.title}`)
   }
-  return "\n".join(metadataArray)
+  return metadataArray.join('\n')
 }

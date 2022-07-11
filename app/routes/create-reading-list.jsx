@@ -1,25 +1,21 @@
-import { doiToCitation, extractPinnedDOIs } from "~/models/citations.server"
-
+import { doiToCitation, generateBasicMetadata, extractPinnedDOIs } from "~/models/citations.server"
 
 export async function action({ request }){
   const formData = await request.formData();
-  const rootModel = formData.get('rootMOdel')
+  const rootModel = formData.get('rootModel')
   const citationStyle = formData.get('citationStyle')
 
   // Get basic metadata from DOIs from the Redis store as a bandaid solution because
   // getting citations is too slow for now
 
-  const citationsString = await generateBasicMetadata(rootModel)
+  const dois = await extractPinnedDOIs(rootModel)
 
-  // CODE THAT WILL BE USED LATER TO GENERATE CITATIONS
-  // const citation = await doiToCitation(doi, citationStyle);
-  // const text = await citation.text();
-  // console.log("CITATION TEXT:", text);
+  const citationsString = await generateBasicMetadata(rootModel)
 
   return new Response(citationsString, {
     headers: {
       "content-type": "text/plain",
-      "content-disposition": "attachment; filename=feedback.txt"
+      "content-disposition": "attachment; filename=citations.txt"
     }
   })
 }
