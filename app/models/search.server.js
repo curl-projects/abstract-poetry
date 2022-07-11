@@ -1,8 +1,14 @@
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import { redirect } from "@remix-run/node"
-import { redis } from "~/models/redis.server"
+// import { redis } from "~/models/redis.server"
 
 var doiRegex = require('doi-regex')
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: "global-sterling-marlin-30591.upstash.io",
+  token: "AXd_ASQgOTZkNTJkOGUtNzM3MC00YzRlLThjN2EtOTI3OTljYTc4YTZlODZjNmU1MjMxMWQ1NGRlMGFmMWJmZDdjMjFkNTIwNTY="
+})
 
 export async function checkDoi(doi){
   let exists = await redis.exists(doi)

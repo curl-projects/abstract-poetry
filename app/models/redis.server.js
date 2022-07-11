@@ -1,6 +1,6 @@
 import { Redis } from "@upstash/redis";
 
 export const redis = new Redis({
-  url: process.env.METADATA_URL,
-  token: process.env.METADATA_TOKEN
+  url: "global-sterling-marlin-30591.upstash.io",
+  token: "AXd_ASQgOTZkNTJkOGUtNzM3MC00YzRlLThjN2EtOTI3OTljYTc4YTZlODZjNmU1MjMxMWQ1NGRlMGFmMWJmZDdjMjFkNTIwNTY="
 })
