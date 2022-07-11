@@ -1,0 +1,152 @@
+/* ------------------------------ */
+/* Resets                         */
+/* ------------------------------ */
+
+/* Reset Box-Sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Reset default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    height: 100%;
+    text-rendering: optimizeSpeed;
+    line-height: 1.35;
+    overflow: hidden;
+    font-family: var(--ff-sansserif);
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* ------------------------------ */
+/* Custom Properties              */
+/* Colors, Fonts, Spacers, Type   */
+/* ------------------------------ */
+
+:root {
+    /* Colors */
+    /* Colors are in comma-separated RGB ints for flexible alpha */
+    /* e.g. rgba(--clr-grey-100, --alpha-low) */
+
+    /* Declarative */
+    /* [100 upto 800] : dark to light */
+
+    --clr-grey-100: 18, 18, 18;
+    --clr-grey-200: 51, 51, 51;
+    --clr-grey-300: 85, 85, 85;
+    --clr-grey-400: 120, 120, 120;
+    --clr-grey-500: 204, 204, 204;
+    --clr-grey-600: 226, 226, 226;
+    --clr-grey-700: 243, 243, 243;
+    --clr-grey-800: 248, 248, 248;
+    --clr-white: 255, 255, 255;
+
+    /* Semantic Colors */
+
+    /* Primary */
+    --clr-primary: 55, 36, 229;
+    
+    /* Accent */
+    --clr-accent-100: 48, 85, 185;
+    --clr-accent-200: 48, 76, 156;
+    --clr-accent-300: 48, 85, 185;
+
+    /* Neutral */
+    --clr-neutral-100: 105, 120, 163;
+    --clr-neutral-200: 139, 149, 178;
+    --clr-neutral-300: 182, 187, 201;
+    --clr-neutral-400: 241, 245, 255;
+    
+
+    /* Glass */
+    --glass-100: rgba(var(--clr-white), var(--alpha-200));
+    --glass-200: rgba(var(--clr-white), var(--alpha-400));
+
+    /* Background */
+    --bg-100: #0E091D;
+
+
+    /* Transparency */
+    --alpha-200: 0.06;
+    --alpha-400: 0.18;
+    --alpha-600: 0.55;
+    --alpha-800: 0.75;
+
+
+    /* Borders */
+    --br-circle: 1000px;
+    --br-sharp: var(--space-xs);
+
+    /* Typography */
+    /* Fonts */
+    /* Lists fonts and fallbacks */
+    --ff-sansserif: 'Open Sans', sans-serif;
+    --ff-serif: 'Libre Baskerville', serif;
+    --ff-monospace: 'IBM Mono', monospace;
+
+    /* Font sizes */
+    /* The interface scales by rem, which is set using --fs-unit */
+    --fs-unit: 1em;
+
+    --fs-xxs: calc(0.25 * var(--fs-unit));
+    --fs-xs: calc(0.5 * var(--fs-unit));
+    --fs-sm: calc(0.85 * var(--fs-unit));
+    --fs-md: calc(1.25 * var(--fs-unit));
+    --fs-lg: calc(2 * var(--fs-unit));
+    --fs-xl: calc(3.25 * var(--fs-unit));
+    --fs-xxl: calc(5.25 * var(--fs-unit));
+
+    /* Space */
+    --space-unit: var(--space-unit);
+
+    --space-xxs: calc(0.25 * var(--space-unit));
+    --space-xs: calc(0.5 * var(--space-unit));
+    --space-sm: calc(0.85 * var(--space-unit));
+    --space-md: calc(1.25 * var(--space-unit));
+    --space-lg: calc(1.75 * var(--space-unit));
+    --space-xl: calc(2.75 * var(--space-unit));
+    --space-xxl: calc(5.25 * var(--space-unit));
+
+}
+
