@@ -1,8 +1,9 @@
-import { SeedSearch } from "~/components/SeedSearch/seed-search.js"
 import { useEffect } from 'react';
 import { useActionData } from "@remix-run/react"
 import { json, redirect, createSession } from "@remix-run/node"
+
 import { getKNNFromVector, getKNNFromDoi, checkDoi } from "~/models/embeddings.server.js"
+import { SeedSearch } from "~/components/SeedSearch/seed-search.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation";
 import { clearTraversalPath } from "~/utils/visited-papers"
 
