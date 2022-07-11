@@ -22,7 +22,6 @@ export const loader = async ({
   const url = new URL(request.url)
   const search = new URLSearchParams(url.search)
   const metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
-  console.log("METADATA:", metadata)
   const data = {
     metadata: metadata,
     search: search.get('nodeId'),
@@ -60,7 +59,7 @@ export default function PaperId(){
       await localforage.setItem("activeNodeId", data.search)
     }
     updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath, setNodeState)
-  }, [params.paperId])
+  }, [params.paperId, data.search])
 
   useEffect(()=>{
     console.log("TRAVERSAL PATH:", traversalPath)
