@@ -6,6 +6,7 @@ import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
+import { Header, Background} from "~/components/PaperViewer/static.js"
 
 import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
@@ -76,38 +77,26 @@ export default function PaperId() {
   }, [actionData])
 
   return (
-    <div style={{ height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center" }}>
-      <div className="ComponentWrapper" style={{
-        border: '2px dashed black',
-        height: "90%",
-        width: "90%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-        <div className="PaperViewer" style={{
-          flex: 1.5,
-          width: "90%",
-          border: '2px dashed purple',
-          display: "flex",
-        }}>
-          <ControlPanel
-            actionData={actionData}
-            traversalPath={traversalPath}
-            mostRecentNode={nodeState}
-            setTraversalPath={setTraversalPath}
-          />
-          <PaperData
-            doi={deslugifyDoi(params.paperId)}
-            metadata={data.metadata ? data.metadata : {}}
-          />
-        </div>
-        <TraversalViewer
-          traversalPath={traversalPath}
-          nodeState={nodeState}
-        />
-      </div>
+    <div className="container grid-view">
+      <Header />
+      <div className="axis"/>
+      <Background/>  
+      <ControlPanel
+        actionData={actionData}
+        traversalPath={traversalPath}
+        mostRecentNode={nodeState}
+        setTraversalPath={setTraversalPath}
+      />
+      <PaperData
+        doi={deslugifyDoi(params.paperId)}
+        metadata={data.metadata ? data.metadata : {}}
+      />
+      <TraversalViewer
+        traversalPath={traversalPath}
+        nodeState={nodeState}
+        className="traversal-viewer"
+      />
+
     </div>
   )
 }

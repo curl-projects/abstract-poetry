@@ -4,53 +4,34 @@ import { deslugifyDoi } from "~/utils/doi-manipulation"
 import { nearestNewPaper } from "~/utils/algorithms"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 
-export function ControlPanel(props){
+export function ControlPanel(props) {
   const params = useParams();
 
-  // TODO
-  // FUNCTIONALITY
-    // buttons in the control panel should be linked to keypresses
-      // Right Arrow: Positive impression
-      // Left Arrow: Negative impression
-      // P: Pin
+  return (
+    <div className="control-panel flex-column">
+      <div className="panel"/>
 
-  return(
-    <div className="ControlPanel" style={{
-        border: '2px solid yellow',
-        flex: 0.5,
-        margin: "20px",
-        display: 'flex',
-        flexDirection: "column",
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <h1>Control Panel</h1>
-        <div className="ButtonWrapper" style={{
-          display: 'flex',
-        }}>
-        <Form method="post">
-          <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)}/>
-          <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)}/>
-          <button
-            name="impression"
-            type="submit"
-            value="false"
-            style={{
-              margin: "10px",
-              height: "40px"
-            }}>Less Like This</button>
-          <button
-            name="impression"
-            type="submit"
-            value="true"
-            style={{
-              margin: "10px",
-              height: "40px"
-            }}>More Like This</button>
+      <div className="panel flex-column-space-between">
+        <Form method="post" style = {{width: "100%"}}>
+          <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)} />
+          <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)} />
+          <div className="switch">
+            <button
+              name="impression"
+              type="submit"
+              value="false"
+              className="impression-button"
+            >-</button>
+            <button
+              name="impression"
+              type="submit"
+              value="true"
+              className="impression-button"
+              >+</button>
+          </div>
         </Form>
-          <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
-        </div>
-
+        <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>
+      </div>
     </div>
   )
 }
