@@ -37,6 +37,7 @@ export async function generateBasicMetadata(rootModel){
   const readingListDOI = await extractPinnedDOIs(rootModel)
   const metadataArray = []
   for(let doi of readingListDOI){
+    // TODO: use batching or pipelining here instead
     let metadata = await redis.get(doi)
     metadataArray.push(`doi:${doi}, title:${metadata.title}`)
   }

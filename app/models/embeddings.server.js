@@ -22,7 +22,7 @@ export async function getKNNFromDoi(doi, topK=1){
   let url = "https://embedding-db-ea3137b.svc.us-west1-gcp.pinecone.io/query"
   let data = {
     "id": doi,
-    "includeValues": true,
+    "includeValues": false,
     "topK": topK,
   }
 

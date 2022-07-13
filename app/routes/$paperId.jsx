@@ -55,6 +55,10 @@ export default function PaperId(){
     // TODO:
     // the nearestNewPaper algorithm should return the new algorithm parameters, which are
     // then used here to update the traversal path
+
+    // when traversing existing paths, node state is captured in a search parameter,
+    // which is then read into local storage to ensure that updateTraversalPath is
+    // working with the right information
     if(data.search){
       await localforage.setItem("activeNodeId", data.search)
     }

@@ -15,6 +15,7 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
 
   // the movement vector algorithm will replace the DOI input with a vector input,
   // and will use getKNNFromVector
+
   const knn = await getKNNFromDoi(doi, topK);
 
   if(knn.matches){
@@ -26,8 +27,8 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
     const node = root.first(function(node){
       return node.model.attributes.nodeId === nodeId
     })
-
-    const path = node.getPath()
+    
+    path = node.getPath()
 
     // find the first closest paper that hasn't already been visited
     const result = knn.matches.find(function(element){

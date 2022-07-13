@@ -78,7 +78,7 @@ export async function getTraversalPath(setter=null){
   return root
 }
 
-export async function checkIfActiveNode(id){
+export async function checkIfPinned(nodeId){
   const activeNodeId = await localforage.getItem("activeNodeId")
   return activeNodeId === id
 }
@@ -92,7 +92,7 @@ export async function pinCurrentPaper(pathSetter){
     return node.model.attributes.nodeId === activeNodeId
   })
 
-  activeNode.model.attributes.pinned = true
+  activeNode.model.attributes.pinned = !activeNode.model.attributes.pinned
 
   localforage.setItem('traversalPath', root.model)
   pathSetter(root.model)
