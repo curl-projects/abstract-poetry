@@ -18,6 +18,7 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
 
   const knn = await getKNNFromDoi(doi, topK);
 
+
   if(knn.matches){
     const tree = new TreeModel();
     const nodeId = JSON.parse(nodeState)
@@ -27,7 +28,7 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
     const node = root.first(function(node){
       return node.model.attributes.nodeId === nodeId
     })
-    
+
     path = node.getPath()
 
     // find the first closest paper that hasn't already been visited

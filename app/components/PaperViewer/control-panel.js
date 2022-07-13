@@ -16,13 +16,10 @@ export function ControlPanel(props){
   const [positiveDOI, setPositiveDOI] = useState(null);
 
   // Preloading
-    // Submit a form to a specified action without reloading when the page renders
-    // This form saves the output of the computation somewhere (where?)
-      // Could save DOIs into URL?
+
   useEffect(()=>{
     if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number")){
-      fetcher.submit({hello: 'finn',
-                      doi: deslugifyDoi(params.paperId),
+      fetcher.submit({doi: deslugifyDoi(params.paperId),
                       traversalPath: JSON.stringify(props.traversalPath),
                       mostRecentNode: JSON.stringify(props.mostRecentNode)},
 
@@ -31,6 +28,7 @@ export function ControlPanel(props){
   }, [props.traversalPath, props.mostRecentNode])
 
   useEffect(()=>{
+    // Saves prefetched doi's into state
     console.log("FETCHER DATA", fetcher.data)
     if(fetcher.data?.negativeImpression){
         setNegativeDOI(fetcher.data.negativeImpression.id)
