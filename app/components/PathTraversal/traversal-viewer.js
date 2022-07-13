@@ -1,11 +1,15 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Link, useParams, Form, useSubmit } from "@remix-run/react"
 import { slugifyDoi } from "~/utils/doi-manipulation"
+
 import Tree from 'react-d3-tree'
+
 import { useCenteredTree } from "~/utils/tree-visualisation"
 import { checkIfActiveNode } from "~/utils/visited-papers"
+
 import * as localforage from "localforage";
 import NoSSR from 'react-no-ssr-depup';
+
 import { traversalNode } from "~/components/PathTraversal/traversal-node"
 
 // export const traversalNode = ({ nodeDatum, nodeState }) => (
@@ -60,6 +64,13 @@ export function TraversalViewer(props) {
           data={props.traversalPath}
           renderCustomNodeElement={(rd3tProps) =>
             traversalNode({ ...rd3tProps, nodeState })}
+          styles={{
+            links: {
+
+              stroke: 'red',
+              strokeWidth: "1px",
+            },
+          }}
         />
       </NoSSR>
     </div>

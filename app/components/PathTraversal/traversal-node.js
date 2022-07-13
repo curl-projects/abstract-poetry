@@ -9,11 +9,12 @@ export const traversalNode = ({ nodeDatum, nodeState }) => (
     <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}?nodeId=${nodeDatum.attributes.nodeId}` : ""}>
     <circle
       r={15}
-      fill={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "green"}
+      fill={ nodeState === nodeDatum.attributes?.nodeId ? "#FFFFFF" : "#CCCCCC"}
+      stroke ={nodeDatum.attributes?.pinned ? "blue" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "#3724E5"}
       >
       </circle>
-      <text>
-        {nodeDatum.name}
+      <text className="node-text">
+        {false? nodeDatum.name : ""}
       </text>
     </Link>
     </g>

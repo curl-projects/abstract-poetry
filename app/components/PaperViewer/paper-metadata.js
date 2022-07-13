@@ -3,12 +3,12 @@ export function PaperMetadata(props){
     return(
       <div className="metadata flex-column" style = {{gap: "var(--space-xxs)"}}>
         <h3>{props.metadata.title}</h3>
+        {false? <small>{props.metadata.publicationDate}</small> : ""}
 
-        {props.metadata.authors ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")).map(authorObj =>
+        {false? props.metadata.authors ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")).map(authorObj =>
           <h4 key={authorObj.authorId}>{authorObj.name},</h4>
-        ) : ""}
+        ) : "" : ""}
        
-        <small>{props.metadata.publicationDate}</small>
         
       </div>
     )
