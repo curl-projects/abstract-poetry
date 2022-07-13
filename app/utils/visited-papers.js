@@ -78,6 +78,7 @@ export async function getTraversalPath(setter=null){
   return root
 }
 
+// TODO: will we use this?
 export async function checkIfPinned(nodeId){
   const activeNodeId = await localforage.getItem("activeNodeId")
   return activeNodeId === id
