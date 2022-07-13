@@ -14,3 +14,9 @@ export async function action({ request, params }){
 
   return {positiveImpression, negativeImpression}
 }
+//
+// <Link to={negativeDOI ? `/${slugifyDoi(negativeDOI)}` : "/"}
+//       ref={negativeDOI ? negativeSubmitRef : inactiveRef}
+//       onClick={() => negativeSubmitRef.current.click()}
+//        />
+// <Link to={positiveDOI ? `/${slugifyDoi(positiveDOI)}` : "/"} ref={positiveDOI ? positiveSubmitRef : inactiveRef} />

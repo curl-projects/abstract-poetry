@@ -11,6 +11,7 @@ export function ControlPanel(props){
   const positiveSubmitRef = useRef();
   const negativeSubmitRef = useRef();
   const exportRef = useRef();
+  const inactiveRef = useRef();
   const fetcher = useFetcher();
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
@@ -19,6 +20,7 @@ export function ControlPanel(props){
 
   useEffect(()=>{
     if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number")){
+      console.log("FETCHER SUBMISSION!")
       fetcher.submit({doi: deslugifyDoi(params.paperId),
                       traversalPath: JSON.stringify(props.traversalPath),
                       mostRecentNode: JSON.stringify(props.mostRecentNode)},
@@ -34,7 +36,7 @@ export function ControlPanel(props){
         setNegativeDOI(fetcher.data.negativeImpression.id)
         setPositiveDOI(fetcher.data.positiveImpression.id)
     }
-  }, [fetcher])
+  }, [fetcher.data])
 
   // Key-Press Control
   useKeyPress(keys, event=>{
@@ -77,40 +79,18 @@ export function ControlPanel(props){
         <Form method="post">
           <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)}/>
           <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)}/>
-          {negativeDOI &&
+          <input type="hidden" name="negativeDOI" value={negativeDOI ? negativeDOI : ""} />
+          <input type="hidden" name="positiveDOI" value={positiveDOI ? positiveDOI : ""} />
             <React.Fragment>
-              <Link to={`/${slugifyDoi(negativeDOI)}`} ref={negativeSubmitRef}>
                 <button
                   name="impression"
-                  type="button"
+                  type="submit"
+                  value="false"
+                  ref={negativeSubmitRef}
                   style={{
                     margin: "10px",
-                    height: "40px"
+                    height: "40px",
                   }}>Less Like This</button>
-              </Link>
-              <Link to={`/${slugifyDoi(positiveDOI)}`} ref={positiveSubmitRef}>
-                <button
-                  name="impression"
-                  type="button"
-                  value="true"
-                  style={{
-                    margin: "10px",
-                    height: "40px"
-                  }}>More Like This</button>
-              </Link>
-            </React.Fragment>
-          }
-          {!negativeDOI &&
-            <React.Fragment>
-              <button
-                name="impression"
-                type="submit"
-                value="false"
-                ref={negativeSubmitRef}
-                style={{
-                  margin: "10px",
-                  height: "40px"
-                }}>Less Like This</button>
               <button
                 name="impression"
                 type="submit"
@@ -121,7 +101,6 @@ export function ControlPanel(props){
                   height: "40px"
                 }}>More Like This</button>
             </React.Fragment>
-          }
 
         </Form>
           <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin Paper</button>

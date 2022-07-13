@@ -33,7 +33,19 @@ export const loader = async ({
 
 export const action = async({ request, params }) => {
   const formData = await request.formData();
+  const negativeDOI = formData.get('negativeDOI')
+  const positiveDOI = formData.get('positiveDOI')
   const impression = formData.get('impression')
+
+  // Determines whether the eager-loading has returned a result
+  if(negativeDOI !== "" && (negativeDOI !== deslugifyDoi(params.paperId) && positiveDOI !== deslugifyDoi(params.paperId))){
+    if(impression){
+      return redirect(`/${slugifyDoi(positiveDOI)}`)
+    }
+    return redirect(`/${slugifyDoi(negativeDOI)}`)
+  }
+
+  console.log("RUNNING ALGORITHM SYNCHRONOUSLY")
   const traversedPapers = formData.get('traversalPath')
   const nodeState = formData.get('mostRecentNode')
 
