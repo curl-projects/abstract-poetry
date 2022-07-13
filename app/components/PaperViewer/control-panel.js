@@ -13,40 +13,42 @@ export function ControlPanel(props) {
   return (
     <div className="control-panel flex-column">
       <div className="panel">
-        <img src={glyph} alt="Glyph Logo"/>
+        <img src={glyph} alt="Glyph Logo" />
       </div>
 
       <div className="panel flex-column">
         <Form method="post" className="switch-wrapper">
           <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)} />
           <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)} />
-            <div className="switch flex-row" style={{gap:"0px"}}>
-              <button
-                name="impression"
-                type="submit"
-                value="false"
-                className="impression-button"
-              >
-                <div className="circle left"/>
-              </button>
-              <button
-                name="impression"
-                type="submit"
-                value="true"
-                className="impression-button"
-                >
-                  <div className="circle right"/>
-                </button>
-            </div>
+          <div className="switch flex-row" style={{ gap: "0px" }}>
+            <button
+              name="impression"
+              type="submit"
+              value="false"
+              className="impression-button"
+            >
+              <div className="circle left" />
+            </button>
+            <button
+              name="impression"
+              type="submit"
+              value="true"
+              className="impression-button"
+            >
+              <div className="circle right" />
+            </button>
+          </div>
         </Form>
-        <div className="switch-wrapper flex-row">
-          <div className="impression-button">
-            <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin</button>
+        <div className="button-wrapper flex-row">
+          <div className="button-column flex-column">
+            <button className="button" onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
+            <button className="button" onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
           </div>
-          <div className="impression-button">
-            <button onClick={() => pinCurrentPaper(props.setTraversalPath)}>Pin</button>
+
+          <div className="button pin">
+            <button onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
           </div>
-        </div>      
+        </div>
       </div>
     </div>
   )
