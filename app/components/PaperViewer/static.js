@@ -35,7 +35,7 @@ export function Background() {
   return (
     <>
       <div className="background">
-        <div style={backgroundImg} />
+        <div className='background-img'/>
       </div>
       <div className="background-panel-left" />
       <div className="background-panel-right" />

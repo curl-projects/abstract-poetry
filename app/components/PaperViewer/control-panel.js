@@ -42,13 +42,19 @@ export function ControlPanel(props) {
         <div className="button-wrapper flex-row">
           <div className="button-column flex-column">
             <div className="button">
-              <button onClick={() => pinCurrentPaper(props.setTraversalPath)}> </button>
+              <button onClick={() => pinCurrentPaper(props.setTraversalPath)}/> 
             </div>
-            <button className="button" onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
+            <div className="button">
+              <button onClick={() => pinCurrentPaper(props.setTraversalPath)}/>
+            </div>
           </div>
 
           <div className="button pin">
-            <div className="effect-1">Pin</div>
+            <div className="effect-1"/>
+            <div className="toggle">
+              <div className="eye"/>
+              
+            </div>
             <button onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
           </div>
         </div>

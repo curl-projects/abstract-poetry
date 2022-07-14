@@ -87,7 +87,7 @@ export default function PaperId() {
         mostRecentNode={nodeState}
         setTraversalPath={setTraversalPath}
       />
-      <div className="blowout-title">
+      <div className="blowout-title no-select">
         {data.metadata.title ? <h1>{data.metadata.title}</h1> : ""}
       </div>
       <PaperData
