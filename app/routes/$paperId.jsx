@@ -1,4 +1,3 @@
-import * as localforage from "localforage";
 import { useEffect, useState } from "react";
 import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"

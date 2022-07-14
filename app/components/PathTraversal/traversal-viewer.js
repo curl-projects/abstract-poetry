@@ -5,7 +5,6 @@ import { slugifyDoi } from "~/utils/doi-manipulation"
 import Tree from 'react-d3-tree'
 
 import { useCenteredTree } from "~/utils/tree-visualisation"
-import { checkIfActiveNode } from "~/utils/visited-papers"
 
 import * as localforage from "localforage";
 import NoSSR from 'react-no-ssr-depup';
