@@ -1,11 +1,16 @@
+import * as localforage from "localforage";
 import { useEffect, useState } from "react";
 import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
+
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
+import { Header, Background, Share, Controls } from "~/components/PaperViewer/static.js"
+
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
+
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
@@ -32,7 +37,7 @@ export const loader = async ({
   return json(data)
 }
 
-export const action = async({ request, params }) => {
+export const action = async ({ request, params }) => {
   const formData = await request.formData();
   const negativeDOIString = formData.get('negativeDOI')
   const positiveDOIString = formData.get('positiveDOI')
@@ -64,7 +69,7 @@ export const action = async({ request, params }) => {
   return(redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
 }
 
-export default function PaperId(){
+export default function PaperId() {
   const params = useParams();
   const data = useLoaderData();
   const actionData = useActionData();
@@ -75,7 +80,8 @@ export default function PaperId(){
   const [messageExists, setMessageExists] = useState(false)
   const [clusters, setClusters] = useState(null)
 
-  useEffect(async()=>{
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
     // TODO:
     // the nearestNewPaper algorithm should return the new algorithm parameters, which are
     // then used here to update the traversal path
@@ -95,12 +101,12 @@ export default function PaperId(){
   }, [params.paperId, data.search])
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("TRAVERSAL PATH:", traversalPath)
   }, [traversalPath])
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("DATA:", data)
   }, [data])
 
@@ -121,66 +127,58 @@ export default function PaperId(){
   }, [nodeState])
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("ACTION DATA:", actionData)
   }, [actionData])
 
-  return(
-    <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", overflow: 'hidden'}}>
-      <div className="ComponentWrapper" style={{border: '2px dashed black',
-                   height: "90%",
-                   width: "80%",
-                   display: "flex",
-                   flexDirection: "column",
-                   justifyContent: "center",
-                   alignItems: "center",
-                 }}>
-        <div className="PaperViewer"style={{
-            flex: 1.5,
-            width: "90%",
-            border: '2px dashed purple',
-            display: "flex",
-          }}>
-          <ControlPanel
-            actionData={actionData}
-            traversalPath={traversalPath}
-            mostRecentNode={nodeState}
-            setTraversalPath={setTraversalPath}
-            algParams={algParams}
-            clusters={clusters}
-            />
-            <PaperData
-              doi={deslugifyDoi(params.paperId)}
-              metadata={data.metadata ? data.metadata : {}}
-            />
-        </div>
-        <TraversalViewer
-          traversalPath={traversalPath}
-          nodeState={nodeState}
-          />
-          <Snackbar
-            open={messageExists}
-            autoHideDuration={6000}
-            message={data.message && data.searchString ? caseToMessage(data.message, data.searchString) : ""}
-            onClose={()=>setMessageExists(false)}
-            action={
-              <React.Fragment>
-                <IconButton
-                  aria-label="close"
-                  sx={{ p: 0.5 }}
-                  color="inherit"
-                  onClick={() => setMessageExists(false)}
-                  >
-                  <CloseIcon />
-                </IconButton>
-              </React.Fragment>
-            }
-          />
+  return (
+    <div className="container grid-view">
+      <Header />
+
+      <div className="axis" />
+
+      <ControlPanel
+        actionData={actionData}
+        traversalPath={traversalPath}
+        mostRecentNode={nodeState}
+        setTraversalPath={setTraversalPath}
+        algParams={algParams}
+        clusters={clusters}
+        metadata = {data.metadata? data.metadata : {}}
+
+      />
+      <PaperData
+        doi={deslugifyDoi(params.paperId)}
+        metadata={data.metadata ? data.metadata : {}}
+      />
+      <TraversalViewer
+        traversalPath={traversalPath}
+        nodeState={nodeState}
+        className="traversal-viewer"
+      />
+
+      <Background />
+
+      <Snackbar
+        open={messageExists}
+        autoHideDuration={6000}
+        message={data.message && data.searchString ? caseToMessage(data.message, data.searchString) : ""}
+        onClose={()=>setMessageExists(false)}
+        action={
+          <React.Fragment>
+            <IconButton
+              aria-label="close"
+              sx={{ p: 0.5 }}
+              color="inherit"
+              onClick={() => setMessageExists(false)}
+              >
+              <CloseIcon />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
       </div>
-    </div>
+
+
   )
 }
-//
-// export const ErrorBoundary = ({error}) => {
-//   return redirect(`/${slugifyDoi(params.paperId)}`)
-// }

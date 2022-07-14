@@ -4,16 +4,17 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-export function SeedSearch(props){
-    return(
-    <div style={{border: '2px dashed red',
-                 height: "50%",
-                 width: "60%",
-                 display: "flex",
-                 flexDirection: 'column',
-                 justifyContent: "center",
-                 alignItems: "center"
-               }}>
+export function SeedSearch(props) {
+  return (
+    <div style={{
+      border: '2px dashed red',
+      height: "50%",
+      width: "60%",
+      display: "flex",
+      flexDirection: 'column',
+      justifyContent: "center",
+      alignItems: "center"
+    }}>
       <h1>Start Searching!</h1>
       <Form method="post">
         <input
@@ -24,7 +25,7 @@ export function SeedSearch(props){
             height: "30px",
             width: "300px"
           }}
-          />
+        />
         <button type="submit">Search!</button>
       </Form>
       <Snackbar
