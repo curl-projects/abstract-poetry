@@ -6,7 +6,7 @@ import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
-import { Header, Background} from "~/components/PaperViewer/static.js"
+import { Header, Background } from "~/components/PaperViewer/static.js"
 
 import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
@@ -79,17 +79,15 @@ export default function PaperId() {
   return (
     <div className="container grid-view">
       <Header />
-      <div className="axis"/>
-      <Background/>  
+
+      <div className="axis" />
+
       <ControlPanel
         actionData={actionData}
         traversalPath={traversalPath}
         mostRecentNode={nodeState}
         setTraversalPath={setTraversalPath}
       />
-      <div className="blowout-title no-select">
-        {data.metadata.title ? <h1>{data.metadata.title}</h1> : ""}
-      </div>
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
@@ -99,6 +97,8 @@ export default function PaperId() {
         nodeState={nodeState}
         className="traversal-viewer"
       />
+
+      <Background />
 
     </div>
   )

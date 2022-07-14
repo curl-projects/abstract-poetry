@@ -1,4 +1,4 @@
-import { Form, useSubmit, useParams } from "@remix-run/react";
+import { Form, useSubmit } from "@remix-run/react";
 import { useRef, useState, useEffect } from "react"
 
 import glyph from "../../../public/assets/Glyph.svg";
@@ -10,12 +10,12 @@ import { nearestNewPaper } from "~/utils/algorithms"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 
 export function ControlPanel(props) {
-  const params = useParams();
+  
 
   return (
     <div className="control-panel flex-column">
       <div className="panel">
-        <img src={glyph} alt="Glyph Logo" />
+        <img src={glyph} alt="Glyph Logo"/>
       </div>
 
       <div className="panel flex-column">
