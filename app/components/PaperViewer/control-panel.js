@@ -10,12 +10,19 @@ import { nearestNewPaper } from "~/utils/algorithms"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 
 export function ControlPanel(props) {
+
+  const {citationCount, referenceCount, influentialCitationCount } = props.metadata
   
 
   return (
     <div className="control-panel flex-column">
       <div className="panel">
-        <img src={glyph} alt="Glyph Logo"/>
+        <img src={glyph} alt="Glyph Logo" style = {{zIndex: "100", height: "100%", width: "100%"}}/>
+        <div className="flex-column-space-between" style ={{display: "none", position: "absolute", top: "0px", left: "0px", alignItems: "center", justifyContent: "center", width: "100%"}}>
+          <p>{citationCount}</p>
+          <p>{referenceCount}</p>
+          <p>{influentialCitationCount}</p>
+        </div>
       </div>
 
       <div className="panel flex-column">

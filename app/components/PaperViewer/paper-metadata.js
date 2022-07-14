@@ -1,5 +1,4 @@
 import calendar from "../../../public/assets/calendar.svg";
-import { MetadataBit } from "./static";
 import authorIcon from "../../../public/assets/authors.svg";
 
 import { useState } from "react";

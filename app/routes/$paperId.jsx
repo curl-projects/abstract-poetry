@@ -6,7 +6,7 @@ import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
-import { Header, Background } from "~/components/PaperViewer/static.js"
+import { Header, Background, Share, Controls } from "~/components/PaperViewer/static.js"
 
 import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
@@ -87,6 +87,7 @@ export default function PaperId() {
         traversalPath={traversalPath}
         mostRecentNode={nodeState}
         setTraversalPath={setTraversalPath}
+        metadata = {data.metadata? data.metadata : {}}
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}
@@ -98,12 +99,11 @@ export default function PaperId() {
         className="traversal-viewer"
       />
 
+      <Share/>
+      <Controls/>
+
       <Background />
 
     </div>
   )
 }
-//
-// export const ErrorBoundary = ({error}) => {
-//   return redirect(`/${slugifyDoi(params.paperId)}`)
-// }

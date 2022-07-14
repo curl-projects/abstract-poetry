@@ -1,6 +1,10 @@
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 
+
+// Stateless styled components to keep `$paperId.jsx` concise
+
+
 export function Header() {
   return (
     <>
@@ -33,7 +37,7 @@ export function Background() {
   return (
     <>
       <div className="background">
-        <div className='background-img'/>
+        <div className='background-img' />
       </div>
       <div className="background-panel-left" />
       <div className="background-panel-right" />
@@ -41,6 +45,22 @@ export function Background() {
   )
 }
 
-export function MetadataBit(){
+export function Share() {
+
+  return (
+    <div className="traversal-share">
+        <div className = ""/>
+    </div>
+  )
+
+}
+
+export function Controls() {
+
+  return (
+    <div className="traversal-controls">
+        <div className = ""/>
+    </div>
+  )
 
 }

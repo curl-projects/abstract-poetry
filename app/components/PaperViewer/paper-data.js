@@ -6,7 +6,6 @@ import { useState } from "react"
 export function PaperData(props) {
 
   const [toggle, setToggle] = useState(true)
-  console.log(props.metadata)
 
   return (
     <div className="paper-viewer">

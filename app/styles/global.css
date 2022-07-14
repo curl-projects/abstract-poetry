@@ -317,6 +317,40 @@ body {
     z-index: 3;
 }
 
+.traversal-controls {
+    grid-column: 2;
+    grid-row: 3;
+    z-index: 4;
+}
+
+.traversal-share {
+    grid-column: 1;
+    grid-row: 3;
+    z-index: 4;
+}
+
+.panel-glass {
+    background-color: rgb(var(--clr-grey-600), var(--alpha-600));
+    
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+.toolbar {
+    z-index: 6;
+    
+    align-self: flex-end;
+    justify-self: flex-end;
+    
+
+    height: var(--space-xxl);
+    width: 50%;
+}
+
+.abs-right {
+    right: 0;
+}
+
 .control-panel {
     grid-column: 1;
     grid-row: 2;
@@ -576,8 +610,6 @@ input[type="text"]:focus {
     padding: var(--space-xxs);
     overflow: hidden;
 }
-
-
 
 .metadata-grid img {
     width: 100%;
