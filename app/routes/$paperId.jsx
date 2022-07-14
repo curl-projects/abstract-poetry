@@ -4,7 +4,7 @@ import { json, redirect } from "@remix-run/node"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
-import { nearestNewPaper } from "~/models/backend-algorithms.server.js"
+import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
@@ -18,7 +18,6 @@ import { caseToMessage } from "~/utils/messages-and-alerts"
 export const loader = async ({
   params, request
 }) => {
-
   const url = new URL(request.url)
   const search = new URLSearchParams(url.search)
   const metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
@@ -26,7 +25,7 @@ export const loader = async ({
     metadata: metadata,
     search: search.get('nodeId'),
     message: search.get('message'),
-    searchString: search.get('searchString')
+    searchString: search.get('searchString'),
   }
   return json(data)
 }
@@ -45,6 +44,7 @@ export const action = async({ request, params }) => {
     return redirect(`/${slugifyDoi(negativeDOI)}`)
   }
 
+  // this triggers when the user is faster than the preloading
   console.log("RUNNING ALGORITHM SYNCHRONOUSLY")
   const traversedPapers = formData.get('traversalPath')
   const nodeState = formData.get('mostRecentNode')

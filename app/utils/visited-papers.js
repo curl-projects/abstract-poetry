@@ -52,7 +52,8 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
   catch(error){
     console.log("CATCH ERROR:", error)
     var tree = new TreeModel();
-    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1, pinned: false}}
+    const clusters = await localforage.getItem("clusters")
+    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: Array(clusters.length).fill(1), nodeId: 1, pinned: false}}
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
