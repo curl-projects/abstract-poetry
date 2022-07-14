@@ -2,6 +2,8 @@ import { Form, useSubmit, useParams } from "@remix-run/react";
 import { useRef, useState, useEffect } from "react"
 
 import glyph from "../../../public/assets/Glyph.svg";
+import read from "../../../public/assets/Read.svg";
+import pin from "../../../public/assets/Pin.svg";
 
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import { nearestNewPaper } from "~/utils/algorithms"
@@ -42,18 +44,37 @@ export function ControlPanel(props) {
         <div className="button-wrapper flex-row">
           <div className="button-column flex-column">
             <div className="button">
-              <button onClick={() => pinCurrentPaper(props.setTraversalPath)}/> 
+              <img className="anchor" src={pin} alt="Read Logo" />
+              <div className="key">
+                <div className="key-cap">
+                  P
+                </div>
+                <div className="key-caption">
+                  Pin
+                </div>
+              </div>
+              <button onClick={() => pinCurrentPaper(props.setTraversalPath)} />
             </div>
             <div className="button">
-              <button onClick={() => pinCurrentPaper(props.setTraversalPath)}/>
+
+              <img className="anchor" src={read} alt="Read Logo" />
+
+              <div className="key">
+                <div className="key-cap">
+                  R
+                </div>
+                <div className="key-caption">
+                  Read
+                </div>
+              </div>
+              <button onClick={() => pinCurrentPaper(props.setTraversalPath)} />
             </div>
           </div>
 
           <div className="button pin">
-            <div className="effect-1"/>
+            <div className="effect-1" />
             <div className="toggle">
-              <div className="eye"/>
-              
+              <div className="eye" />
             </div>
             <button onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
           </div>

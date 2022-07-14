@@ -1,4 +1,3 @@
-import bg1 from '../../../public/assets/1.jpeg';
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 
@@ -29,7 +28,6 @@ export function Background() {
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     zIndex: 1,
-    backgroundImage: `url('../../public/assets/${bg1}')`
   }
 
   return (
