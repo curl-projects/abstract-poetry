@@ -1,41 +1,17 @@
-# Welcome to Remix!
+# Route Structure
+- `search.jsx` encapsulates all code relating to search initialisation
+- `$paperId.jsx` encapsulates all code relating to paper traversal
+- `create-reading-list.jsx` is a resource route that's called to generate and download a reading list from a traversal tree
 
-- [Remix Docs](https://remix.run/docs)
+# Component Structure
+- `PaperViewer` contains all components related to viewing individual papers, including abstracts, metadata and the control panel
+- `PathTraversal` contains all components related to visualising traversal through the semantic space
+- `ReadingList` contains all components related to visualising the list of pinned papers
+- `SeedSearch` contains all components related to initial search
 
-## Fly Setup
+# Current Failure States, Issues & Bugs
+- The application will throw an error if all of the ten nearest neighbous of the active paper are already in the path from the root node to the node associated with that paper
+- Generating citations takes way too long because of how slow the DOI API is
 
-1. [Install `flyctl`](https://fly.io/docs/getting-started/installing-flyctl/)
-
-2. Sign up and log in to Fly
-
-```sh
-flyctl auth signup
-```
-
-3. Setup Fly. It might ask if you want to deploy, say no since you haven't built the app yet.
-
-```sh
-flyctl launch
-```
-
-## Development
-
-From your terminal:
-
-```sh
-npm run dev
-```
-
-This starts your app in development mode, rebuilding assets on file changes.
-
-## Deployment
-
-If you've followed the setup instructions already, all you need to do is run this:
-
-```sh
-npm run deploy
-```
-
-You can run `flyctl info` to get the url and ip address of your server.
-
-Check out the [fly docs](https://fly.io/docs/getting-started/node/) for more information.
+# Parts To Be Built
+- 
