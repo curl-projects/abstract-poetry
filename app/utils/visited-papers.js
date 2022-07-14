@@ -44,7 +44,6 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     // Client side parameter update
     // const newAlgParams = currentAlgParams[algParamIndex][0] += 1
 
-    console.log("IMPRESSION:", JSON.parse(impression), typeof JSON.parse(impression))
     if(JSON.parse(impression)){
         currentAlgParams[algParamIndex][0] += 1
     }
@@ -68,7 +67,13 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
   }
   // If traversal path doesn't exist, create a new tree
   catch(error){
-    console.log("CATCH ERROR:", error)
+    if(error === "Root does not exist -- you might be beginning your search"){
+      console.warn("CATCH ERROR (INTENDED):", error)
+    }
+    else{
+      console.error("CATCH ERROR (UNINTENDED):", error)
+
+    }
     var tree = new TreeModel();
     const clusters = await localforage.getItem("clusters")
     // const initialParams = Array(clusters.length).fill([1, 1])

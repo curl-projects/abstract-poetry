@@ -24,8 +24,8 @@ export async function extractPinnedDOIs(rootModel){
   const root = tree.parse(JSON.parse(rootModel))
 
   // Push the DOIs of all pinned papers into a list
-  let doiList = []
-  nodeList = root.walk(function(node){
+  var doiList = []
+  root.walk(function(node){
     if(node.model.attributes.pinned){
       doiList.push(node.model.attributes.doi)
     }
@@ -35,6 +35,11 @@ export async function extractPinnedDOIs(rootModel){
 
 export async function generateBasicMetadata(rootModel){
   const readingListDOI = await extractPinnedDOIs(rootModel)
+  console.log("READING LIST DOI:", readingListDOI && readingListDOI.length)
+  if(!readingListDOI.length){
+    throw "No pinned papers!"
+    console.log('Executing')
+  }
   const metadataArray = []
   for(let doi of readingListDOI){
     // TODO: use batching or pipelining here instead
