@@ -7,19 +7,23 @@ export function PaperMetadata(props) {
   if (props.metadata) {
     return (
       <>
-        
+
         <div className="metadata flex-column" style={{ gap: "var(--space-xxs)" }}>
           <h3>{props.metadata.title}</h3>
 
           <div className="flex-row metadata-row">
             <div className="flex-row">
-              <img src={calendar} alt={"Publication Date"} />
+              <div className="icon">
+                <img src={calendar} alt={"Publication Date"} />
+              </div>
               <small className="small">{props.metadata.publicationDate}</small>
             </div>
             <div className="flex-row">
-              <img src={authors} alt={"Authors"} />
+              <div className="icon">
+                <img src={authors} alt={"Authors"} />
+              </div>
               {props.metadata.authors ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")).map(authorObj =>
-                <small className="small" key={authorObj.authorId}>{authorObj.name} </small>
+                <small className="small" key={authorObj.authorId}>{authorObj.name} · </small>
               ) : ""}
             </div>
           </div>

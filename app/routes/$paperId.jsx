@@ -87,6 +87,9 @@ export default function PaperId() {
         mostRecentNode={nodeState}
         setTraversalPath={setTraversalPath}
       />
+      <div className="blowout-title">
+        {data.metadata.title ? <h1>{data.metadata.title}</h1> : ""}
+      </div>
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
