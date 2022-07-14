@@ -26,32 +26,42 @@ export const loader = async ({
     search: search.get('nodeId'),
     message: search.get('message'),
     searchString: search.get('searchString'),
+    updateIndex: search.get('updateIndex'),
+    impression: search.get('impression'),
   }
   return json(data)
 }
 
 export const action = async({ request, params }) => {
   const formData = await request.formData();
-  const negativeDOI = formData.get('negativeDOI')
-  const positiveDOI = formData.get('positiveDOI')
+  const negativeDOIString = formData.get('negativeDOI')
+  const positiveDOIString = formData.get('positiveDOI')
   const impression = formData.get('impression')
-
   // Determines whether the eager-loading has returned a result
-  if(negativeDOI !== "" && (negativeDOI !== deslugifyDoi(params.paperId) && positiveDOI !== deslugifyDoi(params.paperId))){
-    if(impression){
-      return redirect(`/${slugifyDoi(positiveDOI)}`)
+
+  if(negativeDOIString){
+    const positiveDOI = JSON.parse(positiveDOIString)
+    const negativeDOI = JSON.parse(negativeDOIString)
+    if(negativeDOI !== "" && (negativeDOI?.negativeImpressionDOI !== deslugifyDoi(params.paperId) && positiveDOI?.positiveImpressionDOI !== deslugifyDoi(params.paperId))){
+      if(JSON.parse(impression)){
+        return redirect(`/${slugifyDoi(positiveDOI.positiveImpressionDOI)}?updateIndex=${positiveDOI.positiveImpressionClusterIndex}&impression=true`)
+      }
+      return redirect(`/${slugifyDoi(negativeDOI.negativeImpressionDOI)}?updateIndex=${negativeDOI.negativeImpressionClusterIndex}&impression=false`)
     }
-    return redirect(`/${slugifyDoi(negativeDOI)}`)
   }
 
   // this triggers when the user is faster than the preloading
   console.log("RUNNING ALGORITHM SYNCHRONOUSLY")
   const traversedPapers = formData.get('traversalPath')
   const nodeState = formData.get('mostRecentNode')
+  const algParams = formData.get('algParams')
+  const clusters = formData.get('clusters')
 
   // the final version of this needs to return a DOI and the updated algorithm parameters
-  let nearestVectors = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, 5, nodeState)
-  return(redirect(`/${slugifyDoi(nearestVectors['id'])}`))
+  let [nextPapers, clusterIndex] = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, nodeState, algParams, clusters)
+
+  console.log("NEXT PAPERS:", nextPapers)
+  return(redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
 }
 
 export default function PaperId(){
@@ -60,8 +70,10 @@ export default function PaperId(){
   const actionData = useActionData();
   const [traversalPath, setTraversalPath] = useState({})
   const [nodeState, setNodeState] = useState({})
+  const [algParams, setAlgParams] = useState(null)
   const [pinningPaper, setPinningPaper] = useState(false)
   const [messageExists, setMessageExists] = useState(false)
+  const [clusters, setClusters] = useState(null)
 
   useEffect(async()=>{
     // TODO:
@@ -74,8 +86,14 @@ export default function PaperId(){
     if(data.search){
       await localforage.setItem("activeNodeId", data.search)
     }
-    updateTraversalPath(deslugifyDoi(params.paperId), [1, 2], setTraversalPath, setNodeState)
+
+    updateTraversalPath(deslugifyDoi(params.paperId), data.updateIndex, data.impression, setTraversalPath, setNodeState, setAlgParams)
+
+    // TODO: might be unnecessary, using it for the control-panel form
+    const clusters = await localforage.getItem('clusters')
+    setClusters(clusters)
   }, [params.paperId, data.search])
+
 
   useEffect(()=>{
     console.log("TRAVERSAL PATH:", traversalPath)
@@ -85,6 +103,10 @@ export default function PaperId(){
   useEffect(()=>{
     console.log("DATA:", data)
   }, [data])
+
+  useEffect(()=>{
+    console.log("ALG PARAMS STATE:", algParams)
+  }, [algParams])
 
   useEffect(()=>{
     // Handle info messages passed from search
@@ -124,6 +146,8 @@ export default function PaperId(){
             traversalPath={traversalPath}
             mostRecentNode={nodeState}
             setTraversalPath={setTraversalPath}
+            algParams={algParams}
+            clusters={clusters}
             />
             <PaperData
               doi={deslugifyDoi(params.paperId)}

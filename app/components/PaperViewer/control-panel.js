@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { deslugifyDoi, slugifyDoi } from "~/utils/doi-manipulation";
 import { pinCurrentPaper } from "~/utils/visited-papers";
 import useKeyPress from "react-use-keypress";
-
+import * as localforage from "localforage";
 
 export function ControlPanel(props){
   const params = useParams();
@@ -17,24 +17,27 @@ export function ControlPanel(props){
   const [positiveDOI, setPositiveDOI] = useState(null);
 
   // Preloading
-
-  useEffect(()=>{
-    if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number")){
-      console.log("FETCHER SUBMISSION!")
+  useEffect(async()=>{
+    if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
       fetcher.submit({doi: deslugifyDoi(params.paperId),
                       traversalPath: JSON.stringify(props.traversalPath),
-                      mostRecentNode: JSON.stringify(props.mostRecentNode)},
+                      mostRecentNode: JSON.stringify(props.mostRecentNode),
+                      algParams: JSON.stringify(props.algParams),
+                      clusters: JSON.stringify(await localforage.getItem("clusters"))
+                    },
 
                       {method: "post", action: '/preload-impressions'})
     }
-  }, [props.traversalPath, props.mostRecentNode])
+  }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
 
   useEffect(()=>{
+    console.log("FETCHER DATA:", fetcher.data)
+  }, [fetcher.data])
+  useEffect(()=>{
     // Saves prefetched doi's into state
-    console.log("FETCHER DATA", fetcher.data)
     if(fetcher.data?.negativeImpression){
-        setNegativeDOI(fetcher.data.negativeImpression.id)
-        setPositiveDOI(fetcher.data.positiveImpression.id)
+        setNegativeDOI({negativeImpressionDOI: fetcher.data.negativeImpression.id, negativeImpressionClusterIndex: fetcher.data.negativeImpressionClusterIndex})
+        setPositiveDOI({positiveImpressionDOI: fetcher.data.positiveImpression.id, positiveImpressionClusterIndex: fetcher.data.positiveImpressionClusterIndex})
     }
   }, [fetcher.data])
 
@@ -79,8 +82,10 @@ export function ControlPanel(props){
         <Form method="post">
           <input type="hidden" name="traversalPath" value={JSON.stringify(props.traversalPath)}/>
           <input type="hidden" name="mostRecentNode" value={JSON.stringify(props.mostRecentNode)}/>
-          <input type="hidden" name="negativeDOI" value={negativeDOI ? negativeDOI : ""} />
-          <input type="hidden" name="positiveDOI" value={positiveDOI ? positiveDOI : ""} />
+          <input type="hidden" name="algParams" value={JSON.stringify(props.algParams)} />
+          <input type="hidden" name="negativeDOI" value={negativeDOI ? JSON.stringify(negativeDOI) : ""} />
+          <input type="hidden" name="positiveDOI" value={positiveDOI ? JSON.stringify(positiveDOI) : ""} />
+          <input type="hidden" name="clusters" value={JSON.stringify(props.clusters)} />
             <React.Fragment>
                 <button
                   name="impression"

@@ -6,17 +6,19 @@ export async function action({ request, params }){
   const traversalPath = formData.get('traversalPath')
   const mostRecentNode = formData.get('mostRecentNode')
   const doi = formData.get('doi')
+  const algParams = formData.get('algParams')
+  const clusters = formData.get('clusters')
 
-  let [positiveImpression, negativeImpression] = await Promise.all([
-    nearestNewPaper(doi, true, traversalPath, 5, mostRecentNode),
-    nearestNewPaper(doi, false, traversalPath, 5, mostRecentNode)
+  let [[positiveImpression, positiveImpressionClusterIndex], [negativeImpression, negativeImpressionClusterIndex]] = await Promise.all([
+    nearestNewPaper(doi, true, traversalPath, mostRecentNode, algParams, clusters),
+    nearestNewPaper(doi, false, traversalPath, mostRecentNode, algParams, clusters)
   ])
 
-  return {positiveImpression, negativeImpression}
+  return {positiveImpression, positiveImpressionClusterIndex, negativeImpression, negativeImpressionClusterIndex}
 }
 //
 // <Link to={negativeDOI ? `/${slugifyDoi(negativeDOI)}` : "/"}
-//       ref={negativeDOI ? negativeSubmitRef : inactiveRef}
+//       ref={negativeDOI ? negativeSubmitRef : inactiveRef }
 //       onClick={() => negativeSubmitRef.current.click()}
 //        />
 // <Link to={positiveDOI ? `/${slugifyDoi(positiveDOI)}` : "/"} ref={positiveDOI ? positiveSubmitRef : inactiveRef} />

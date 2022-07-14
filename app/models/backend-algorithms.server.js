@@ -15,27 +15,25 @@ export async function clusterDOIs(doi){
   return res.json()
 }
 
-async function updateParams(doi, impression){
-  // Read existing param values
+async function updateParams(doi, impression, clusters, parameters){
+  // Find the cluster that the doi belongs to
+  const row = clusters.find(cluster => cluster.some(doiString => doiString === doi))
+  // Update the associated parameter value
+  const clusterIndex = clusters.indexOf(row)
+
+  // NOTE: there's a frontend version of this in the visited-papers algorithm that you should update as well
+  // TODO: abstract this away into a single function
+  if(impression){
+      parameters[clusterIndex][0] += 1
+  }
+  else{
+    parameters[clusterIndex][0] -= 1
+  }
+  return [parameters, clusterIndex]
 }
 
-export async function nearestNewPaper(doi, impression, traversedPapers, topK, nodeState){
-
-  // TODO:
-  // ALGORITHM:
-    // The algorithm will read the most recent algorithm parameters from local storage
-    // For clustering, it'll also need to extract a list of visited vectors from the tree (using DOIs as keys)
-
-    // Clustering will also require storing all vectors somewhere that's easily accessible
-      // This might actually be really difficult: they're too large for local storage
-      // Maybe a Redis key specifically set up to host the currently active vectors for the current user?
-
-
-  // the movement vector algorithm will replace the DOI input with a vector input,
-  // and will use getKNNFromVector
-
+async function findNextPaper(updatedParams, doi, nodeState, traversedPapers, topK=5){
   const knn = await getKNNFromDoi(doi, topK);
-
 
   if(knn.matches){
     const tree = new TreeModel();
@@ -61,4 +59,13 @@ export async function nearestNewPaper(doi, impression, traversedPapers, topK, no
     return result
   }
   return knn
+}
+
+// TODO: remove the null default values once the codebase is refactored
+export async function nearestNewPaper(doi, impression, traversedPapers, nodeState, algParams=null, clusters=null){
+  let [updatedParams, clusterIndex] = await updateParams(doi, impression, JSON.parse(clusters), JSON.parse(algParams))
+
+  let result = await findNextPaper(updatedParams, doi, nodeState, traversedPapers)
+
+  return [result, clusterIndex]
 }
