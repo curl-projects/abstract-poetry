@@ -20,18 +20,18 @@ export function ControlPanel(props) {
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
 
-  const {citationCount, referenceCount, influentialCitationCount } = props.metadata
-
   useEffect(async()=>{
-    if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
-      fetcher.submit({doi: deslugifyDoi(params.paperId),
-                      traversalPath: JSON.stringify(props.traversalPath),
-                      mostRecentNode: JSON.stringify(props.mostRecentNode),
-                      algParams: JSON.stringify(props.algParams),
-                      clusters: JSON.stringify(await localforage.getItem("clusters"))
-                    },
+    if(params.paperId){
+      if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
+        fetcher.submit({doi: deslugifyDoi(params.paperId),
+                        traversalPath: JSON.stringify(props.traversalPath),
+                        mostRecentNode: JSON.stringify(props.mostRecentNode),
+                        algParams: JSON.stringify(props.algParams),
+                        clusters: JSON.stringify(await localforage.getItem("clusters"))
+                      },
 
-                      {method: "post", action: '/preload-impressions'})
+                        {method: "post", action: '/preload-impressions'})
+      }
     }
   }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
 
@@ -49,23 +49,25 @@ export function ControlPanel(props) {
 
   // Key-Press Control
   useKeyPress(keys, event=>{
-    if(event.key === "ArrowRight"){
-      positiveSubmitRef.current.click()
-    }
+    if(params.paperId){
+      if(event.key === "ArrowRight"){
+        positiveSubmitRef.current.click()
+      }
 
-    else if(event.key === "ArrowLeft"){
-      negativeSubmitRef.current.click()
-    }
+      else if(event.key === "ArrowLeft"){
+        negativeSubmitRef.current.click()
+      }
 
-    else if(event.key === 'p' || event.key === 'P'){
-      pinCurrentPaper(props.setTraversalPath)
-    }
-    else if(event.key === 'r' || event.key === "R"){
-      window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
-    }
+      else if(event.key === 'p' || event.key === 'P'){
+        pinCurrentPaper(props.setTraversalPath)
+      }
+      else if(event.key === 'r' || event.key === "R"){
+        window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
+      }
 
-    else if(event.key === 'e' || event.key === "E"){
-      exportRef.current.click()
+      else if(event.key === 'e' || event.key === "E"){
+        exportRef.current.click()
+      }
     }
   })
 
@@ -76,9 +78,9 @@ export function ControlPanel(props) {
       <div className="panel">
         <img src={glyph} alt="Glyph Logo" style = {{zIndex: "100", height: "100%", width: "100%"}}/>
         <div className="flex-column-space-between" style ={{display: "none", position: "absolute", top: "0px", left: "0px", alignItems: "center", justifyContent: "center", width: "100%"}}>
-          <p>{citationCount}</p>
-          <p>{referenceCount}</p>
-          <p>{influentialCitationCount}</p>
+          <p>{props.metadata ? props.metadata.citationCount : ""}</p>
+          <p>{props.metadata ? props.metadata.referenceCount : ""}</p>
+          <p>{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
           <form method="post" action="/create-reading-list">
             <input type="hidden" name="rootModel" value={JSON.stringify(props.traversalPath)} />
             <input type="hidden" name="citationStyle" value="apa" />

@@ -1,21 +1,17 @@
 import calendar from "../../../public/assets/calendar.svg";
 import authorIcon from "../../../public/assets/authors.svg";
-
 import { useState } from "react";
-
 export function PaperMetadata(props) {
-  
+
   const [toggle, setToggle] = useState(false);
-  const authors = props.metadata.authors ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")) : ["No authors found"];
-  
+  const authors = props.metadata?.authors ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")) : ["No authors found"];
+
   const options = {month: "long", year: "numeric"};
-  const date = props.metadata.publicationDate ? new Date(props.metadata.publicationDate).toLocaleDateString('default', options ) : "n.d.";
-  
+  const date = props.metadata?.publicationDate ? new Date(props.metadata.publicationDate).toLocaleDateString('default', options ) : "n.d.";
 
   if (props.metadata) {
     return (
       <>
-
         <div className="metadata flex-column" style={{ gap: "var(--space-xxs)" }}>
           <h3 onClick={() => props.setToggle(!props.toggle)}>{props.metadata.title}</h3>
 
@@ -54,14 +50,13 @@ export function PaperMetadata(props) {
     return (
       <div className="PaperMetadata" style={{
         flex: 0.5,
-        border: "2px solid red",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: 'center'
       }}>
-        <p>No metadata is available for this paper</p>
+        {props.params.paperId ? <p>No metadata is available for this paper</p> : <p>Start searching with a DOI or keyword</p>}
       </div>
     )
   }
