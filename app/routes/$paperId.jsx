@@ -156,6 +156,9 @@ export default function PaperId() {
         className="traversal-viewer"
       />
 
+      <Share/>
+      <Controls/>
+
       <Background />
 
       <Snackbar
