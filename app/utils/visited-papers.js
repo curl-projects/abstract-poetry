@@ -4,10 +4,11 @@ import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
-export async function updateTraversalPath(doi, algParams, pathSetter=null, recentNodeSetter=null){
+export async function updateTraversalPath(doi, algParamIndex, impression, pathSetter=null, recentNodeSetter=null, algParamsSetter=null){
   try{
     const rootModel = await localforage.getItem("traversalPath")
     if(rootModel === null){
+      // This error is desired: it's thrown when the tree doesn't exist
       throw "Root does not exist -- you might be beginning your search"
     }
     const mostRecentNodeId = await localforage.getItem("activeNodeId")
@@ -15,52 +16,78 @@ export async function updateTraversalPath(doi, algParams, pathSetter=null, recen
     const tree = new TreeModel();
     const root = tree.parse(rootModel)
 
-    // Find the active node
+    // Find the active node in the tree from its id
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === parseInt(mostRecentNodeId)
     })
-    // If the most recently visited path is the current path, don't update the tree
-    // If the current path contains the doi, don't update the tree
+
+    // If the current path (root to active node) contains a node with the active doi
+    // don't update the tree
     const path = mostRecentNode.getPath()
-    // if(mostRecentNode.model.attributes.doi === deslugifyDoi(doi)){
+    const currentAlgParams = await localforage.getItem("algParams")
+
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
       localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
       if(pathSetter !== null){
         pathSetter(rootModel)
         recentNodeSetter(mostRecentNode.model.attributes.nodeId)
+        algParamsSetter(currentAlgParams)
       }
       return rootModel
     }
 
   // Otherwise, update the path and most recent node
     // Create a new node associated with the current position
+
     const nodeIdCounter = await localforage.getItem("nodeIdCounter")
-    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: nodeIdCounter+1, pinned: false}}
+
+    // Client side parameter update
+    // const newAlgParams = currentAlgParams[algParamIndex][0] += 1
+
+    if(JSON.parse(impression)){
+        currentAlgParams[algParamIndex][0] += 1
+    }
+    else{
+      currentAlgParams[algParamIndex][0] -= 1
+    }
+
+
+    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: currentAlgParams, nodeId: nodeIdCounter+1, pinned: false}}
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
     localforage.setItem("traversalPath", root.model)
-    // localforage.setItem("mostRecentNode", childObject)
-
+    localforage.setItem("algParams", currentAlgParams)
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(nodeIdCounter+1)
+      algParamsSetter(currentAlgParams)
     }
     return rootModel
   }
   // If traversal path doesn't exist, create a new tree
   catch(error){
-    console.log("CATCH ERROR:", error)
+    if(error === "Root does not exist -- you might be beginning your search"){
+      console.warn("CATCH ERROR (INTENDED):", error)
+    }
+    else{
+      console.error("CATCH ERROR (UNINTENDED):", error)
+
+    }
     var tree = new TreeModel();
-    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: algParams, nodeId: 1, pinned: false}}
+    const clusters = await localforage.getItem("clusters")
+    // const initialParams = Array(clusters.length).fill([1, 1])
+    const initialParams = Array.from({length: clusters.length}, e=> Array(2).fill(1))
+    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
-    localforage.setItem("mostRecentNode", childObject)
     localforage.setItem("activeNodeId", 1)
+    localforage.setItem("algParams", initialParams)
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(1)
+      algParamsSetter(initialParams)
     }
     return root
   }
@@ -74,15 +101,17 @@ export async function getTraversalPath(setter=null){
   let root = await ls.getObject('traversalPath')
   if(setter === null){
     return root
-  }
+
   setter(root)
   return root
 }
-
-export async function checkIfActiveNode(id){
-  const activeNodeId = await localforage.getItem("activeNodeId")
-  return activeNodeId === id
 }
+
+// TODO: will we use this?
+// export async function checkIfPinned(nodeId){
+//   const activeNodeId = await localforage.getItem("activeNodeId")
+//   return activeNodeId === id
+// }
 
 export async function pinCurrentPaper(pathSetter){
   const activeNodeId = await localforage.getItem("activeNodeId")
@@ -93,7 +122,7 @@ export async function pinCurrentPaper(pathSetter){
     return node.model.attributes.nodeId === activeNodeId
   })
 
-  activeNode.model.attributes.pinned = true
+  activeNode.model.attributes.pinned = !activeNode.model.attributes.pinned
 
   localforage.setItem('traversalPath', root.model)
   pathSetter(root.model)

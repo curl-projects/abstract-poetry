@@ -28,7 +28,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body style={{overflow: "hidden", height: "100%"}}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />

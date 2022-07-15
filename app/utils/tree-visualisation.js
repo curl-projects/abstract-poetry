@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 
 export const useCenteredTree = (defaultTranslate = { x: 0, y: 0 }) => {
+  // Automatically centers the tree visualisation
+  
   const [translate, setTranslate] = useState(defaultTranslate);
   const [dimensions, setDimensions] = useState();
   const containerRef = useCallback((containerElem) => {

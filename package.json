@@ -8,17 +8,23 @@
     "start": "remix-serve build"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.7",
     "@prisma/client": "^4.0.0",
     "@remix-run/node": "^1.6.3",
     "@remix-run/react": "^1.6.3",
     "@remix-run/serve": "^1.6.3",
     "@upstash/redis": "^1.7.0",
+    "doi-regex": "^0.1.13",
     "local-storage": "^2.0.0",
     "localforage": "^1.10.0",
     "react": "^17.0.2",
     "react-d3-tree": "^3.3.2",
     "react-dom": "^17.0.2",
     "react-no-ssr-depup": "^2.0.1",
+    "react-use-keypress": "^1.3.1",
     "reactjs-localstorage": "^1.0.1",
     "tree-model": "^1.0.7",
     "tree-util": "^1.0.7"
