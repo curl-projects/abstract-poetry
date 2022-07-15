@@ -4,10 +4,12 @@ import * as localforage from "localforage";
 
 async function updateParams(doi, impression, clusters, parameters){
   // Find the cluster that the doi belongs to
-  const row = clusters.find(cluster => cluster.some(doiString => doiString === doi))
-  // Update the associated parameter value
-  const clusterIndex = clusters.indexOf(row)
+  // const row = clusters.find(cluster => cluster.some(doiString => doiString === doi))
+  // // Update the associated parameter value
+  // const clusterIndex = clusters.indexOf(row)
 
+  const clusterIndex = clusters[`${doi}`]
+  console.log("CLUSTERINDEX:", clusterIndex)
   // NOTE: there's a frontend version of this in the visited-papers algorithm that you should update as well
   // TODO: abstract this away into a single function
   if(impression){

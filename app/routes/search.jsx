@@ -11,7 +11,8 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { Header, Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Header } from "~/components/SeedSearch/search-header"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
@@ -48,6 +49,10 @@ export default function Search(props){
   }, [coldStartFetcher.data])
 
   useEffect(()=>{
+    console.log("FETCHER DATA:", fetcher.data)
+  }, [fetcher.data])
+
+  useEffect(()=>{
     // Keeps track of search error state, opening and closing the snackbar
     if(actionData?.action === 'error'){
       setErrorExists(true)
@@ -64,7 +69,7 @@ export default function Search(props){
 
   useEffect(async()=>{
     if(fetcher.data?.cluster){
-      await localforage.setItem("clusters", fetcher.data.cluster.cluster)
+      await localforage.setItem("clusters", fetcher.data.cluster)
       ref.current.click()
     }
   }, [fetcher.data])

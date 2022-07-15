@@ -77,7 +77,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     var tree = new TreeModel();
     const clusters = await localforage.getItem("clusters")
     // const initialParams = Array(clusters.length).fill([1, 1])
-    const initialParams = Array.from({length: clusters.length}, e=> Array(2).fill(1))
+    const initialParams = Array.from({length: [...new Set(Object.values(clusters))].length}, e=> Array(2).fill(1))
     const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)

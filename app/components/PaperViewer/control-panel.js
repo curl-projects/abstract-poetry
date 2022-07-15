@@ -20,6 +20,7 @@ export function ControlPanel(props) {
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
 
+  // ANDRE: EAGER LOADING
   useEffect(async()=>{
     if(params.paperId){
       if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
