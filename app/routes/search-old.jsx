@@ -7,11 +7,6 @@ import { clearTraversalPath } from "~/utils/visited-papers"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import * as localforage from "localforage";
 
-import { Header, Background, Share, Controls } from "~/components/PaperViewer/static.js"
-import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
-import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
-import { PaperData } from "~/components/PaperViewer/paper-data.js"
-
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
   const searchString = formData.get('searchString')
@@ -74,30 +69,15 @@ export default function Search(){
 
   return(
     <>
-    <div className="container grid-view">
-      <Header />
-
-      <div className="axis" />
-
-      <ControlPanel
+    <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", flexDirection: 'column'}}>
+      <SeedSearch
+        errorExists={errorExists}
+        setErrorExists={setErrorExists}
+        errorData={actionData ? actionData : null}
       />
-      <PaperData
-      />
-      <TraversalViewer
-      />
-
-      <Background />
-      </div>
+    {fetcher.state === 'submitting' && <h1>Algorithm is running!</h1>}
+    </div>
+    {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
     </>
   )
 }
-
-// <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", flexDirection: 'column'}}>
-//   <SeedSearch
-//     errorExists={errorExists}
-//     setErrorExists={setErrorExists}
-//     errorData={actionData ? actionData : null}
-//   />
-// {fetcher.state === 'submitting' && <h1>Algorithm is running!</h1>}
-// </div>
-// {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}

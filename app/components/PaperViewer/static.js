@@ -1,22 +1,23 @@
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
-
+import { Form } from "@remix-run/react"
 
 // Stateless styled components to keep `$paperId.jsx` concise
-
 
 export function Header() {
   return (
     <>
       <div className="header-wrapper" />
       <div className="header flex-space-between">
-        <div className="search flex-row">
-          <div className="search-input">
-            <p className="search-prompt">Browse spaces of papers with</p>
-            <input type="text" placeholder="abstract poetry" />
-          </div>
-          <img src={glass} alt="Glass Logo" />
-        </div>
+          <Form method="post" className="search flex-row">
+            <div className="search-input">
+              <p className="search-prompt">Browse spaces of papers with</p>
+              <input type="text" name="searchString" placeholder="abstract poetry" />
+            </div>
+            <button type="submit" style={{cursor: "pointer"}}>
+              <img src={glass} alt="Glass Logo" />
+            </button>
+          </Form>
         <img src={account} alt="Account Login" />
       </div>
     </>

@@ -64,10 +64,6 @@ export function ControlPanel(props) {
       else if(event.key === 'r' || event.key === "R"){
         window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
       }
-
-      else if(event.key === 'e' || event.key === "E"){
-        exportRef.current.click()
-      }
     }
   })
 
