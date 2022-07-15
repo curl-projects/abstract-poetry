@@ -9,7 +9,6 @@ async function updateParams(doi, impression, clusters, parameters){
   // const clusterIndex = clusters.indexOf(row)
 
   const clusterIndex = clusters[`${doi}`]
-  console.log("CLUSTERINDEX:", clusterIndex)
   // NOTE: there's a frontend version of this in the visited-papers algorithm that you should update as well
   // TODO: abstract this away into a single function
   if(impression){
