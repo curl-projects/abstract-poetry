@@ -5,9 +5,9 @@ import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress";
 import * as localforage from "localforage";
 
-import glyph from "../../../public/assets/Glyph.svg";
-import read from "../../../public/assets/Read.svg";
-import pin from "../../../public/assets/Pin.svg";
+import glyph from "../../../public/assets/glyph.svg";
+import read from "../../../public/assets/read.svg";
+import pin from "../../../public/assets/pin.svg";
 
 export function ControlPanel(props) {
   const params = useParams();
@@ -97,7 +97,7 @@ export function ControlPanel(props) {
           <div className="switch flex-row" style={{ gap: "0px" }}>
             <button
               name="impression"
-              type="submit"
+              type={params.paperId ? "submit" : "button"}
               value="false"
               className="impression-button"
               ref={negativeSubmitRef}
@@ -106,7 +106,7 @@ export function ControlPanel(props) {
             </button>
             <button
               name="impression"
-              type="submit"
+              type={params.paperId ? "submit" : "button"}
               value="true"
               className="impression-button"
               ref={positiveSubmitRef}
@@ -119,7 +119,7 @@ export function ControlPanel(props) {
           <div className="button-column flex-column">
             <div className="button">
               <img className="anchor" src={pin} alt="Read Logo" />
-              <div className="key">
+              <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath) : {}}>
                 <div className="key-cap">
                   P
                 </div>
@@ -127,13 +127,12 @@ export function ControlPanel(props) {
                   Pin
                 </div>
               </div>
-              <button onClick={() => pinCurrentPaper(props.setTraversalPath)} />
             </div>
             <div className="button">
 
               <img className="anchor" src={read} alt="Read Logo" />
 
-              <div className="key">
+              <div className="key" onClick={() => params.paperId ? window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank") : {}}>
                 <div className="key-cap">
                   R
                 </div>
@@ -141,7 +140,6 @@ export function ControlPanel(props) {
                   Read
                 </div>
               </div>
-              <button onClick={() => window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")} />
             </div>
           </div>
 

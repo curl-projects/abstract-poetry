@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 
@@ -98,7 +98,6 @@ export default function PaperId() {
     const clusters = await localforage.getItem('clusters')
     setClusters(clusters)
   }, [params.paperId, data.search])
-
 
   useEffect(() => {
     console.log("TRAVERSAL PATH:", traversalPath)

@@ -30,14 +30,22 @@ export default function Search(props){
   const [errorExists, setErrorExists] = useState(false)
   const [algorithmRunning, setAlgorithmRunning] = useState(false)
   const fetcher = useFetcher();
+  const coldStartFetcher = useFetcher();
   const ref = useRef();
 
 
   useEffect(()=>{
+    coldStartFetcher.submit({}, {
+      method: "post",
+      action: "/warmup-microservice"
+    })
     // Clears local storage whenever the search page loads, resetting the algorithm
       clearTraversalPath()
     }, [])
 
+  useEffect(()=>{
+    console.log("COLD START FETCHER DATA:", coldStartFetcher.data)
+  }, [coldStartFetcher.data])
 
   useEffect(()=>{
     // Keeps track of search error state, opening and closing the snackbar
@@ -71,7 +79,6 @@ export default function Search(props){
   useEffect(()=>{
     console.log("ACTION DATA:", actionData)
   }, [actionData])
-
 
   return(
     <>

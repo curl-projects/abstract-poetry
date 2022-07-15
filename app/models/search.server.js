@@ -31,7 +31,6 @@ export async function handleSearch(searchString){
         // Find the closest DOI to the one that was entered that is in our database\
 
         // TODO: Improve this: really bad search
-        // let url=`http://api.crossref.org/works?query=${searchString}&filter=prefix:10.1371&select=DOI,subject,title&rows=20`
         let url=`http://api.crossref.org/works?query=${searchString}&filter=prefix:10.1371&select=DOI&rows=1`
 
         const response = await fetch(url, {
