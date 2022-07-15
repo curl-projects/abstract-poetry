@@ -17,6 +17,7 @@ export function PaperData(props) {
         setToggle={setToggle}
         toggle={toggle}
         params={params}
+        algorithmRunning={props.algorithmRunning}
       />
 
       {toggle ?

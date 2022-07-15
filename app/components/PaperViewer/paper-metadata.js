@@ -56,7 +56,7 @@ export function PaperMetadata(props) {
         justifyContent: "center",
         alignItems: 'center'
       }}>
-        {props.params.paperId ? <p>No metadata is available for this paper</p> : <p>Start searching with a DOI or keyword</p>}
+        {props.algorithmRunning ? <p>Algorithm is running!</p>: props.params.paperId ? <p>No metadata is available for this paper</p> : <p>Start searching with a DOI or keyword</p>}
       </div>
     )
   }

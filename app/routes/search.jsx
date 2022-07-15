@@ -28,6 +28,7 @@ export default function Search(props){
   const actionData = useActionData();
   // TODO: rename this now, because it's used for both errors and algorithm progress
   const [errorExists, setErrorExists] = useState(false)
+  const [algorithmRunning, setAlgorithmRunning] = useState(false)
   const fetcher = useFetcher();
   const ref = useRef();
 
@@ -62,9 +63,9 @@ export default function Search(props){
 
   useEffect(()=>{
     console.log("FETCHER STATE:", fetcher.state)
-    // if(fetcher.state === "submitting"){
-    //     setErrorExists(true)
-    // }
+    if(fetcher.state === "submitting"){
+        setAlgorithmRunning(true)
+    }
   }, [fetcher.state])
 
   useEffect(()=>{
@@ -80,7 +81,9 @@ export default function Search(props){
       <div className="axis" />
 
       <ControlPanel/>
-      <PaperData/>
+      <PaperData
+        algorithmRunning={algorithmRunning}
+        />
       <TraversalViewer/>
       <Background />
 
