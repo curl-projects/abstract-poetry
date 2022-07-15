@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 
@@ -6,8 +6,8 @@ import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
-import { Header, Background, Share, Controls } from "~/components/PaperViewer/static.js"
-
+import { Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Header } from "~/components/SeedSearch/search-header"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
@@ -98,7 +98,6 @@ export default function PaperId() {
     const clusters = await localforage.getItem('clusters')
     setClusters(clusters)
   }, [params.paperId, data.search])
-
 
   useEffect(() => {
     console.log("TRAVERSAL PATH:", traversalPath)

@@ -19,8 +19,17 @@ export function PaperAbstract(props){
     setAbstract("<p>" + rawAbstract + "<h1> {'\u00A0'} </h1>" + "</p>")
   }, [props.abstract])
 
-
-  return(
-    <div className="abstract" dangerouslySetInnerHTML={{__html: abstract}}/>
-  )
+  if(props.params.paperId){
+    return(
+      <div className="abstract" dangerouslySetInnerHTML={{__html: abstract}}/>
+    )
+  }
+  else{
+    return(
+      <div className="abstract">
+        <p></p>
+        <h1> {'\u00A0'} </h1>
+      </div>
+    )
+  }
 }

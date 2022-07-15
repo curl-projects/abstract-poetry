@@ -2,25 +2,13 @@ import { getKNNFromDoi } from "~/models/embeddings.server"
 import TreeModel from 'tree-model';
 import * as localforage from "localforage";
 
-export async function clusterDOIs(doi){
-  let data = {
-    "doiList": [doi]
-  }
-  let url = "https://abstract-poetry-microservice.azurewebsites.net/api/ClusterEmbeddings?code=p41wjN5G4JXgPyMc0R5EvwSLWBE7h8iEQkwxMeP7Jbs8AzFuAIZSmw=="
-  let res = await fetch(url, {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-
-  return res.json()
-}
-
 async function updateParams(doi, impression, clusters, parameters){
   // Find the cluster that the doi belongs to
-  const row = clusters.find(cluster => cluster.some(doiString => doiString === doi))
-  // Update the associated parameter value
-  const clusterIndex = clusters.indexOf(row)
+  // const row = clusters.find(cluster => cluster.some(doiString => doiString === doi))
+  // // Update the associated parameter value
+  // const clusterIndex = clusters.indexOf(row)
 
+  const clusterIndex = clusters[`${doi}`]
   // NOTE: there's a frontend version of this in the visited-papers algorithm that you should update as well
   // TODO: abstract this away into a single function
   if(impression){

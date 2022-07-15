@@ -15,6 +15,7 @@ import { traversalNode } from "~/components/PathTraversal/traversal-node"
 export function TraversalViewer(props) {
   const [dimensions, translate, containerRef] = useCenteredTree();
   const [nodeState, setNodeState] = useState("")
+  const params = useParams();
 
   useEffect(() => {
     setNodeState(props.nodeState)
@@ -24,25 +25,27 @@ export function TraversalViewer(props) {
 
   return (
     <div className="traversal-viewer" ref={containerRef}>
-      <NoSSR>
-        <Tree
-          depthFactor={300}
-          collapsible={false}
-          dimensions={dimensions}
-          translate={translate}
-          zoomable={true}
-          data={props.traversalPath}
-          renderCustomNodeElement={(rd3tProps) =>
-            traversalNode({ ...rd3tProps, nodeState })}
-          styles={{
-            links: {
+      {params.paperId &&
+        <NoSSR>
+          <Tree
+            depthFactor={300}
+            collapsible={false}
+            dimensions={dimensions}
+            translate={translate}
+            zoomable={true}
+            data={props.traversalPath}
+            renderCustomNodeElement={(rd3tProps) =>
+              traversalNode({ ...rd3tProps, nodeState })}
+            styles={{
+              links: {
 
-              stroke: 'red',
-              strokeWidth: "1px",
-            },
-          }}
-        />
-      </NoSSR>
+                stroke: 'red',
+                strokeWidth: "1px",
+              },
+            }}
+          />
+        </NoSSR>
+      }
     </div>
 
   )

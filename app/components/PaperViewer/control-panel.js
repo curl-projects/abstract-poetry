@@ -5,9 +5,9 @@ import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress";
 import * as localforage from "localforage";
 
-import glyph from "../../../public/assets/Glyph.svg";
-import read from "../../../public/assets/Read.svg";
-import pin from "../../../public/assets/Pin.svg";
+import glyph from "../../../public/assets/glyph.svg";
+import read from "../../../public/assets/read.svg";
+import pin from "../../../public/assets/pin.svg";
 
 export function ControlPanel(props) {
   const params = useParams();
@@ -20,18 +20,19 @@ export function ControlPanel(props) {
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
 
-  const {citationCount, referenceCount, influentialCitationCount } = props.metadata
-
+  // ANDRE: EAGER LOADING
   useEffect(async()=>{
-    if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
-      fetcher.submit({doi: deslugifyDoi(params.paperId),
-                      traversalPath: JSON.stringify(props.traversalPath),
-                      mostRecentNode: JSON.stringify(props.mostRecentNode),
-                      algParams: JSON.stringify(props.algParams),
-                      clusters: JSON.stringify(await localforage.getItem("clusters"))
-                    },
+    if(params.paperId){
+      if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
+        fetcher.submit({doi: deslugifyDoi(params.paperId),
+                        traversalPath: JSON.stringify(props.traversalPath),
+                        mostRecentNode: JSON.stringify(props.mostRecentNode),
+                        algParams: JSON.stringify(props.algParams),
+                        clusters: JSON.stringify(await localforage.getItem("clusters"))
+                      },
 
-                      {method: "post", action: '/preload-impressions'})
+                        {method: "post", action: '/preload-impressions'})
+      }
     }
   }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
 
@@ -49,23 +50,21 @@ export function ControlPanel(props) {
 
   // Key-Press Control
   useKeyPress(keys, event=>{
-    if(event.key === "ArrowRight"){
-      positiveSubmitRef.current.click()
-    }
+    if(params.paperId){
+      if(event.key === "ArrowRight"){
+        positiveSubmitRef.current.click()
+      }
 
-    else if(event.key === "ArrowLeft"){
-      negativeSubmitRef.current.click()
-    }
+      else if(event.key === "ArrowLeft"){
+        negativeSubmitRef.current.click()
+      }
 
-    else if(event.key === 'p' || event.key === 'P'){
-      pinCurrentPaper(props.setTraversalPath)
-    }
-    else if(event.key === 'r' || event.key === "R"){
-      window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
-    }
-
-    else if(event.key === 'e' || event.key === "E"){
-      exportRef.current.click()
+      else if(event.key === 'p' || event.key === 'P'){
+        pinCurrentPaper(props.setTraversalPath)
+      }
+      else if(event.key === 'r' || event.key === "R"){
+        window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
+      }
     }
   })
 
@@ -76,9 +75,9 @@ export function ControlPanel(props) {
       <div className="panel">
         <img src={glyph} alt="Glyph Logo" style = {{zIndex: "100", height: "100%", width: "100%"}}/>
         <div className="flex-column-space-between" style ={{display: "none", position: "absolute", top: "0px", left: "0px", alignItems: "center", justifyContent: "center", width: "100%"}}>
-          <p>{citationCount}</p>
-          <p>{referenceCount}</p>
-          <p>{influentialCitationCount}</p>
+          <p>{props.metadata ? props.metadata.citationCount : ""}</p>
+          <p>{props.metadata ? props.metadata.referenceCount : ""}</p>
+          <p>{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
           <form method="post" action="/create-reading-list">
             <input type="hidden" name="rootModel" value={JSON.stringify(props.traversalPath)} />
             <input type="hidden" name="citationStyle" value="apa" />
@@ -99,7 +98,7 @@ export function ControlPanel(props) {
           <div className="switch flex-row" style={{ gap: "0px" }}>
             <button
               name="impression"
-              type="submit"
+              type={params.paperId ? "submit" : "button"}
               value="false"
               className="impression-button"
               ref={negativeSubmitRef}
@@ -108,7 +107,7 @@ export function ControlPanel(props) {
             </button>
             <button
               name="impression"
-              type="submit"
+              type={params.paperId ? "submit" : "button"}
               value="true"
               className="impression-button"
               ref={positiveSubmitRef}
@@ -121,7 +120,7 @@ export function ControlPanel(props) {
           <div className="button-column flex-column">
             <div className="button">
               <img className="anchor" src={pin} alt="Read Logo" />
-              <div className="key">
+              <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath) : {}}>
                 <div className="key-cap">
                   P
                 </div>
@@ -129,13 +128,12 @@ export function ControlPanel(props) {
                   Pin
                 </div>
               </div>
-              <button onClick={() => pinCurrentPaper(props.setTraversalPath)} />
             </div>
             <div className="button">
 
               <img className="anchor" src={read} alt="Read Logo" />
 
-              <div className="key">
+              <div className="key" onClick={() => params.paperId ? window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank") : {}}>
                 <div className="key-cap">
                   R
                 </div>
@@ -143,7 +141,6 @@ export function ControlPanel(props) {
                   Read
                 </div>
               </div>
-              <button onClick={() => window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")} />
             </div>
           </div>
 

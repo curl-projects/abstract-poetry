@@ -1,27 +1,5 @@
-import glass from "../../../public/assets/Glass.svg";
-import account from "../../../public/assets/account.svg";
 import share from "../../../public/assets/share.svg";
 import focus from "../../../public/assets/focus.svg";
-// Stateless styled components to keep `$paperId.jsx` concise
-
-
-export function Header() {
-  return (
-    <>
-      <div className="header-wrapper" />
-      <div className="header flex-space-between">
-        <div className="search flex-row">
-          <div className="search-input">
-            <p className="search-prompt">Browse spaces of papers with</p>
-            <input type="text" placeholder="abstract poetry" />
-          </div>
-          <img src={glass} alt="Glass Logo" />
-        </div>
-        <img src={account} alt="Account Login" />
-      </div>
-    </>
-  )
-}
 
 export function Background() {
 

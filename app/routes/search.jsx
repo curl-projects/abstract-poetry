@@ -7,38 +7,50 @@ import { clearTraversalPath } from "~/utils/visited-papers"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import * as localforage from "localforage";
 
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
+import { Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Header } from "~/components/SeedSearch/search-header"
+import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
+import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
+import { PaperData } from "~/components/PaperViewer/paper-data.js"
+
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
   const searchString = formData.get('searchString')
   const handleSearchOutput = await handleSearch(searchString)
 
-  // if(handleSearchOutput.action === 'redirect'){
-  //
-  //   // TODO: Clustering/algorithm initialisation happens here (?)
-  //   // const testMicroservice = await clusterDOIs("10.1371/journal.pcbi.1008777")
-  //   // Search params are used to carry messages from the search route to the $paperId route
-  //   return redirect(`/${handleSearchOutput.doiString}?message=${handleSearchOutput.case}&searchString=${searchString}`, {
-  //   })
-  // }
-  // If anything's returned here, it means there's an error, which is displayed in the Snackbar in seed-search
   return json({...handleSearchOutput, searchString: searchString})
 }
 
-export default function Search(){
+export default function Search(props){
   const actionData = useActionData();
+  // TODO: rename this now, because it's used for both errors and algorithm progress
   const [errorExists, setErrorExists] = useState(false)
+  const [algorithmRunning, setAlgorithmRunning] = useState(false)
   const fetcher = useFetcher();
+  const coldStartFetcher = useFetcher();
   const ref = useRef();
 
 
   useEffect(()=>{
+    coldStartFetcher.submit({}, {
+      method: "post",
+      action: "/warmup-microservice"
+    })
     // Clears local storage whenever the search page loads, resetting the algorithm
       clearTraversalPath()
     }, [])
 
   useEffect(()=>{
-    console.log("ACTIONDATA:", actionData)
-  }, [actionData])
+    console.log("COLD START FETCHER DATA:", coldStartFetcher.data)
+  }, [coldStartFetcher.data])
+
+  useEffect(()=>{
+    console.log("FETCHER DATA:", fetcher.data)
+  }, [fetcher.data])
 
   useEffect(()=>{
     // Keeps track of search error state, opening and closing the snackbar
@@ -56,28 +68,67 @@ export default function Search(){
   }, [actionData])
 
   useEffect(async()=>{
-    console.log("FETCHER DATA:", fetcher.data)
     if(fetcher.data?.cluster){
-      await localforage.setItem("clusters", fetcher.data.cluster.cluster)
+      await localforage.setItem("clusters", fetcher.data.cluster)
       ref.current.click()
     }
   }, [fetcher.data])
 
   useEffect(()=>{
     console.log("FETCHER STATE:", fetcher.state)
+    if(fetcher.state === "submitting"){
+        setAlgorithmRunning(true)
+    }
   }, [fetcher.state])
+
+  useEffect(()=>{
+    console.log("ACTION DATA:", actionData)
+  }, [actionData])
 
   return(
     <>
-    <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", flexDirection: 'column'}}>
-      <SeedSearch
-        errorExists={errorExists}
-        setErrorExists={setErrorExists}
-        errorData={actionData ? actionData : null}
+    <div className="container grid-view">
+      <Header />
+
+      <div className="axis" />
+
+      <ControlPanel/>
+      <PaperData
+        algorithmRunning={algorithmRunning}
+        />
+      <TraversalViewer/>
+      <Background />
+
+      <Snackbar
+        open={errorExists}
+        autoHideDuration={4000}
+        message={actionData ? actionData.message : "Clustering nearby papers"}
+        onClose={()=>setErrorExists(false)}
+        action={
+          <React.Fragment>
+            <IconButton
+              aria-label="close"
+              sx={{ p: 0.5 }}
+              color="inherit"
+              onClick={() => setErrorExists(false)}
+              >
+              <CloseIcon />
+            </IconButton>
+          </React.Fragment>
+        }
       />
-    {fetcher.state === 'submitting' && <h1>Algorithm is running!</h1>}
-    </div>
-    {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
+      {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
+      </div>
     </>
   )
 }
+
+// <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", flexDirection: 'column'}}>
+//   <SeedSearch
+//     errorExists={errorExists}
+//     setErrorExists={setErrorExists}
+//     errorData={actionData ? actionData : null}
+//   />
+// {fetcher.state === 'submitting' && <h1>Algorithm is running!</h1>}
+// </div>
+// {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
