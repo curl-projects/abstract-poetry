@@ -214,10 +214,11 @@ body {
     grid-column: 1;
     grid-row: 2;
 
+    margin-right: calc(-0.75*var(--grid-gap));
+
     justify-self: center;
 
     margin-top: calc(0.5*var(--grid-gap));
-    margin-right: calc(-0.5*var(--grid-gap));
     height: calc(85% - var(--grid-gap));
     width: calc(100% - var(--grid-gap));
 
@@ -237,7 +238,7 @@ body {
     justify-self: center;
 
     margin-top: calc(0.5*var(--grid-gap));
-    margin-left: calc(-0.5*var(--grid-gap));
+    margin-left: calc(-0.75*var(--grid-gap));
     height: calc(85% - var(--grid-gap));
     width: calc(100% - var(--grid-gap));
 
@@ -399,7 +400,7 @@ body {
     grid-row: 2;
     
     max-height: 100%;
-    width: 95%;
+    width: 97%;
     resize: horizontal;
     z-index: 4;
 
@@ -578,7 +579,7 @@ h4 {
 
 .search {
     border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
-    width: 50%;
+    width: 100%;
 }
 
 .search-input {
