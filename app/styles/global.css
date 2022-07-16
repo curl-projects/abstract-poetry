@@ -725,7 +725,7 @@ input[type="text"]:focus {
 }
 
 .button:hover {
-    background-color: var(--glass-300);
+    background-color: var(--glass-200);
 }
 
 
