@@ -4,7 +4,7 @@ import { useState } from "react";
 export function PaperMetadata(props) {
 
   const [toggle, setToggle] = useState(false);
-  const authors = props.metadata?.authors ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")) : ["No authors found"];
+  const authors = (props.metadata?.authors && props.metadata.authors.length !== 0) ? JSON.parse(props.metadata.authors.replace(/\'/g, "\"")) : ["No Authors Found"];
 
   const options = {month: "long", year: "numeric"};
   const date = props.metadata?.publicationDate ? new Date(props.metadata.publicationDate).toLocaleDateString('default', options ) : "n.d.";
@@ -27,19 +27,19 @@ export function PaperMetadata(props) {
                 <img src={authorIcon} alt={"Authors"} />
               </div>
 
-              {toggle ?
+              {toggle && authors ?
                 authors.map((authorObj, i) => {
                   if (i === authors.length - 1) {
-                    return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name}</small>)
+                    return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name ? authorObj.name : ""}</small>)
                   }
                   else {
-                    return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name} · </small>)
+                    return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name ? authorObj.name : ""} · </small>)
                   }
                 }
                 ) :
-                <small className="small shrink">{authors[0].name} {authors.length === 1? "": <span>et al.</span>}</small>
+                <small className="small shrink">{authors.length !== 0 ? authors[0].name : "No authors found"} {authors.length === 1 || authors.length === 0? "": <span>et al.</span>}</small>
                 }
-            </div>
+""            </div>
           </div>
         </div>
 

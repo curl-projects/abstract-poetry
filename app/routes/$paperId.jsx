@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Outlet, useActionData, useLoaderData, useParams } from "@remix-run/react"
+import { Outlet, useActionData, useLoaderData, useParams, useFetcher } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
@@ -25,6 +25,8 @@ export const loader = async ({
   const url = new URL(request.url)
   const search = new URLSearchParams(url.search)
   const metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
+
+  console.log("METADATA:", metadata)
   const data = {
     metadata: metadata,
     search: search.get('nodeId'),
@@ -78,16 +80,10 @@ export default function PaperId() {
   const [pinningPaper, setPinningPaper] = useState(false)
   const [messageExists, setMessageExists] = useState(false)
   const [clusters, setClusters] = useState(null)
+  const skipFetcher = useFetcher();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    // TODO:
-    // the nearestNewPaper algorithm should return the new algorithm parameters, which are
-    // then used here to update the traversal path
-
-    // when traversing existing paths, node state is captured in a search parameter,
-    // which is then read into local storage to ensure that updateTraversalPath is
-    // working with the right information
     if(data.search){
       await localforage.setItem("activeNodeId", data.search)
     }
