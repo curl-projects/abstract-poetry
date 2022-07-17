@@ -2,7 +2,7 @@ import { SeedSearch } from "~/components/SeedSearch/seed-search.js"
 import { useEffect, useState, useRef } from 'react';
 import { useActionData, useFetcher, Link } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
-import { handleSearch } from "~/models/search.server"
+import { handleSearch, handleSearchv2 } from "~/models/search.server"
 import { clearTraversalPath } from "~/utils/visited-papers"
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import * as localforage from "localforage";
@@ -20,7 +20,7 @@ import { PaperData } from "~/components/PaperViewer/paper-data.js"
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
   const searchString = formData.get('searchString')
-  const handleSearchOutput = await handleSearch(searchString)
+  const handleSearchOutput = await handleSearchv2(searchString)
 
   return json({...handleSearchOutput, searchString: searchString})
 }
@@ -122,13 +122,3 @@ export default function Search(props){
     </>
   )
 }
-
-// <div style={{height: "100vh", width: "100vw", display: 'flex', alignItems: "center", justifyContent: "center", flexDirection: 'column'}}>
-//   <SeedSearch
-//     errorExists={errorExists}
-//     setErrorExists={setErrorExists}
-//     errorData={actionData ? actionData : null}
-//   />
-// {fetcher.state === 'submitting' && <h1>Algorithm is running!</h1>}
-// </div>
-// {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
