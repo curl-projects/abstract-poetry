@@ -16,12 +16,12 @@ export function ClusterViewer(props){
   const tempNodeData = [
     {
           "id": "id1",
-          "name": "name1",
+          "name": "paper1",
           "val": 1
         },
         {
           "id": "id2",
-          "name": "name2",
+          "name": "paper2",
           "val": 10
         }
   ]
@@ -38,13 +38,13 @@ export function ClusterViewer(props){
     links: tempLinkData
   }
 
-
   return(
-    <div className="traversal-viewer" ref={containerRef}>
+    <div className={false? "traversal-viewer" : ""} 
+         ref={containerRef} 
+         style = {{width: "500", height: "500px"}}>
     <NoSSR>
       <ForceGraph2D
-        graphData={props.forceNodes ? props.forceNodes : {nodes: [], links: []}}
-        // backgroundColor="grey"
+        graphData={graphData}
         width={width}
         height={height}
       />
