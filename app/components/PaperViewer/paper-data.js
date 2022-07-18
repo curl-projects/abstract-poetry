@@ -1,12 +1,18 @@
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
 import { PaperAbstract } from "~/components/PaperViewer/paper-abstract.js"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams} from "@remix-run/react"
 
 export function PaperData(props) {
   const params = useParams();
-  const [toggle, setToggle] = useState(true)
+  const [toggle, setToggle] = useState(false)
+
+  useEffect(() => {
+    if(props.toggle){
+        setToggle(true)
+    }
+  }, [props.toggle])
 
   return (
     <div className="paper-viewer">
@@ -16,34 +22,34 @@ export function PaperData(props) {
         metadata={props.metadata}
         setToggle={setToggle}
         toggle={toggle}
-        params={params}
-        algorithmRunning={props.algorithmRunning}
+        headerMessage={props.headerMessage}
       />
 
       {toggle ?
+        <div className="flex-column" style={{ gap: 0, overflow: "auto" }}>
+
+          {props.paperList.map((metadata, i) => {
+            return (
+              <PaperMetadata
+                key={i}
+                doi={""}
+                metadata={metadata}
+                fetcher={props.fetcher}
+              />
+            )
+          }
+          )}
+        </div>
+
+        :
         <PaperAbstract
           doi={props.doi}
           title={props.metadata ? props.metadata.title : ""}
           abstract={props.metadata ? props.metadata.abstract : ""}
           params={params}
-        /> :
-        <div className="flex-column" style={{ gap: 0, overflow: "auto" }}>
-
-          {Array(10).fill(0).map((_, i) => {
-            return (
-              <PaperMetadata
-                key={i}
-                doi={props.doi}
-                metadata={props.metadata}
-              />
-            )
-          }
-
-
-          )}
-
-        </div>
+        />
       }
+
     </div>
   )
 }

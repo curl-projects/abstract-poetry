@@ -9,7 +9,7 @@ export function Header() {
       <>
         <div className="header-wrapper" />
         <div className="header flex-space-between">
-            <Link to={'/search'} className="search flex-row" style={{cursor: "pointer"}}>
+            <Link to={'/search'} className="search flex-row" style={{cursor: "pointer", textDecoration: "none"}}>
               <div className="search-input">
                 <p className="search-prompt">Browse spaces of papers with</p>
                 <input type="text" name="searchString" placeholder="abstract poetry" />
