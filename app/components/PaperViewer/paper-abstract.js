@@ -14,7 +14,7 @@ export function PaperAbstract(props){
         const keyword = keywords[i];
         const regexp = new RegExp(keyword, "i");
 
-        rawAbstract = rawAbstract.replace(regexp, '<span class="keyword">' + keyword + '</span>');
+        rawAbstract = rawAbstract.replace(regexp, '<span className="keyword">' + keyword + '</span>');
       }
 
       setAbstract("<p>" + rawAbstract + "<h1> {'\u00A0'} </h1>" + "</p>")

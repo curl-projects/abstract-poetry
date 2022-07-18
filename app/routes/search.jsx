@@ -4,18 +4,19 @@ import { useActionData, useFetcher, Link } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 import { handleSearch, handleSearchv2 } from "~/models/search.server"
 import { clearTraversalPath } from "~/utils/visited-papers"
-import { deslugifyDoi } from "~/utils/doi-manipulation"
+import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import * as localforage from "localforage";
 
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Background } from "~/components/PaperViewer/static.js"
 import { Header } from "~/components/SeedSearch/search-header"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
+import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
 
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
@@ -29,11 +30,11 @@ export default function Search(props){
   const actionData = useActionData();
   // TODO: rename this now, because it's used for both errors and algorithm progress
   const [errorExists, setErrorExists] = useState(false)
-  const [algorithmRunning, setAlgorithmRunning] = useState(false)
   const fetcher = useFetcher();
   const coldStartFetcher = useFetcher();
   const ref = useRef();
-
+  const [paperSelection, setPaperSelection] = useState(false)
+  const [headerMessage, setHeaderMessage] = useState("Start searching with a DOI or keyword")
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
@@ -56,10 +57,18 @@ export default function Search(props){
     // Keeps track of search error state, opening and closing the snackbar
     if(actionData?.action === 'error'){
       setErrorExists(true)
+      setHeaderMessage("Start searching with a DOI or keyword")
+    }
+    if(actionData?.action === 'select-papers'){
+      setPaperSelection(true)
+      setHeaderMessage("Choose an initialisation paper")
+      console.log("DOI LIST DATA!!:", actionData.doiList)
     }
     else if(actionData?.action === 'redirect'){
+      setHeaderMessage(`Clustering papers around ${actionData.doiString}`)
       fetcher.submit({
-        doi: deslugifyDoi(actionData.doiString)
+        doi: deslugifyDoi(actionData.doiString),
+        keywordSearch: false
       }, {
         method: "post",
         action: "/cluster-papers"
@@ -72,12 +81,15 @@ export default function Search(props){
       await localforage.setItem("clusters", fetcher.data.cluster)
       ref.current.click()
     }
+    else{
+      setErrorExists(true)
+    }
   }, [fetcher.data])
 
   useEffect(()=>{
     console.log("FETCHER STATE:", fetcher.state)
     if(fetcher.state === "submitting"){
-        setAlgorithmRunning(true)
+      setHeaderMessage(`Clustering papers`)
     }
   }, [fetcher.state])
 
@@ -93,16 +105,21 @@ export default function Search(props){
       <div className="axis" />
 
       <ControlPanel/>
+
       <PaperData
-        algorithmRunning={algorithmRunning}
-        />
+            toggle={paperSelection}
+            paperList={actionData?.doiList ? actionData.doiList : Array(10).fill(0)}
+            headerMessage={headerMessage}
+            fetcher={fetcher}
+            />
+
       <TraversalViewer/>
       <Background />
 
       <Snackbar
         open={errorExists}
         autoHideDuration={4000}
-        message={actionData ? actionData.message : "Clustering nearby papers"}
+        message={actionData ? actionData.message : fetcher.data?.error}
         onClose={()=>setErrorExists(false)}
         action={
           <React.Fragment>
@@ -117,7 +134,9 @@ export default function Search(props){
           </React.Fragment>
         }
       />
-      {fetcher.data?.cluster && <Link to={`/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
+    {fetcher.data?.cluster && <Link to={fetcher.data.seedDOI ?
+                                            `/${slugifyDoi(fetcher.data.seedDOI)}?message=${actionData.case}&searchString=${actionData.searchString}`
+                                          : `/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
       </div>
     </>
   )

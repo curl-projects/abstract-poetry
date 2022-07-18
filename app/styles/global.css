@@ -288,7 +288,7 @@ body {
     position: absolute;
     bottom: 0;
     right: calc(-0.5*var(--grid-gap));
-    
+
     height: 1px;
     width: var(--grid-gap);
     /*rotate*/
@@ -352,7 +352,7 @@ body {
     padding: var(--space-xs);
 
     border-radius: var(--br-sharp);
-    border: 1px solid rgba(var(--clr-grey-600)); 
+    border: 1px solid rgba(var(--clr-grey-600));
 }
 
 .join {
@@ -368,7 +368,7 @@ body {
     margin-bottom: var(--space-sm) ;
     margin-right: calc(-1.95 * var(--grid-gap));
 
-    border-top: 1px solid rgba(var(--clr-neutral-300));    
+    border-top: 1px solid rgba(var(--clr-neutral-300));
 }
 
 .abs-right {
@@ -398,7 +398,7 @@ body {
 .paper-viewer {
     grid-column: 2 / -1;
     grid-row: 2;
-    
+
     max-height: 100%;
     width: 97%;
     resize: horizontal;
@@ -560,6 +560,7 @@ h4 {
 
 .abstract span {
     color:rgb(var(--clr-white));
+    /* display: block; */
 }
 
 
@@ -569,7 +570,7 @@ h4 {
     display: inline-block;
 
     padding: 4px;
-    
+
     border-radius: 50%;
     background-color: rgba(var(--clr-neutral-200), var(--alpha-400));
 }
@@ -606,7 +607,7 @@ input[type="text"]::placeholder{
     font-size: var(--fs-lg);
     color: rgb(var(--clr-grey-300));
     font-weight: 700;
-    
+
 }
 
 input[type="text"]:focus {
@@ -622,7 +623,7 @@ input[type="text"]:focus {
 
     width: 100vw;
 
-    
+
 
     color: rgba(var(--clr-grey-800), 0.45);
     font-size: 42px;
@@ -652,7 +653,7 @@ input[type="text"]:focus {
 .anchor {
     position: absolute;
     display: block;
-    
+
     left: 0;
     right: 0;
     margin: auto;
@@ -661,7 +662,7 @@ input[type="text"]:focus {
     width: 80%;
     height: 80%;
     z-index: 3;
-    
+
 }
 
 /* media query for tablet */
@@ -734,7 +735,7 @@ input[type="text"]:focus {
     content:"";
 	display:inline-block;
 	position:relative;
-    
+
     height:100%;
 	width: 100%;
 
@@ -787,10 +788,10 @@ input[type="text"]:focus {
     top: 0;
     left: 0;
     z-index: 6;
-    
+
     height: 100%;
     width: 100%;
-    
+
     padding: 0px 0px 0px 2px;
     margin-top: -4px;
 
