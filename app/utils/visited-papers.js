@@ -4,8 +4,9 @@ import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
-export async function updateTraversalPath(doi, algParamIndex, impression, pathSetter=null, recentNodeSetter=null, algParamsSetter=null){
+export async function updateTraversalPath(doi, algParamIndex, impression, pathSetter=null, recentNodeSetter=null, algParamsSetter=null, forceNodeSetter=null){
   try{
+    console.log("UPDATING")
     const rootModel = await localforage.getItem("traversalPath")
     if(rootModel === null){
       // This error is desired: it's thrown when the tree doesn't exist
@@ -25,13 +26,14 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     // don't update the tree
     const path = mostRecentNode.getPath()
     const currentAlgParams = await localforage.getItem("algParams")
-
+    const forceNodes = await localforage.getItem('forceNodes')
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
       localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
       if(pathSetter !== null){
         pathSetter(rootModel)
         recentNodeSetter(mostRecentNode.model.attributes.nodeId)
         algParamsSetter(currentAlgParams)
+        forceNodeSetter(forceNodes)
       }
       return rootModel
     }
@@ -79,15 +81,18 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     // const initialParams = Array(clusters.length).fill([1, 1])
     const initialParams = Array.from({length: [...new Set(Object.values(clusters))].length}, e=> Array(2).fill(1))
     const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
+    const initialForceNodes = Array.from({length: initialParams.length}, (e, index) => ({id: `${index}`, name: `Cluster ${index}`, val: 5}))
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("activeNodeId", 1)
     localforage.setItem("algParams", initialParams)
+    localforage.setItem("forceNodes", {nodes: initialForceNodes, links: []})
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(1)
       algParamsSetter(initialParams)
+      forceNodeSetter({nodes: initialForceNodes, links: []})
     }
     return root
   }
