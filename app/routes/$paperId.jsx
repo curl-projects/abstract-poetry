@@ -26,7 +26,6 @@ export const loader = async ({
   const search = new URLSearchParams(url.search)
   const metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
 
-  console.log("METADATA:", metadata)
   const data = {
     metadata: metadata,
     search: search.get('nodeId'),

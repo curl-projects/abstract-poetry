@@ -57,6 +57,7 @@ export default function Search(props){
     // Keeps track of search error state, opening and closing the snackbar
     if(actionData?.action === 'error'){
       setErrorExists(true)
+      setHeaderMessage("Start searching with a DOI or keyword")
     }
     if(actionData?.action === 'select-papers'){
       setPaperSelection(true)
