@@ -39,7 +39,7 @@ export function PaperMetadata(props) {
         <div className="metadata flex-column" style={{ gap: "var(--space-xxs)" }}>
           <h3 onClick={props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{props.metadata.title}</h3>
 
-          <div className="flex-row" style={{ gap: "var(--space-unit)" }}>
+          <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch" }}>
             <div className="flex-row shrink">
               <div className="icon">
                 <img src={calendar} alt={"Publication Date"} />

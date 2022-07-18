@@ -150,7 +150,11 @@ select {
     --space-xl: calc(2.15 * var(--space-unit));
     --space-xxl: calc(3.25 * var(--space-unit));
 
+
+    /* Interface Scale Parameters */
     --grid-gap: var(--space-xs);
+    --control-dim: 14;
+    --bg-height: calc(2 * var(--control-dim) * var(--fs-unit));
 }
 
 /* ------------------------------ */
@@ -169,7 +173,7 @@ body {
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 3.5rem 1.5fr 1fr;
+    grid-template-rows: 3.5rem 0.5fr 1fr;
 
     grid-gap: var(--grid-gap);
     row-gap: calc(0.5*var(--grid-gap));
@@ -182,8 +186,12 @@ body {
     grid-row: 2;
     z-index: 1;
 
-    --bg-height: 85%;
+    position: relative;
+    top: var(--space-xs);
+
     --bg-width: 100%;
+    
+
     height: var(--bg-height);
     width: var(--bg-width);
     justify-self: center;
@@ -210,19 +218,21 @@ body {
 }
 
 .background-panel-left {
-
     grid-column: 1;
     grid-row: 2;
-
-    margin-right: calc(-0.75*var(--grid-gap));
-
+    z-index: 3;
+    
     justify-self: center;
 
+    position: relative;
+    top: var(--space-xs);
+    
+    margin-right: calc(-0.75*var(--grid-gap));
     margin-top: calc(0.5*var(--grid-gap));
-    height: calc(85% - var(--grid-gap));
+
+    height: calc(var(--bg-height) - var(--space-xs));
     width: calc(100% - var(--grid-gap));
 
-    z-index: 3;
 
     background: linear-gradient(270deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
@@ -237,9 +247,12 @@ body {
 
     justify-self: center;
 
+    position: relative;
+    top: var(--space-xs);
     margin-top: calc(0.5*var(--grid-gap));
     margin-left: calc(-0.75*var(--grid-gap));
-    height: calc(85% - var(--grid-gap));
+
+    height: calc(var(--bg-height) - var(--space-xs));
     width: calc(100% - var(--grid-gap));
 
     z-index: 3;
@@ -276,7 +289,7 @@ body {
     z-index: 2;
 
     position: relative;
-    height: 90%;
+    height: calc(var(--bg-height) + var(--space-md));
     margin-right: calc(-0.5*var(--grid-gap));
     margin-top: calc(-1*var(--grid-gap));
 
@@ -386,7 +399,7 @@ body {
 
 
     position: relative;
-    top: var(--grid-gap);
+    top: var(--space-md);
     right: var(--grid-gap);
 }
 
@@ -399,13 +412,13 @@ body {
     grid-column: 2 / -1;
     grid-row: 2;
 
-    max-height: 100%;
+    height: 105%;
     width: calc(100% - var(--space-md));
     resize: horizontal;
     z-index: 4;
 
     position: relative;
-    top: var(--grid-gap);
+    top: var(--space-md);
     left: var(--grid-gap);
 
     display: grid;
@@ -511,12 +524,9 @@ h4 {
 /* ------------------------------ */
 .metadata {
     grid-row: 1;
-    height: 100%;
-    width: 100%;
-    overflow: none;
+    max-height: 100%;
+    
 
-    position: relative;
-    top: 0px;
 
     padding-left: var(--space-xl);
     padding-top: var(--space-lg);
@@ -529,9 +539,7 @@ h4 {
 }
 
 .metadata-row {
-    flex: 1 0 auto;
-    height: 100%;
-    max-width: 100%;
+    flex: 1 1 auto;
     overflow-x: scroll;
     padding-right: var(--space-xl);
 }
@@ -642,6 +650,8 @@ input[type="text"]:focus {
     padding: var(--space-xxs);
     overflow: hidden;
 }
+
+
 
 .metadata-grid img {
     width: 100%;
