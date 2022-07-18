@@ -1,8 +1,6 @@
-import share from "../../../public/assets/share.svg";
 import focus from "../../../public/assets/focus.svg";
 
 export function Background() {
-
   const backgroundImg = {
     height: "100%",
     width: "100%",
@@ -23,29 +21,17 @@ export function Background() {
   )
 }
 
-export function Share() {
-
-  return (
-    <div className="traversal-share">
-        <div className = "abs-left toolbar panel-glass ">
-          <img src = {share} alt ="Share or Export Reading List"/>
-        </div>
-    </div>
-  )
-
-}
 
 export function Controls() {
 
   return (
     <>
-      <div className="traversal-controls">
-          <div className = "abs-right toolbar panel-glass flex-row" style = {{width: "100%", flexDirection: "row-reverse"}}>
+      <div className="traversal-controls" style={{pointerEvents: 'none'}}>
+          <div className = "abs-right toolbar panel-glass flex-row" style = {{pointerEvents: 'auto', width: "100%", flexDirection: "row-reverse"}}>
             <img src = {focus} alt ="Focus on a specific paper"/>
           </div>
           <div className="join"/>
       </div>
     </>
   )
-
 }

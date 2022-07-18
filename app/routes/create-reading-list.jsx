@@ -7,7 +7,7 @@ export async function action({ request }){
 
   // Get basic metadata from DOIs from the Redis store as a bandaid solution because
   // getting citations is too slow for now
-  try{
+  // try{
     const citationsString = await generateBasicMetadata(rootModel)
 
     console.log("CITATIONS STRING", citationsString)
@@ -19,14 +19,14 @@ export async function action({ request }){
         "content-disposition": "attachment; filename=citations.txt"
       }
     })
-  }
-  catch(e){
-    console.error(e)
-    return new Response(citationsString, {
-      headers: {
-        "content-type": "text/plain",
-        "content-disposition": "attachment; filename=citations.txt"
-      }
-    })
-  }
+  // }
+  // catch(e){
+  //   console.error(e)
+  //   return new Response("BAD RESPONSE", {
+  //     headers: {
+  //       "content-type": "text/plain",
+  //       "content-disposition": "attachment; filename=citations.txt"
+  //     }
+  //   })
+  // }
 }

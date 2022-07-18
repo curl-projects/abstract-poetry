@@ -11,7 +11,7 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Background } from "~/components/PaperViewer/static.js"
 import { Header } from "~/components/SeedSearch/search-header"
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"

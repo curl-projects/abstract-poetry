@@ -5,7 +5,6 @@ export async function action({ request, params }){
   const formData = await request.formData();
   const doi = formData.get('doi');
   const keywordSearch = formData.get('keywordSearch');
-  console.log("keywordSearch!", keywordSearch)
 
   if(JSON.parse(keywordSearch)){
     const paperId = formData.get('paperId')

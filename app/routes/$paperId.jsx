@@ -6,8 +6,9 @@ import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
-import { Background, Share, Controls } from "~/components/PaperViewer/static.js"
+import { Background, Controls } from "~/components/PaperViewer/static.js"
 import { Header } from "~/components/SeedSearch/search-header"
+import { Share } from "~/components/PathTraversal/traversal-export.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
@@ -150,7 +151,10 @@ export default function PaperId() {
         className="traversal-viewer"
       />
 
-      <Share/>
+      <Share
+        traversalPath={traversalPath}
+
+        />
       <Controls/>
 
       <Background />
