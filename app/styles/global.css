@@ -190,7 +190,7 @@ body {
     top: var(--space-xs);
 
     --bg-width: 100%;
-    
+
 
     height: var(--bg-height);
     width: var(--bg-width);
@@ -221,12 +221,12 @@ body {
     grid-column: 1;
     grid-row: 2;
     z-index: 3;
-    
+
     justify-self: center;
 
     position: relative;
     top: var(--space-xs);
-    
+
     margin-right: calc(-0.75*var(--grid-gap));
     margin-top: calc(0.5*var(--grid-gap));
 
@@ -378,7 +378,7 @@ body {
     height: calc(0.5*var(--space-xxl));
     width: calc(1.95 * var(--grid-gap));
 
-    margin-bottom: var(--space-sm) ;
+    margin-bottom: var(--space-sm);
     margin-right: calc(-1.95 * var(--grid-gap));
 
     border-top: 1px solid rgba(var(--clr-neutral-300));
@@ -525,7 +525,7 @@ h4 {
 .metadata {
     grid-row: 1;
     max-height: 100%;
-    
+
 
 
     padding-left: var(--space-xl);
@@ -567,9 +567,66 @@ h4 {
 }
 
 .abstract span {
-    color:rgb(var(--clr-white));
+    color: rgb(var(--clr-white));
     /* display: block; */
 }
+
+.metadata-grid {
+    width: 90%;
+    height: calc(45% - var(--space-xs));
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        "tl tr"
+        "bl br";
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.md-tl {
+    grid-area: tl;
+}
+
+.md-tr {
+    grid-area: tr;
+}
+
+.md-bl {
+    grid-area: bl;
+}
+
+.md-br {
+    grid-area: br;
+}
+
+.metadata-grid small {
+    font-size: var(--fs-xs);
+    color: rgb(var(--clr-grey-400));
+    font-weight: 400;
+    letter-spacing: 0.025em;
+    /* capitalise*/
+    text-transform: uppercase;
+}
+
+.metadata-grid div p {
+    color: rgb(var(--clr-white));
+}
+
 
 
 .icon {
@@ -582,6 +639,7 @@ h4 {
     border-radius: 50%;
     background-color: rgba(var(--clr-neutral-200), var(--alpha-400));
 }
+
 .icon:hover {
     background-color: rgba(var(--clr-neutral-300), var(--alpha-400));
 }
@@ -611,7 +669,7 @@ input[type="text"] {
     width: 100%;
 }
 
-input[type="text"]::placeholder{
+input[type="text"]::placeholder {
     font-size: var(--fs-lg);
     color: rgb(var(--clr-grey-300));
     font-weight: 700;
@@ -653,12 +711,14 @@ input[type="text"]:focus {
 
 
 
-.metadata-grid img {
-    width: 100%;
-    height: 100%;
+.paper-portrait {
+
     object-fit: contain;
     object-position: center;
+
+    z-index: -1;
 }
+
 
 .anchor {
     position: absolute;
@@ -741,20 +801,20 @@ input[type="text"]:focus {
 
 
 
-.button::after{
-    content:"";
-	display:inline-block;
-	position:relative;
+.button::after {
+    content: "";
+    display: inline-block;
+    position: relative;
 
-    height:100%;
-	width: 100%;
+    height: 100%;
+    width: 100%;
 
     background-color: var(--glass-800);
     border-radius: 3px;
     border: 1px solid rgb(var(--clr-grey-200));
 
-	top:-2px;
-	z-index:1;
+    top: -2px;
+    z-index: 1;
 }
 
 .button:active::after {
@@ -817,7 +877,7 @@ input[type="text"]:focus {
     font-weight: 600;
 }
 
-.key-caption{
+.key-caption {
     margin-left: 2px;
     color: rgb(var(--clr-grey-400));
     font-size: var(--fs-sm);
@@ -1045,11 +1105,17 @@ input[type="text"]:focus {
 
 /* Text */
 .no-select {
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Old versions of Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
-  }
+}

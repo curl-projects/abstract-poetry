@@ -68,21 +68,27 @@ export function ControlPanel(props) {
     }
   })
 
-  //TODO: refactor reading list form to use fetchers and add errors
 
+  //TODO: refactor reading list form to use fetchers and add errors
   return (
     <div className="control-panel flex-column">
       <div className="panel">
-        <img src={glyph} alt="Glyph Logo" style = {{zIndex: "100", height: "100%", width: "100%"}}/>
-        <div className="flex-column-space-between" style ={{display: "none", position: "absolute", top: "0px", left: "0px", alignItems: "center", justifyContent: "center", width: "100%"}}>
-          <p>{props.metadata ? props.metadata.citationCount : ""}</p>
-          <p>{props.metadata ? props.metadata.referenceCount : ""}</p>
-          <p>{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
-          <form method="post" action="/create-reading-list">
-            <input type="hidden" name="rootModel" value={JSON.stringify(props.traversalPath)} />
-            <input type="hidden" name="citationStyle" value="apa" />
-            <button type="submit" ref={exportRef}>Export Reading List</button>
-          </form>
+        <img src={glyph} alt="Glyph Logo" className="paper-portrait"/>
+        <div className="metadata-grid">
+          <div className="metadata-bit">
+            <p className="tl">{props.metadata ? props.metadata.citationCount : ""}</p>
+            <small>Citations</small>
+          </div>
+          <div className="metadata-bit">
+          <p className="tr">{props.metadata ? props.metadata.referenceCount : ""}</p>
+            <small>References</small>
+          </div>
+          <div className="metadata-bit">
+          <p className="bl">{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
+            <small>Influential</small>
+          </div>
+          
+          
         </div>
       </div>
 
