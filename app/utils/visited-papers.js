@@ -50,7 +50,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
         currentAlgParams[algParamIndex][0] += 1
     }
     else{
-      currentAlgParams[algParamIndex][0] -= 1
+      currentAlgParams[algParamIndex][1] += 1
     }
 
 
