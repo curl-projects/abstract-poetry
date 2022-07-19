@@ -578,14 +578,13 @@ h4 {
     position: absolute;
     top: 0;
     bottom: 0;
-    
+
+
     margin-left: auto;
     margin-right: auto;
     left: 0;
     right: 0;
     text-align: center;
-
-    
 
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -716,8 +715,9 @@ input[type="text"]:focus {
     object-fit: contain;
     object-position: center;
 
-    z-index: -1;
+    z-index: 2;
 }
+
 
 
 .anchor {
@@ -821,6 +821,10 @@ input[type="text"]:focus {
     transform: translate(0, 2px);
 }
 
+.button:active div {
+    transform: translate(0, 2px);
+}
+
 
 .toggle {
     position: absolute;
@@ -840,6 +844,10 @@ input[type="text"]:focus {
     align-items: center;
     text-align: center;
     gap: 0px;
+}
+
+.toggle:active {
+    flex-direction: column-reverse;
 }
 
 

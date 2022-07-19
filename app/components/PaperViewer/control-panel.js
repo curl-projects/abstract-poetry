@@ -19,6 +19,7 @@ export function ControlPanel(props) {
   const fetcher = useFetcher();
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
+  const [toggle, setToggle] = useState(true);
 
   // ANDRE: EAGER LOADING
   useEffect(async()=>{
@@ -72,9 +73,9 @@ export function ControlPanel(props) {
   //TODO: refactor reading list form to use fetchers and add errors
   return (
     <div className="control-panel flex-column">
-      <div className="panel">
+      <div className="panel" onClick={() => setToggle(!toggle)} style = {{cursor: "pointer"}}>
         <img src={glyph} alt="Glyph Logo" className="paper-portrait"/>
-        <div className="metadata-grid">
+        <div className="metadata-grid" style = {{display: toggle? "none" : "grid"}}>
           <div className="metadata-bit">
             <p className="tl">{props.metadata ? props.metadata.citationCount : ""}</p>
             <small>Citations</small>
