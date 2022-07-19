@@ -20,20 +20,20 @@ export function ControlPanel(props) {
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
 
-  // ANDRE: EAGER LOADING
-  useEffect(async()=>{
-    if(params.paperId){
-      if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
-        fetcher.submit({doi: deslugifyDoi(params.paperId),
-                        traversalPath: JSON.stringify(props.traversalPath),
-                        mostRecentNode: JSON.stringify(props.mostRecentNode),
-                        algParams: JSON.stringify(props.algParams),
-                        clusters: JSON.stringify(await localforage.getItem("clusters"))
-                      },
-                        {method: "post", action: '/preload-impressions'})
-      }
-    }
-  }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
+  // // ANDRE: EAGER LOADING
+  // useEffect(async()=>{
+  //   if(params.paperId){
+  //     if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
+  //       fetcher.submit({doi: deslugifyDoi(params.paperId),
+  //                       traversalPath: JSON.stringify(props.traversalPath),
+  //                       mostRecentNode: JSON.stringify(props.mostRecentNode),
+  //                       algParams: JSON.stringify(props.algParams),
+  //                       clusters: JSON.stringify(await localforage.getItem("clusters"))
+  //                     },
+  //                       {method: "post", action: '/preload-impressions'})
+  //     }
+  //   }
+  // }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
 
   useEffect(()=>{
     console.log("FETCHER DATA:", fetcher.data)

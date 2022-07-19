@@ -51,7 +51,8 @@ export function ClusterViewer(props){
           d3AlphaDecay={0.1}
           width={width}
           height={height}
-          onEngineStop={handleEngineStop}
+          cooldownTicks={20}
+          onEngineStop={() => fgRef.current.zoomToFit(1800)}
         />
       </NoSSR>
     </div>
