@@ -8,6 +8,12 @@ export function PaperData(props) {
   const params = useParams();
   const [toggle, setToggle] = useState(false)
 
+  useEffect(() => {
+    if(props.toggle){
+        setToggle(true)
+    }
+  }, [props.toggle])
+
   return (
     <div className="paper-viewer">
 
