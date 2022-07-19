@@ -2,7 +2,6 @@ import React from "react"
 import { Link } from "@remix-run/react"
 import { slugifyDoi } from "~/utils/doi-manipulation"
 
-
 export const traversalNode = ({ nodeDatum, nodeState }) => (
   <React.Fragment>
     <g>

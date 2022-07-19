@@ -97,38 +97,38 @@ export default function PaperId() {
     setClusters(clusters)
   }, [params.paperId, data.search])
 
-  useEffect(() => {
-    console.log("TRAVERSAL PATH:", traversalPath)
-  }, [traversalPath])
-
-  useEffect(() => {
-    console.log("FORCE NODES:", forceNodes)
-  }, [forceNodes])
-
-  useEffect(() => {
-    console.log("DATA:", data)
-  }, [data])
-
-  useEffect(()=>{
-    console.log("ALG PARAMS STATE:", algParams)
-  }, [algParams])
-
-  useEffect(()=>{
-    // Handle info messages passed from search
-    if(data.message){
-      setMessageExists(true)
-      console.log(caseToMessage(data.messsage, data.searchString))
-    }
-  }, [data])
-
-  useEffect(()=>{
-    console.log("NODE STATE:", nodeState)
-  }, [nodeState])
-
-
-  useEffect(() => {
-    console.log("ACTION DATA:", actionData)
-  }, [actionData])
+  // useEffect(() => {
+  //   console.log("TRAVERSAL PATH:", traversalPath)
+  // }, [traversalPath])
+  //
+  // useEffect(() => {
+  //   console.log("FORCE NODES:", forceNodes)
+  // }, [forceNodes])
+  //
+  // useEffect(() => {
+  //   console.log("DATA:", data)
+  // }, [data])
+  //
+  // useEffect(()=>{
+  //   console.log("ALG PARAMS STATE:", algParams)
+  // }, [algParams])
+  // //
+  // useEffect(()=>{
+  //   // Handle info messages passed from search
+  //   if(data.message){
+  //     setMessageExists(true)
+  //     console.log(caseToMessage(data.messsage, data.searchString))
+  //   }
+  // }, [data])
+  //
+  // useEffect(()=>{
+  //   console.log("NODE STATE:", nodeState)
+  // }, [nodeState])
+  //
+  //
+  // useEffect(() => {
+  //   console.log("ACTION DATA:", actionData)
+  // }, [actionData])
 
   return (
     <div className="container grid-view">
@@ -153,6 +153,7 @@ export default function PaperId() {
 
       <ClusterViewer
         forceNodes={forceNodes}
+        nodeState={nodeState}
         />
 
       <Share
@@ -182,10 +183,10 @@ export default function PaperId() {
         }
       />
       </div>
-
-
   )
 }
+
+// export const unstable_shouldReload = () => false;
 
 // <TraversalViewer
 //   traversalPath={traversalPath}

@@ -30,7 +30,6 @@ export function ControlPanel(props) {
                         algParams: JSON.stringify(props.algParams),
                         clusters: JSON.stringify(await localforage.getItem("clusters"))
                       },
-
                         {method: "post", action: '/preload-impressions'})
       }
     }

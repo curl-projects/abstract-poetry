@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 export function PaperAbstract(props){
 
-  const [abstract, setAbstract] = useState('')
+  const [abstract, setAbstract] = useState(null)
 
   useEffect(() => {
     if(props.abstract){
