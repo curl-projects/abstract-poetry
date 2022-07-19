@@ -4,6 +4,7 @@ import { json, redirect } from "@remix-run/node"
 
 import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
+import { ClusterViewer } from "~/components/PathTraversal/cluster-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
 import { Background, Controls } from "~/components/PaperViewer/static.js"
@@ -80,6 +81,7 @@ export default function PaperId() {
   const [pinningPaper, setPinningPaper] = useState(false)
   const [messageExists, setMessageExists] = useState(false)
   const [clusters, setClusters] = useState(null)
+  const [forceNodes, setForceNodes] = useState(null)
   const skipFetcher = useFetcher();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,8 +89,8 @@ export default function PaperId() {
     if(data.search){
       await localforage.setItem("activeNodeId", data.search)
     }
-
-    updateTraversalPath(deslugifyDoi(params.paperId), data.updateIndex, data.impression, setTraversalPath, setNodeState, setAlgParams)
+    console.log("UPDATED!")
+    updateTraversalPath(deslugifyDoi(params.paperId), data.updateIndex, data.impression, setTraversalPath, setNodeState, setAlgParams, setForceNodes)
 
     // TODO: might be unnecessary, using it for the control-panel form
     const clusters = await localforage.getItem('clusters')
@@ -99,6 +101,9 @@ export default function PaperId() {
     console.log("TRAVERSAL PATH:", traversalPath)
   }, [traversalPath])
 
+  useEffect(() => {
+    console.log("FORCE NODES:", forceNodes)
+  }, [forceNodes])
 
   useEffect(() => {
     console.log("DATA:", data)
@@ -145,11 +150,10 @@ export default function PaperId() {
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
       />
-      <TraversalViewer
-        traversalPath={traversalPath}
-        nodeState={nodeState}
-        className="traversal-viewer"
-      />
+
+      <ClusterViewer
+        forceNodes={forceNodes}
+        />
 
       <Share
         traversalPath={traversalPath}
@@ -182,3 +186,9 @@ export default function PaperId() {
 
   )
 }
+
+// <TraversalViewer
+//   traversalPath={traversalPath}
+//   nodeState={nodeState}
+//   className="traversal-viewer"
+// />

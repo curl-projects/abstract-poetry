@@ -102,7 +102,7 @@ export async function handleSearchv2(searchString){
       if(jsonResponse.error || jsonResponse.data.length === 0){
         return { action: 'error', case: "no-search-matches", message: `We couldn't find any papers in our database closely related to the search '${searchString}'`, doiString: "" }
       }
-      else{
+      else {
         return { action: 'select-papers', case: "closest-search-match", message: `Here's the paper in our database most closely related to the search '${searchString}'`, doiString: null, doiList: jsonResponse.data }
       }
     }
