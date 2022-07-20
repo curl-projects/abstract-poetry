@@ -19,7 +19,6 @@ export function TraversalViewer(props) {
 
   useEffect(() => {
     setNodeState(props.nodeState)
-    console.log(translate)
   }, [props.nodeState])
 
 

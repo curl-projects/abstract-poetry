@@ -28,8 +28,21 @@ export function ClusterViewer(props) {
     setGraphData(forceNodeData)
   }, [props.forceNodes])
 
-  return (
+  function setNodeColors(node){
+      console.log("NODE.PINNED", node.pinned)
+      if(node.nodeId === props.nodeState){
+        return 'red'
+      }
+      else if(node.type === 'cluster')
+        return 'orange'
+      else if(node.pinned)
+        return 'green'
+      else {
+        return 'blue'
+      }
+  }
 
+  return (
     <div className="traversal-viewer" ref={containerRef}>
       {(typeof window !== "undefined") &&
         <ForceGraph2D
@@ -40,8 +53,9 @@ export function ClusterViewer(props) {
           d3AlphaDecay={0.1}
           width={width}
           height={height}
-          cooldownTicks={20}
+          cooldownTicks={10}
           onEngineStop={() => fgRef.current.zoomToFit(1800)}
+          nodeColor={setNodeColors}
         />
       }
     </div>
