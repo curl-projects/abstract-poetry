@@ -9,7 +9,7 @@ export const traversalNode = ({ nodeDatum, nodeState }) => (
     <circle
       r={15}
       fill={ nodeState === nodeDatum.attributes?.nodeId ? "#FFFFFF" : "#CCCCCC"}
-      stroke ={nodeDatum.attributes?.pinned ? "green" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "#3724E5"}
+      stroke = {nodeDatum.attributes?.pinned ? "green" : (nodeState === nodeDatum.attributes?.nodeId) ? "red" : "#3724E5"}
       >
       </circle>
       <text className="node-text">

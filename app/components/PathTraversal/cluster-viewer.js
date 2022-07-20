@@ -1,6 +1,6 @@
 import NoSSR from 'react-no-ssr-depup';
 import loadable from '@loadable/component'
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import * as localforage from "localforage";
 import { useParams, useSubmit, Form } from "@remix-run/react";
 import { clusterNode } from "~/components/PathTraversal/cluster-node"
@@ -33,15 +33,15 @@ export function ClusterViewer(props) {
   function setNodeColors(node){
       if(node.pinned){
         console.log("NODE.PINNED", node.pinned)
-        return 'green'
+        return 'blue'
       }
       else if(node.nodeId === props.nodeState){
-        return 'red'
+        return 'rgb(21, 18, 26)'
       }
       else if(node.type === 'cluster')
-        return 'orange'
+        return "rgba(183, 176, 183, 1)"
       else {
-        return 'blue'
+        return 'rgba(90, 90, 90, 0.9)'
       }
   }
 
@@ -53,6 +53,9 @@ export function ClusterViewer(props) {
           formData,
           { method: "post", action: "/redirect-cluster-node" }
         );
+    }
+    else if(node.type === 'cluster'){
+
     }
   }
 
