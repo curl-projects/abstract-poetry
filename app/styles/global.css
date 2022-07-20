@@ -901,7 +901,7 @@ input[type="text"]:focus::placeholder {
 
 .key-caption {
     margin-left: 2px;
-    color: rgba(var(--clr-grey-500), var(--alpha-500));
+    color: rgba(var(--clr-grey-500), var(--alpha-600));
     font-size: var(--fs-sm);
 }
 
