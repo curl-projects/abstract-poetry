@@ -53,7 +53,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
         currentAlgParams[algParamIndex][0] += 1
     }
     else{
-      currentAlgParams[algParamIndex][0] -= 1
+      currentAlgParams[algParamIndex][1] += 1
     }
     const clusters = await localforage.getItem("clusters")
     const newNode = {id: `node-${nodeIdCounter+1}`,
