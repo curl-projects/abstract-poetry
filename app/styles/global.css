@@ -150,7 +150,11 @@ select {
     --space-xl: calc(2.15 * var(--space-unit));
     --space-xxl: calc(3.25 * var(--space-unit));
 
+
+    /* Interface Scale Parameters */
     --grid-gap: var(--space-xs);
+    --control-dim: 14;
+    --bg-height: calc(2 * var(--control-dim) * var(--fs-unit));
 }
 
 /* ------------------------------ */
@@ -169,7 +173,7 @@ body {
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 3.5rem 1.5fr 1fr;
+    grid-template-rows: 3.5rem 0.5fr 1fr;
 
     grid-gap: var(--grid-gap);
     row-gap: calc(0.5*var(--grid-gap));
@@ -182,8 +186,12 @@ body {
     grid-row: 2;
     z-index: 1;
 
-    --bg-height: 85%;
+    position: relative;
+    top: var(--space-xs);
+
     --bg-width: 100%;
+
+
     height: var(--bg-height);
     width: var(--bg-width);
     justify-self: center;
@@ -210,19 +218,21 @@ body {
 }
 
 .background-panel-left {
-
     grid-column: 1;
     grid-row: 2;
-
-    margin-right: calc(-0.75*var(--grid-gap));
+    z-index: 3;
 
     justify-self: center;
 
+    position: relative;
+    top: var(--space-xs);
+
+    margin-right: calc(-0.75*var(--grid-gap));
     margin-top: calc(0.5*var(--grid-gap));
-    height: calc(85% - var(--grid-gap));
+
+    height: calc(var(--bg-height) - var(--space-xs));
     width: calc(100% - var(--grid-gap));
 
-    z-index: 3;
 
     background: linear-gradient(270deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
@@ -237,9 +247,12 @@ body {
 
     justify-self: center;
 
+    position: relative;
+    top: var(--space-xs);
     margin-top: calc(0.5*var(--grid-gap));
     margin-left: calc(-0.75*var(--grid-gap));
-    height: calc(85% - var(--grid-gap));
+
+    height: calc(var(--bg-height) - var(--space-xs));
     width: calc(100% - var(--grid-gap));
 
     z-index: 3;
@@ -276,7 +289,7 @@ body {
     z-index: 2;
 
     position: relative;
-    height: 90%;
+    height: calc(var(--bg-height) + var(--space-md));
     margin-right: calc(-0.5*var(--grid-gap));
     margin-top: calc(-1*var(--grid-gap));
 
@@ -364,7 +377,7 @@ body {
     height: calc(0.5*var(--space-xxl));
     width: calc(1.95 * var(--grid-gap));
 
-    margin-bottom: var(--space-sm) ;
+    margin-bottom: var(--space-sm);
     margin-right: calc(-1.95 * var(--grid-gap));
 
     border-top: 1px solid rgba(var(--clr-neutral-300));
@@ -385,7 +398,7 @@ body {
 
 
     position: relative;
-    top: var(--grid-gap);
+    top: var(--space-md);
     right: var(--grid-gap);
 }
 
@@ -404,7 +417,7 @@ body {
     z-index: 4;
 
     position: relative;
-    top: var(--grid-gap);
+    top: var(--space-md);
     left: var(--grid-gap);
 
     display: grid;
@@ -510,12 +523,9 @@ h4 {
 /* ------------------------------ */
 .metadata {
     grid-row: 1;
-    height: 100%;
-    width: 100%;
-    overflow: none;
+    max-height: 100%;
 
-    position: relative;
-    top: 0px;
+
 
     padding-left: var(--space-xl);
     padding-top: var(--space-lg);
@@ -528,9 +538,7 @@ h4 {
 }
 
 .metadata-row {
-    flex: 1 0 auto;
-    height: 100%;
-    max-width: 100%;
+    flex: 1 1 auto;
     overflow-x: scroll;
     padding-right: var(--space-xl);
 }
@@ -558,9 +566,65 @@ h4 {
 }
 
 .abstract span {
-    color:rgb(var(--clr-white));
+    color: rgb(var(--clr-white));
     /* display: block; */
 }
+
+.metadata-grid {
+    width: 90%;
+    height: calc(45% - var(--space-xs));
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        "tl tr"
+        "bl br";
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.md-tl {
+    grid-area: tl;
+}
+
+.md-tr {
+    grid-area: tr;
+}
+
+.md-bl {
+    grid-area: bl;
+}
+
+.md-br {
+    grid-area: br;
+}
+
+.metadata-grid small {
+    font-size: var(--fs-xs);
+    color: rgb(var(--clr-grey-400));
+    font-weight: 400;
+    letter-spacing: 0.025em;
+    /* capitalise*/
+    text-transform: uppercase;
+}
+
+.metadata-grid div p {
+    color: rgb(var(--clr-white));
+}
+
 
 
 .icon {
@@ -573,6 +637,7 @@ h4 {
     border-radius: 50%;
     background-color: rgba(var(--clr-neutral-200), var(--alpha-400));
 }
+
 .icon:hover {
     background-color: rgba(var(--clr-neutral-300), var(--alpha-400));
 }
@@ -602,7 +667,7 @@ input[type="text"] {
     width: 100%;
 }
 
-input[type="text"]::placeholder{
+input[type="text"]::placeholder {
     font-size: var(--fs-lg);
     color: rgb(var(--clr-grey-300));
     font-weight: 700;
@@ -642,12 +707,17 @@ input[type="text"]:focus {
     overflow: hidden;
 }
 
-.metadata-grid img {
-    width: 100%;
-    height: 100%;
+
+
+.paper-portrait {
+
     object-fit: contain;
     object-position: center;
+
+    z-index: 2;
 }
+
+
 
 .anchor {
     position: absolute;
@@ -730,23 +800,27 @@ input[type="text"]:focus {
 
 
 
-.button::after{
-    content:"";
-	display:inline-block;
-	position:relative;
+.button::after {
+    content: "";
+    display: inline-block;
+    position: relative;
 
-    height:100%;
-	width: 100%;
+    height: 100%;
+    width: 100%;
 
     background-color: var(--glass-800);
     border-radius: 3px;
     border: 1px solid rgb(var(--clr-grey-200));
 
-	top:-2px;
-	z-index:1;
+    top: -2px;
+    z-index: 1;
 }
 
 .button:active::after {
+    transform: translate(0, 2px);
+}
+
+.button:active div {
     transform: translate(0, 2px);
 }
 
@@ -769,6 +843,10 @@ input[type="text"]:focus {
     align-items: center;
     text-align: center;
     gap: 0px;
+}
+
+.toggle:active {
+    flex-direction: column-reverse;
 }
 
 
@@ -806,7 +884,7 @@ input[type="text"]:focus {
     font-weight: 600;
 }
 
-.key-caption{
+.key-caption {
     margin-left: 2px;
     color: rgb(var(--clr-grey-400));
     font-size: var(--fs-sm);
@@ -1034,11 +1112,17 @@ input[type="text"]:focus {
 
 /* Text */
 .no-select {
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Old versions of Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
-  }
+}
