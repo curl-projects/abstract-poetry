@@ -212,9 +212,6 @@ body {
 
     z-index: 1;
     background-image: url(https://source.unsplash.com/vBc7xy65us8/);
-    background-image: url(https://source.unsplash.com/GVV669GVYjo/);
-    background-image: url(https://source.unsplash.com/z0FbhQhpimI/);
-    background-image: url(https://source.unsplash.com/xzH7K6nVVgI/);
 }
 
 .background-panel-left {
@@ -327,7 +324,7 @@ body {
     grid-row: 3;
 
 
-    width: 100%;
+    width: 300%;
     justify-self: center;
     z-index: 3;
 }
@@ -510,9 +507,11 @@ h4 {
 .search-prompt {
     font-family: var(--ff-sansserif);
     font-size: var(--fs-xs);
-    color: rgba(var(--clr-grey-300), var(--alpha-800));
-    font-weight: 400;
+    color: rgba(var(--clr-grey-400), var(--alpha-800));
+    font-weight: 200;
     letter-spacing: 0.025em;
+
+    text-transform: uppercase;
 }
 
 .search-prompt:hover {
@@ -622,7 +621,7 @@ h4 {
 
 .metadata-grid small {
     font-size: var(--fs-xs);
-    color: rgb(var(--clr-grey-400));
+    color: rgb(var(--clr-grey-500), var(--alpha-800));
     font-weight: 400;
     letter-spacing: 0.025em;
     /* capitalise*/
@@ -653,7 +652,9 @@ h4 {
 
 .search {
     border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
-    width: 100%;
+    width: 55%;
+    position: relative;
+    bottom: 0;
 }
 
 .search-input {
