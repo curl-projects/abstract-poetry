@@ -40,7 +40,6 @@ export function PaperData(props) {
           }
           )}
         </div>
-
         :
         <PaperAbstract
           doi={props.doi}
