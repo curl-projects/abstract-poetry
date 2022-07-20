@@ -25,6 +25,8 @@ export function ControlPanel(props) {
 
   const [pinState, setPinState] = useState(null)
 
+  const [toggle, setToggle] = useState(true)
+
   // // ANDRE: EAGER LOADING
    useEffect(async()=>{
      if(params.paperId){
@@ -37,6 +39,7 @@ export function ControlPanel(props) {
                        },
                          {method: "post", action: '/preload-impressions'})
        }
+       setToggle(false)
      }
    }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
 

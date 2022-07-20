@@ -181,6 +181,7 @@ export default function PaperId() {
 
       <Controls
         setTraversalState={setTraversalState}
+        traversalState = {traversalState}
         />
 
 
