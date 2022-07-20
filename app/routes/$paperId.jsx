@@ -83,6 +83,7 @@ export default function PaperId() {
   const [clusters, setClusters] = useState(null)
   const [forceNodes, setForceNodes] = useState(null)
   const skipFetcher = useFetcher();
+  const [traversalState, setTraversalState] = useState(true)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -161,16 +162,27 @@ export default function PaperId() {
         metadata={data.metadata ? data.metadata : {}}
       />
 
+    {traversalState ?
       <ClusterViewer
         forceNodes={forceNodes}
         nodeState={nodeState}
         />
+      :
+      <TraversalViewer
+        traversalPath={traversalPath}
+        nodeState={nodeState}
+        className="traversal-viewer"
+      />
+    }
 
       <Share
         traversalPath={traversalPath}
-
         />
-      <Controls/>
+
+      <Controls
+        setTraversalState={setTraversalState}
+        />
+
 
       <Background />
 
@@ -195,11 +207,3 @@ export default function PaperId() {
       </div>
   )
 }
-
-// export const unstable_shouldReload = () => false;
-
-// <TraversalViewer
-//   traversalPath={traversalPath}
-//   nodeState={nodeState}
-//   className="traversal-viewer"
-// />
