@@ -141,6 +141,7 @@ export default function PaperId() {
         traversalPath={traversalPath}
         mostRecentNode={nodeState}
         setTraversalPath={setTraversalPath}
+        setForceNodes={setForceNodes}
         algParams={algParams}
         clusters={clusters}
         metadata = {data.metadata? data.metadata : {}}

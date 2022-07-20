@@ -24,19 +24,20 @@ export function ClusterViewer(props) {
   }, [containerRef.current])
 
   useEffect(() => {
+    
     const forceNodeData = JSON.parse(localStorage.getItem("forceNodes"));
     setGraphData(forceNodeData)
   }, [props.forceNodes])
 
   function setNodeColors(node){
       console.log("NODE.PINNED", node.pinned)
-      if(node.nodeId === props.nodeState){
+      if(node.pinned)
+        return 'green'
+      else if(node.nodeId === props.nodeState){
         return 'red'
       }
       else if(node.type === 'cluster')
         return 'orange'
-      else if(node.pinned)
-        return 'green'
       else {
         return 'blue'
       }

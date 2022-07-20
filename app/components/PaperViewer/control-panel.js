@@ -59,7 +59,7 @@ export function ControlPanel(props) {
       }
 
       else if(event.key === 'p' || event.key === 'P'){
-        pinCurrentPaper(props.setTraversalPath)
+        pinCurrentPaper(props.setTraversalPath, props.setForceNodes)
       }
       else if(event.key === 'r' || event.key === "R"){
         window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
@@ -119,7 +119,7 @@ export function ControlPanel(props) {
           <div className="button-column flex-column">
             <div className="button">
               <img className="anchor" src={pin} alt="Read Logo" />
-              <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath) : {}}>
+              <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath, props.setForceNodes) : {}}>
                 <div className="key-cap">
                   P
                 </div>
