@@ -4,7 +4,12 @@ import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
-export async function updateTraversalPath(doi, algParamIndex, impression, pathSetter=null, recentNodeSetter=null, algParamsSetter=null, forceNodeSetter=null){
+export async function updateTraversalPath(doi, algParamIndex, impression,
+                                          pathSetter=null,
+                                          recentNodeSetter=null,
+                                          algParamsSetter=null,
+                                          forceNodeSetter=null,
+                                          title){
   try{
     console.log("UPDATING")
     const rootModel = await localforage.getItem("traversalPath")
@@ -54,6 +59,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     const newNode = {id: `node-${nodeIdCounter+1}`,
                      name: `${deslugifyDoi(doi)}`,
                      doi: deslugifyDoi(doi),
+                     title: title,
                      val: 2,
                      nodeId: nodeIdCounter+1,
                      type: 'paper',
@@ -104,6 +110,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     initialForceNodes.push({id: `node-1`,
                             name: `${deslugifyDoi(doi)}-[[1]]`,
                             doi: deslugifyDoi(doi),
+                            title: title,
                             nodeId: 1,
                             val: 2,
                             type: 'paper',

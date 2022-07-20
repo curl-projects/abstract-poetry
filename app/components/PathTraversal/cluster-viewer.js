@@ -39,11 +39,20 @@ export function ClusterViewer(props) {
         return 'rgb(21, 18, 26)'
       }
       else if(node.type === 'cluster')
-        return "rgba(183, 176, 183, 1)"
+        return "rgba(183, 176, 183, 0.7)"
       else {
-        return 'rgba(90, 90, 90, 0.9)'
+        return 'rgba(90, 90, 90, 0.7)'
       }
   }
+
+  const resolveNodeLabel = useCallback(node => {
+    if(node.title){
+      return node.title
+    }
+    else{
+      return node.name
+    }
+  }, [fgRef])
 
   function handleRedirectSubmit(node){
     if(node.type === 'paper'){
@@ -77,7 +86,7 @@ export function ClusterViewer(props) {
           onEngineStop={() => fgRef.current.zoomToFit(1800)}
           nodeColor={setNodeColors}
           onNodeClick={handleRedirectSubmit}
-
+          nodeLabel={resolveNodeLabel}
         />
       }
     </div>

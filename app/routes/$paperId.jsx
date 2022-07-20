@@ -90,7 +90,15 @@ export default function PaperId() {
       await localforage.setItem("activeNodeId", data.search)
     }
     console.log("UPDATED!")
-    updateTraversalPath(deslugifyDoi(params.paperId), data.updateIndex, data.impression, setTraversalPath, setNodeState, setAlgParams, setForceNodes)
+    updateTraversalPath(deslugifyDoi(params.paperId),
+                        data.updateIndex,
+                        data.impression,
+                        setTraversalPath,
+                        setNodeState,
+                        setAlgParams,
+                        setForceNodes,
+                        data.metadata.title
+                      )
 
     // TODO: might be unnecessary, using it for the control-panel form
     const clusters = await localforage.getItem('clusters')
@@ -105,9 +113,9 @@ export default function PaperId() {
   //   console.log("FORCE NODES:", forceNodes)
   // }, [forceNodes])
   //
-  // useEffect(() => {
-  //   console.log("DATA:", data)
-  // }, [data])
+  useEffect(() => {
+    console.log("DATA:", data)
+  }, [data])
   //
   // useEffect(()=>{
   //   console.log("ALG PARAMS STATE:", algParams)
