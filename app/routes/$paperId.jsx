@@ -146,6 +146,7 @@ export default function PaperId() {
         clusters={clusters}
         metadata = {data.metadata? data.metadata : {}}
 
+
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}

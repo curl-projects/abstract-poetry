@@ -4,6 +4,9 @@ import { deslugifyDoi, slugifyDoi } from "~/utils/doi-manipulation";
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress";
 import * as localforage from "localforage";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 import glyph from "../../../public/assets/glyph.svg";
 import read from "../../../public/assets/read.svg";
@@ -19,6 +22,7 @@ export function ControlPanel(props) {
   const fetcher = useFetcher();
   const [negativeDOI, setNegativeDOI] = useState(null);
   const [positiveDOI, setPositiveDOI] = useState(null);
+  const [pinState, setPinState] = useState(null)
 
   // // ANDRE: EAGER LOADING
    useEffect(async()=>{
@@ -59,7 +63,7 @@ export function ControlPanel(props) {
       }
 
       else if(event.key === 'p' || event.key === 'P'){
-        pinCurrentPaper(props.setTraversalPath, props.setForceNodes)
+        pinCurrentPaper(props.setTraversalPath, props.setForceNodes, setPinState)
       }
       else if(event.key === 'r' || event.key === "R"){
         window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
@@ -119,7 +123,7 @@ export function ControlPanel(props) {
           <div className="button-column flex-column">
             <div className="button">
               <img className="anchor" src={pin} alt="Read Logo" />
-              <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath, props.setForceNodes) : {}}>
+              <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath, props.setForceNodes, setPinState) : {}}>
                 <div className="key-cap">
                   P
                 </div>
@@ -148,10 +152,32 @@ export function ControlPanel(props) {
             <div className="toggle">
               <div className="eye" />
             </div>
-            <button onClick={() => pinCurrentPaper(props.setTraversalPath)}></button>
+            <button onClick={() => pinCurrentPaper(props.setTraversalPath, props.setForceNodes, setPinState)}></button>
           </div>
         </div>
       </div>
+      <Snackbar
+        open={pinState !== null}
+        autoHideDuration={2000}
+        message={pinState ? "Paper Pinned" : "Paper Unpinned"}
+        onClose={()=>setPinState(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        style={{
+          zIndex: 1000
+        }}
+        action={
+          <React.Fragment>
+            <IconButton
+              aria-label="close"
+              sx={{ p: 0.5 }}
+              color="inherit"
+              onClick={() => setPinState(null)}
+              >
+              <CloseIcon />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
     </div>
   )
 }

@@ -53,6 +53,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     const clusters = await localforage.getItem("clusters")
     const newNode = {id: `node-${nodeIdCounter+1}`,
                      name: `${deslugifyDoi(doi)}`,
+                     doi: deslugifyDoi(doi),
                      val: 2,
                      nodeId: nodeIdCounter+1,
                      type: 'paper',
@@ -102,6 +103,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
                                                                                        }))
     initialForceNodes.push({id: `node-1`,
                             name: `${deslugifyDoi(doi)}-[[1]]`,
+                            doi: deslugifyDoi(doi),
                             nodeId: 1,
                             val: 2,
                             type: 'paper',
@@ -147,7 +149,7 @@ export async function getTraversalPath(setter=null){
 //   return activeNodeId === id
 // }
 
-export async function pinCurrentPaper(pathSetter, forceNodeSetter){
+export async function pinCurrentPaper(pathSetter, forceNodeSetter, pinStateSetter){
   const activeNodeId = await localforage.getItem("activeNodeId")
   const rootModel = await localforage.getItem("traversalPath")
   const tree = new TreeModel();
@@ -164,16 +166,17 @@ export async function pinCurrentPaper(pathSetter, forceNodeSetter){
   // Update the force nodes objects
   const forceNodes = await localforage.getItem("forceNodes")
 
-  console.log('TYPE', typeof forceNodes)
   const index = forceNodes.nodes.findIndex(function(node){
     return node.nodeId === activeNodeId
   })
 
   if(~index){
-    forceNodes.nodes[index] = {...forceNodes.nodes[index], pinned: true}
+    forceNodes.nodes[index] = {...forceNodes.nodes[index], pinned: !forceNodes.nodes[index].pinned}
   }
 
   localforage.setItem("forceNodes", forceNodes)
+  forceNodeSetter(forceNodes)
+  pinStateSetter(activeNode.model.attributes.pinned)
 }
 
 export async function findDOIFromNodeId(nodeId){
