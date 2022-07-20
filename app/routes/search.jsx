@@ -55,7 +55,8 @@ export default function Search(props){
 
   useEffect(()=>{
     // Keeps track of search error state, opening and closing the snackbar
-    if(actionData?.action === 'error'){
+    if(actionData && actionData.action === 'error'){
+      console.log("HELLO")
       setErrorExists(true)
       setHeaderMessage("Start searching with a DOI or keyword")
     }
@@ -77,12 +78,14 @@ export default function Search(props){
   }, [actionData])
 
   useEffect(async()=>{
-    if(fetcher.data?.cluster){
-      await localforage.setItem("clusters", fetcher.data.cluster)
-      ref.current.click()
-    }
-    else{
-      setErrorExists(true)
+    if(fetcher.data){
+      if(fetcher.data.cluster){
+        await localforage.setItem("clusters", fetcher.data.cluster)
+        ref.current.click()
+      }
+      else{
+        setErrorExists(true)
+      }
     }
   }, [fetcher.data])
 
@@ -97,9 +100,13 @@ export default function Search(props){
     console.log("ACTION DATA:", actionData)
   }, [actionData])
 
+  useEffect(()=>{
+    console.log("ERROR EXISTS:", errorExists)
+  }, [errorExists])
+
   return(
     <>
-    <div className="container grid-view">
+    <div className="container">
       <Header />
 
       <div className="axis" />
