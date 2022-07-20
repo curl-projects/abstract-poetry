@@ -63,7 +63,9 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     localforage.setItem("algParams", currentAlgParams)
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
+
     localforage.setItem("forceNodes", forceNodes)
+    localStorage.setItem("forceNodes", JSON.stringify(forceNodes))
 
     if(pathSetter !== null){
       pathSetter(root.model)
@@ -97,6 +99,8 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     localforage.setItem("activeNodeId", 1)
     localforage.setItem("algParams", initialParams)
     localforage.setItem("forceNodes", {nodes: initialForceNodes, links: initialLinks})
+    localStorage.setItem("forceNodes", JSON.stringify({nodes: initialForceNodes, links: initialLinks}))
+
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(1)
