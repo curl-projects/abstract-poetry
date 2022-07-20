@@ -106,7 +106,7 @@ export default function Search(props){
 
   return(
     <>
-    <div className="container grid-view">
+    <div className="container">
       <Header />
 
       <div className="axis" />

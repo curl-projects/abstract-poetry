@@ -13,7 +13,6 @@
     padding: 0;
 }
 
-
 body {
     min-height: 100vh;
     height: 100%;
@@ -173,7 +172,7 @@ body {
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 3.5rem 0.5fr 1fr;
+    grid-template-rows: 3rem 0.5fr 1fr;
 
     grid-gap: var(--grid-gap);
     row-gap: calc(0.5*var(--grid-gap));
@@ -233,8 +232,8 @@ body {
 
     background: linear-gradient(270deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 }
 
 .background-panel-right {
@@ -256,8 +255,8 @@ body {
 
     background: linear-gradient(90deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 }
 
 .glass {
@@ -277,6 +276,7 @@ body {
 
     width: 100%;
     position: relative;
+    bottom: 0;
 }
 
 
@@ -310,7 +310,7 @@ body {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 3.5rem;
+    height: 3rem;
 
     background-color: rgb(var(--clr-white), var(--alpha-800));
     border-bottom: 1px solid rgba(var(--clr-grey-600));
@@ -653,7 +653,8 @@ h4 {
 .search {
     border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
     width: 100%;
-    position: relative;
+
+    position: absolute;
     bottom: 0;
 }
 

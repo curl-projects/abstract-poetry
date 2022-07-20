@@ -8,17 +8,14 @@ export function Header() {
     return (
       <>
         <div className="header-wrapper" />
-        <div className="header flex-space-between">
-          <div className="search flex-row">
-            <div className="search-input">
-              <p className="search-prompt">Browse spaces of papers with</p>
-              <div className="flex-row-space-between" style={{ display: "inline-flex", width: "100%" }} >
-                <input type="text" name="searchString" placeholder="abstract poetry " />
-                <button type="submit" style={{ cursor: "pointer" }}>
-                  <img src={glass} alt="Glass Logo" />
-                </button>
-              </div>
+        <div className="header">
+          <div className="search flex-space-between">
+            <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
+              <input type="text" name="searchString" placeholder="abstract poetry " />
             </div>
+            <button type="submit" style={{ cursor: "pointer" }}>
+              <img src={glass} alt="Glass Logo" />
+            </button>
           </div>
           {false ? <img src={account} alt="Account Login" /> : null}
         </div>
@@ -29,17 +26,14 @@ export function Header() {
     return (
       <>
         <div className="header-wrapper" />
-        <div className="header flex-space-between">
-          <Form method="post" className="search flex-row">
-            <div className="search-input">
-              <p className="search-prompt">Browse spaces of papers with</p>
-              <div className="flex-row-space-between" style={{ display: "inline-flex", width: "100%" }} >
-                <input type="text" name="searchString" placeholder="abstract poetry " />
-                <button type="submit" style={{ cursor: "pointer" }}>
-                  <img src={glass} alt="Glass Logo" />
-                </button>
-              </div>
+        <div className="header">
+          <Form method="post" className="search flex-space-between">
+            <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
+              <input type="text" name="searchString" placeholder="abstract poetry" />
             </div>
+            <button type="submit" style={{ cursor: "pointer" }}>
+              <img src={glass} alt="Glass Logo" />
+            </button>
           </Form>
           {false ? <img src={account} alt="Account Login" /> : null}
         </div>
