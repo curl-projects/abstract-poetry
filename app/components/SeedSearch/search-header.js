@@ -9,18 +9,18 @@ export function Header() {
       <>
         <div className="header-wrapper" />
         <div className="header flex-space-between">
-          <Link to={'/search'} className="search flex-row" style={{ cursor: "pointer", textDecoration: "none" }}>
+          <div className="search flex-row">
             <div className="search-input">
-              <p className="search-prompt">Browse spaces of papers</p>
-              <div className="flex-row" style={{ display: "inline-flex" }} >
+              <p className="search-prompt">Browse spaces of papers with</p>
+              <div className="flex-row-space-between" style={{ display: "inline-flex", width: "100%" }} >
                 <input type="text" name="searchString" placeholder="abstract poetry " />
                 <button type="submit" style={{ cursor: "pointer" }}>
                   <img src={glass} alt="Glass Logo" />
                 </button>
               </div>
             </div>
-          </Link>
-          <img src={account} alt="Account Login" />
+          </div>
+          {false ? <img src={account} alt="Account Login" /> : null}
         </div>
       </>
     )
@@ -32,7 +32,7 @@ export function Header() {
         <div className="header flex-space-between">
           <Form method="post" className="search flex-row">
             <div className="search-input">
-              <p className="search-prompt">Browse spaces of papers</p>
+              <p className="search-prompt">Browse spaces of papers with</p>
               <div className="flex-row-space-between" style={{ display: "inline-flex", width: "100%" }} >
                 <input type="text" name="searchString" placeholder="abstract poetry " />
                 <button type="submit" style={{ cursor: "pointer" }}>
@@ -41,7 +41,7 @@ export function Header() {
               </div>
             </div>
           </Form>
-          { false? <img src={account} alt="Account Login" /> : null }
+          {false ? <img src={account} alt="Account Login" /> : null}
         </div>
       </>
     )

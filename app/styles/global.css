@@ -652,7 +652,7 @@ h4 {
 
 .search {
     border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
-    width: 55%;
+    width: 100%;
     position: relative;
     bottom: 0;
 }
