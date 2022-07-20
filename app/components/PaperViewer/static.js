@@ -22,13 +22,16 @@ export function Background() {
 }
 
 
-export function Controls() {
+export function Controls(props) {
 
   return (
     <>
       <div className="traversal-controls" style={{pointerEvents: 'none'}}>
           <div className = "abs-right toolbar panel-glass flex-row" style = {{pointerEvents: 'auto', width: "100%", flexDirection: "row-reverse"}}>
             <img src = {focus} alt ="Focus on a specific paper"/>
+            <button onClick={() => props.setTraversalState(prevState => !prevState)}>
+              <p>Swap Traversal</p>
+            </button>
           </div>
           <div className="join"/>
       </div>

@@ -83,6 +83,7 @@ export default function PaperId() {
   const [clusters, setClusters] = useState(null)
   const [forceNodes, setForceNodes] = useState(null)
   const skipFetcher = useFetcher();
+  const [traversalState, setTraversalState] = useState(true)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -90,45 +91,53 @@ export default function PaperId() {
       await localforage.setItem("activeNodeId", data.search)
     }
     console.log("UPDATED!")
-    updateTraversalPath(deslugifyDoi(params.paperId), data.updateIndex, data.impression, setTraversalPath, setNodeState, setAlgParams, setForceNodes)
+    updateTraversalPath(deslugifyDoi(params.paperId),
+                        data.updateIndex,
+                        data.impression,
+                        setTraversalPath,
+                        setNodeState,
+                        setAlgParams,
+                        setForceNodes,
+                        data.metadata.title
+                      )
 
     // TODO: might be unnecessary, using it for the control-panel form
     const clusters = await localforage.getItem('clusters')
     setClusters(clusters)
   }, [params.paperId, data.search])
 
-  useEffect(() => {
-    console.log("TRAVERSAL PATH:", traversalPath)
-  }, [traversalPath])
-
-  useEffect(() => {
-    console.log("FORCE NODES:", forceNodes)
-  }, [forceNodes])
-
+  // useEffect(() => {
+  //   console.log("TRAVERSAL PATH:", traversalPath)
+  // }, [traversalPath])
+  //
+  // useEffect(() => {
+  //   console.log("FORCE NODES:", forceNodes)
+  // }, [forceNodes])
+  //
   useEffect(() => {
     console.log("DATA:", data)
   }, [data])
-
-  useEffect(()=>{
-    console.log("ALG PARAMS STATE:", algParams)
-  }, [algParams])
-
-  useEffect(()=>{
-    // Handle info messages passed from search
-    if(data.message){
-      setMessageExists(true)
-      console.log(caseToMessage(data.messsage, data.searchString))
-    }
-  }, [data])
-
-  useEffect(()=>{
-    console.log("NODE STATE:", nodeState)
-  }, [nodeState])
-
-
-  useEffect(() => {
-    console.log("ACTION DATA:", actionData)
-  }, [actionData])
+  //
+  // useEffect(()=>{
+  //   console.log("ALG PARAMS STATE:", algParams)
+  // }, [algParams])
+  // //
+  // useEffect(()=>{
+  //   // Handle info messages passed from search
+  //   if(data.message){
+  //     setMessageExists(true)
+  //     console.log(caseToMessage(data.messsage, data.searchString))
+  //   }
+  // }, [data])
+  //
+  // useEffect(()=>{
+  //   console.log("NODE STATE:", nodeState)
+  // }, [nodeState])
+  //
+  //
+  // useEffect(() => {
+  //   console.log("ACTION DATA:", actionData)
+  // }, [actionData])
 
   return (
     <div className="container grid-view">
@@ -141,9 +150,11 @@ export default function PaperId() {
         traversalPath={traversalPath}
         mostRecentNode={nodeState}
         setTraversalPath={setTraversalPath}
+        setForceNodes={setForceNodes}
         algParams={algParams}
         clusters={clusters}
         metadata = {data.metadata? data.metadata : {}}
+
 
       />
       <PaperData
@@ -151,15 +162,27 @@ export default function PaperId() {
         metadata={data.metadata ? data.metadata : {}}
       />
 
+    {traversalState ?
       <ClusterViewer
         forceNodes={forceNodes}
+        nodeState={nodeState}
         />
+      :
+      <TraversalViewer
+        traversalPath={traversalPath}
+        nodeState={nodeState}
+        className="traversal-viewer"
+      />
+    }
 
       <Share
         traversalPath={traversalPath}
-
         />
-      <Controls/>
+
+      <Controls
+        setTraversalState={setTraversalState}
+        />
+
 
       <Background />
 
@@ -182,13 +205,5 @@ export default function PaperId() {
         }
       />
       </div>
-
-
   )
 }
-
-// <TraversalViewer
-//   traversalPath={traversalPath}
-//   nodeState={nodeState}
-//   className="traversal-viewer"
-// />

@@ -4,7 +4,12 @@ import * as localforage from "localforage";
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
-export async function updateTraversalPath(doi, algParamIndex, impression, pathSetter=null, recentNodeSetter=null, algParamsSetter=null, forceNodeSetter=null){
+export async function updateTraversalPath(doi, algParamIndex, impression,
+                                          pathSetter=null,
+                                          recentNodeSetter=null,
+                                          algParamsSetter=null,
+                                          forceNodeSetter=null,
+                                          title){
   try{
     console.log("UPDATING")
     const rootModel = await localforage.getItem("traversalPath")
@@ -44,26 +49,41 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     const nodeIdCounter = await localforage.getItem("nodeIdCounter")
 
     // Client side parameter update
-    // const newAlgParams = currentAlgParams[algParamIndex][0] += 1
-
     if(JSON.parse(impression)){
         currentAlgParams[algParamIndex][0] += 1
     }
     else{
       currentAlgParams[algParamIndex][0] -= 1
     }
-
+    const clusters = await localforage.getItem("clusters")
+    const newNode = {id: `node-${nodeIdCounter+1}`,
+                     name: `${deslugifyDoi(doi)}`,
+                     doi: deslugifyDoi(doi),
+                     title: title,
+                     val: 2,
+                     nodeId: nodeIdCounter+1,
+                     type: 'paper',
+                     pinned: false}
+    const newLink = { "source": `cluster-${clusters[deslugifyDoi(doi)]}`, "target": `node-${nodeIdCounter+1}`}
+    forceNodes.nodes.push(newNode)
+    forceNodes.links.push(newLink)
 
     const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: currentAlgParams, nodeId: nodeIdCounter+1, pinned: false}}
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
+
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("algParams", currentAlgParams)
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
+
+    localforage.setItem("forceNodes", forceNodes)
+    localStorage.setItem("forceNodes", JSON.stringify(forceNodes))
+
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(nodeIdCounter+1)
       algParamsSetter(currentAlgParams)
+      forceNodeSetter(forceNodes)
     }
     return rootModel
   }
@@ -78,21 +98,39 @@ export async function updateTraversalPath(doi, algParamIndex, impression, pathSe
     }
     var tree = new TreeModel();
     const clusters = await localforage.getItem("clusters")
-    // const initialParams = Array(clusters.length).fill([1, 1])
     const initialParams = Array.from({length: [...new Set(Object.values(clusters))].length}, e=> Array(2).fill(1))
     const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
-    const initialForceNodes = Array.from({length: initialParams.length}, (e, index) => ({id: `${index}`, name: `Cluster ${index}`, val: 5}))
+    const initialForceNodes = Array.from({length: initialParams.length}, (e, index) => ({id: `cluster-${index}`,
+                                                                                         name: `Cluster ${index+1}`,
+                                                                                         val: 5,
+                                                                                         type: 'cluster',
+                                                                                         nodeId: 0,
+                                                                                         pinned: false
+                                                                                       }))
+    initialForceNodes.push({id: `node-1`,
+                            name: `${deslugifyDoi(doi)}-[[1]]`,
+                            doi: deslugifyDoi(doi),
+                            title: title,
+                            nodeId: 1,
+                            val: 2,
+                            type: 'paper',
+                            pinned: false})
+    const initialLinks = [{ "source": `cluster-${clusters[deslugifyDoi(doi)]}`, "target": "node-1"}]
+    // const initialLinks = Array.from({length: initialParams.length - 1}, (e, index) => ({source: `cluster-${index}`, target: `cluster-${index + 1}`}))
+    // initialLinks.push({ "source": `cluster-${clusters[deslugifyDoi(doi)]}`, "target": "node-1"})
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("activeNodeId", 1)
     localforage.setItem("algParams", initialParams)
-    localforage.setItem("forceNodes", {nodes: initialForceNodes, links: []})
+    localforage.setItem("forceNodes", {nodes: initialForceNodes, links: initialLinks})
+    localStorage.setItem("forceNodes", JSON.stringify({nodes: initialForceNodes, links: initialLinks}))
+
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(1)
       algParamsSetter(initialParams)
-      forceNodeSetter({nodes: initialForceNodes, links: []})
+      forceNodeSetter({nodes: initialForceNodes, links: initialLinks})
     }
     return root
   }
@@ -118,7 +156,7 @@ export async function getTraversalPath(setter=null){
 //   return activeNodeId === id
 // }
 
-export async function pinCurrentPaper(pathSetter){
+export async function pinCurrentPaper(pathSetter, forceNodeSetter, pinStateSetter){
   const activeNodeId = await localforage.getItem("activeNodeId")
   const rootModel = await localforage.getItem("traversalPath")
   const tree = new TreeModel();
@@ -131,6 +169,21 @@ export async function pinCurrentPaper(pathSetter){
 
   localforage.setItem('traversalPath', root.model)
   pathSetter(root.model)
+
+  // Update the force nodes objects
+  const forceNodes = await localforage.getItem("forceNodes")
+
+  const index = forceNodes.nodes.findIndex(function(node){
+    return node.nodeId === activeNodeId
+  })
+
+  if(~index){
+    forceNodes.nodes[index] = {...forceNodes.nodes[index], pinned: !forceNodes.nodes[index].pinned}
+  }
+
+  localforage.setItem("forceNodes", forceNodes)
+  forceNodeSetter(forceNodes)
+  pinStateSetter(activeNode.model.attributes.pinned)
 }
 
 export async function findDOIFromNodeId(nodeId){
