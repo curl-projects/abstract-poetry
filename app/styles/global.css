@@ -313,7 +313,6 @@ body {
     grid-column: 1 / -1;
     grid-row: 3;
 
-    margin-top: -20%;
 
     width: 100%;
     justify-self: center;
@@ -399,7 +398,7 @@ body {
     grid-column: 2 / -1;
     grid-row: 2;
 
-    max-height: 100%;
+    max-height: calc(100% - var(--grid-gap));
     width: 97%;
     resize: horizontal;
     z-index: 4;
