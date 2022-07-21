@@ -32,7 +32,7 @@ export function ClusterViewer(props) {
     setGraphData(forceNodeData)
   }, [props.forceNodes])
 
-  
+
 
   function setLinkColors(link) {
     console.log(String(link.source.id).includes("cluster"))

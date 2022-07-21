@@ -56,7 +56,9 @@ export const action = async ({ request, params }) => {
       if (JSON.parse(impression)) {
         return redirect(`/${slugifyDoi(positiveDOI.positiveImpressionDOI)}?updateIndex=${positiveDOI.positiveImpressionClusterIndex}&impression=true`)
       }
-      return redirect(`/${slugifyDoi(negativeDOI.negativeImpressionDOI)}?updateIndex=${negativeDOI.negativeImpressionClusterIndex}&impression=false`)
+      else{
+        return redirect(`/${slugifyDoi(negativeDOI.negativeImpressionDOI)}?updateIndex=${negativeDOI.negativeImpressionClusterIndex}&impression=false`)
+      }
     }
   }
 
@@ -70,8 +72,13 @@ export const action = async ({ request, params }) => {
   // the final version of this needs to return a DOI and the updated algorithm parameters
   let [nextPapers, clusterIndex] = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, nodeState, algParams, clusters)
 
+<<<<<<< HEAD
   console.log("NEXT PAPERS:", nextPapers)
   return (redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
+=======
+  console.warn("NEXT PAPERS:", nextPapers)
+  return(redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
+>>>>>>> 375b4bc265bbd0365242e967e5064513550f8a62
 }
 
 export default function PaperId() {
@@ -95,6 +102,7 @@ export default function PaperId() {
     }
     console.log("UPDATED!")
     updateTraversalPath(deslugifyDoi(params.paperId),
+<<<<<<< HEAD
       data.updateIndex,
       data.impression,
       setTraversalPath,
@@ -103,15 +111,26 @@ export default function PaperId() {
       setForceNodes,
       data.metadata.title
     )
+=======
+                        data.updateIndex,
+                        data.impression,
+                        setTraversalPath,
+                        setNodeState,
+                        setAlgParams,
+                        setForceNodes,
+                        setClusters,
+                        data.metadata.title
+                      )
+>>>>>>> 375b4bc265bbd0365242e967e5064513550f8a62
 
     // TODO: might be unnecessary, using it for the control-panel form
-    const clusters = await localforage.getItem('clusters')
-    setClusters(clusters)
+    // const clusters = await localforage.getItem('clusters')
+    // setClusters(clusters)
   }, [params.paperId, data.search])
 
-  // useEffect(() => {
-  //   console.log("TRAVERSAL PATH:", traversalPath)
-  // }, [traversalPath])
+  useEffect(() => {
+    console.log("LOADER DATA:", data)
+  }, [data])
   //
   // useEffect(() => {
   //   console.log("FORCE NODES:", forceNodes)
@@ -141,6 +160,10 @@ export default function PaperId() {
   // useEffect(() => {
   //   console.log("ACTION DATA:", actionData)
   // }, [actionData])
+
+  useEffect(()=>{
+    console.log("CLUSTER SIZE:", clusters ? Object.keys(clusters).length : 0)
+  }, [clusters])
 
   return (
     <div className="container grid-view">
