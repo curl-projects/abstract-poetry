@@ -396,7 +396,7 @@ body {
 
 
     position: relative;
-    top: var(--space-md);
+    top: calc(3 * var(--grid-gap));
     right: var(--grid-gap);
 }
 
@@ -416,7 +416,7 @@ body {
     z-index: 4;
 
     position: relative;
-    top: var(--space-md);
+    top: calc(3 * var(--grid-gap));
     left: var(--grid-gap);
 
     display: grid;
