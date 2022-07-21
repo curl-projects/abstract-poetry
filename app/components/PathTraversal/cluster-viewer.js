@@ -32,23 +32,15 @@ export function ClusterViewer(props) {
     console.log(forceNodeData)
   }, [props.forceNodes])
 
-  function setNodeColors(node) {
-    if (node.pinned) {
-      console.log("NODE.PINNED", node.pinned)
-      return 'rgb(178, 171, 243)'
-    }
-    else if (node.nodeId === props.nodeState) {
-      return 'rgb(21, 18, 26)'
-    }
-    else if (node.type === 'cluster')
-      return 'rgb(250,250,250)'
-    else {
-      return 'rgba(90, 90, 90, 0.7)'
-    }
-  }
+  
 
   function setLinkColors(link) {
-    return 'rgb(243,243,243)'
+    console.log(String(link.source.id).includes("cluster"))
+    if (String(link.target.id).includes('cluster')) {
+      return 'rgb(243, 243, 243)'
+    } else {
+      return 'rgb(230, 230, 230)'
+    }
   }
 
 
@@ -93,12 +85,12 @@ export function ClusterViewer(props) {
 
   const nodePaint = (node, color, ctx) => {
 
-    if (node.type === "cluster") {
+    if (node.nodeId === props.nodeState) {
+      ctx.fillStyle = 'rgb(18, 18, 18)'
+    } else if (node.type === "cluster") {
       ctx.fillStyle = 'rgb(255,255,255)';
     } else if (node.pinned) {
       ctx.fillStyle = 'rgb(238, 238, 238)';
-    } else if (node.nodeId === props.nodeState) {
-      return 'rgb(100, 100, 100)'
     } else {
       ctx.fillStyle = 'rgb(200, 200, 200)';
     }
@@ -121,11 +113,12 @@ export function ClusterViewer(props) {
           graphData={props.forceNodes ? graphData : { nodes: [], links: [] }}
           ref={fgRef}
           forceEngine="d3"
-          d3AlphaMin={0.1}
-          d3AlphaDecay={0.02}
+          // d3AlphaMin={0.1}
+          d3AlphaDecay={0.1}
           width={width}
           height={height}
-          cooldownTicks={10000}
+          cooldownTicks={12}
+          d3VelocityDecay={0.1}
           onEngineStop={() => fgRef.current.zoomToFit(400)}
 
           nodeCanvasObject={(node, ctx) => nodePaint(node, getColor(node), ctx)}
