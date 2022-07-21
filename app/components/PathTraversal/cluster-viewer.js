@@ -84,7 +84,7 @@ export function ClusterViewer(props) {
           width={width}
           height={height}
           cooldownTicks={10}
-          onEngineStop={() => fgRef.current.zoomToFit(1800)}
+          onEngineStop={() => fgRef.current.zoomToFit(800)}
           nodeColor={setNodeColors}
           onNodeClick={handleRedirectSubmit}
           nodeLabel={resolveNodeLabel}
