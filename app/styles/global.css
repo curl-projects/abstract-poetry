@@ -427,6 +427,7 @@ body {
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
     overflow: hidden;
+
 }
 
 
@@ -995,7 +996,7 @@ input[type="text"]:focus::placeholder {
     width: 100%;
     height: 100%;
 
-    
+
 
     border: 1px solid rgb(var(--clr-grey-200), var(--alpha-600));
     background-color: var(--glass-100);
@@ -1012,7 +1013,7 @@ input[type="text"]:focus::placeholder {
     justify-content: center;
     align-items: center;
     padding: 1px;
-    
+
 }
 
 .pin::after{

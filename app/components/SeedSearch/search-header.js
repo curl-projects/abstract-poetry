@@ -11,12 +11,14 @@ export function Header() {
         <div className="header-wrapper" />
         <div className="header">
           <div className="search flex-space-between">
+          <Link to={'/search'} className="search flex-row" style={{cursor: "pointer", textDecoration: "none"}}>
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
               <input type="text" name="searchString" placeholder="abstract poetry " />
             </div>
             <button type="submit" style={{ cursor: "pointer" }}>
               <img src={glass} alt="Glass Logo" />
             </button>
+          </Link>
           </div>
           {false ? <img src={account} alt="Account Login" /> : null}
         </div>
