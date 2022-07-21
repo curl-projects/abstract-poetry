@@ -396,7 +396,7 @@ body {
 
 
     position: relative;
-    top: var(--space-md);
+    top: calc(3 * var(--grid-gap));
     right: var(--grid-gap);
 }
 
@@ -416,7 +416,7 @@ body {
     z-index: 4;
 
     position: relative;
-    top: var(--space-md);
+    top: calc(3 * var(--grid-gap));
     left: var(--grid-gap);
 
     display: grid;
@@ -531,8 +531,7 @@ h4 {
 .metadata {
     grid-row: 1;
     max-height: 100%;
-
-
+    width: 100%;
 
     padding-left: var(--space-xl);
     padding-top: var(--space-lg);
@@ -849,7 +848,7 @@ input[type="text"]:focus::placeholder {
     height: calc(1.4*var(--width));
     width: var(--width);
     border-radius: 50px;
-    border: 14px solid rgb(var(--clr-grey-100));
+    border: 14px solid #090909;
 
     padding: 2px;
 
@@ -861,9 +860,11 @@ input[type="text"]:focus::placeholder {
     gap: 0px;
 }
 
+/*
 .toggle:active {
     flex-direction: column-reverse;
 }
+*/
 
 
 .eye {
@@ -897,7 +898,7 @@ input[type="text"]:focus::placeholder {
     color: rgba(var(--clr-grey-500), var(--alpha-900));
 
     font-size: var(--fs-lg);
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .key-caption {
@@ -993,7 +994,43 @@ input[type="text"]:focus::placeholder {
     flex: 2 1 0;
     width: 100%;
     height: 100%;
+
+    
+
+    border: 1px solid rgb(var(--clr-grey-200), var(--alpha-600));
+    background-color: var(--glass-100);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-radius: 5px;
+
+    cursor: pointer;
+    z-index: 5;
+
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+    
 }
+
+.pin::after{
+    content: "";
+    display: inline-block;
+    position: relative;
+
+    height: 100%;
+    width: 100%;
+
+    background-color: var(--glass-800);
+    border-radius: 3px;
+    border: 1px solid rgb(var(--clr-grey-200));
+
+    top: 0px;
+    z-index: 1;
+}
+
 
 .impression-button {
     flex: 1 1 auto;

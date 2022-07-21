@@ -2,6 +2,7 @@ import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import { Form, useParams, Link } from "@remix-run/react"
 
+
 export function Header() {
   const params = useParams();
   if (params.paperId) {

@@ -16,9 +16,12 @@ import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import * as localforage from "localforage";
+
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { Tooltip } from "@mui/material";
+
 import { caseToMessage } from "~/utils/messages-and-alerts"
 
 export const loader = async ({
@@ -46,11 +49,11 @@ export const action = async ({ request, params }) => {
   const impression = formData.get('impression')
   // Determines whether the eager-loading has returned a result
 
-  if(negativeDOIString){
+  if (negativeDOIString) {
     const positiveDOI = JSON.parse(positiveDOIString)
     const negativeDOI = JSON.parse(negativeDOIString)
-    if(negativeDOI !== "" && (negativeDOI?.negativeImpressionDOI !== deslugifyDoi(params.paperId) && positiveDOI?.positiveImpressionDOI !== deslugifyDoi(params.paperId))){
-      if(JSON.parse(impression)){
+    if (negativeDOI !== "" && (negativeDOI?.negativeImpressionDOI !== deslugifyDoi(params.paperId) && positiveDOI?.positiveImpressionDOI !== deslugifyDoi(params.paperId))) {
+      if (JSON.parse(impression)) {
         return redirect(`/${slugifyDoi(positiveDOI.positiveImpressionDOI)}?updateIndex=${positiveDOI.positiveImpressionClusterIndex}&impression=true`)
       }
       else{
@@ -89,7 +92,7 @@ export default function PaperId() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    if(data.search){
+    if (data.search) {
       await localforage.setItem("activeNodeId", data.search)
     }
     console.log("UPDATED!")
@@ -160,7 +163,7 @@ export default function PaperId() {
         setForceNodes={setForceNodes}
         algParams={algParams}
         clusters={clusters}
-        metadata = {data.metadata? data.metadata : {}}
+        metadata={data.metadata ? data.metadata : {}}
 
 
       />
@@ -169,27 +172,27 @@ export default function PaperId() {
         metadata={data.metadata ? data.metadata : {}}
       />
 
-    {traversalState ?
-      <ClusterViewer
-        forceNodes={forceNodes}
-        nodeState={nodeState}
+      {traversalState ?
+        <ClusterViewer
+          forceNodes={forceNodes}
+          nodeState={nodeState}
         />
-      :
-      <TraversalViewer
-        traversalPath={traversalPath}
-        nodeState={nodeState}
-        className="traversal-viewer"
-      />
-    }
+        :
+        <TraversalViewer
+          traversalPath={traversalPath}
+          nodeState={nodeState}
+          className="traversal-viewer"
+        />
+      }
 
       <Share
         traversalPath={traversalPath}
-        />
+      />
 
       <Controls
         setTraversalState={setTraversalState}
-        traversalState = {traversalState}
-        />
+        traversalState={traversalState}
+      />
 
 
       <Background />
@@ -198,7 +201,7 @@ export default function PaperId() {
         open={messageExists}
         autoHideDuration={6000}
         message={data.message && data.searchString ? caseToMessage(data.message, data.searchString) : ""}
-        onClose={()=>setMessageExists(false)}
+        onClose={() => setMessageExists(false)}
         action={
           <React.Fragment>
             <IconButton
@@ -206,12 +209,12 @@ export default function PaperId() {
               sx={{ p: 0.5 }}
               color="inherit"
               onClick={() => setMessageExists(false)}
-              >
+            >
               <CloseIcon />
             </IconButton>
           </React.Fragment>
         }
       />
-      </div>
+    </div>
   )
 }
