@@ -151,7 +151,7 @@ export default function PaperId() {
 
   return (
     <div className="container grid-view">
-      <Header />
+      <Header searchString = {data.searchString? data.searchString : null}/>
 
       <div className="axis" />
 
