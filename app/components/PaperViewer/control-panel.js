@@ -87,15 +87,15 @@ export function ControlPanel(props) {
         <img src={glyph} alt="Glyph Logo" className="paper-portrait"/>
         <div className="metadata-grid" style = {{display: toggle? "none" : "grid"}}>
           <div className="metadata-bit">
-            <p className="tl">{props.metadata ? props.metadata.citationCount : ""}</p>
+            <p className="tr">{props.metadata ? props.metadata.citationCount : ""}</p>
             <small>Citations</small>
           </div>
           <div className="metadata-bit">
-          <p className="tr">{props.metadata ? props.metadata.referenceCount : ""}</p>
+          <p className="tl">{props.metadata ? props.metadata.referenceCount : ""}</p>
             <small>References</small>
           </div>
           <div className="metadata-bit">
-          <p className="bl">{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
+          <p className="br">{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
             <small>Influential</small>
           </div>
 

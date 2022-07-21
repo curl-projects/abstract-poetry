@@ -13,7 +13,6 @@
     padding: 0;
 }
 
-
 body {
     min-height: 100vh;
     height: 100%;
@@ -173,7 +172,7 @@ body {
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 3.5rem 0.5fr 1fr;
+    grid-template-rows: 3rem 0.5fr 1fr;
 
     grid-gap: var(--grid-gap);
     row-gap: calc(0.5*var(--grid-gap));
@@ -212,9 +211,6 @@ body {
 
     z-index: 1;
     background-image: url(https://source.unsplash.com/vBc7xy65us8/);
-    background-image: url(https://source.unsplash.com/GVV669GVYjo/);
-    background-image: url(https://source.unsplash.com/z0FbhQhpimI/);
-    background-image: url(https://source.unsplash.com/xzH7K6nVVgI/);
 }
 
 .background-panel-left {
@@ -236,8 +232,8 @@ body {
 
     background: linear-gradient(270deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 }
 
 .background-panel-right {
@@ -259,8 +255,8 @@ body {
 
     background: linear-gradient(90deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 }
 
 .glass {
@@ -280,6 +276,7 @@ body {
 
     width: 100%;
     position: relative;
+    bottom: 0;
 }
 
 
@@ -313,7 +310,7 @@ body {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 3.5rem;
+    height: 3rem;
 
     background-color: rgb(var(--clr-white), var(--alpha-800));
     border-bottom: 1px solid rgba(var(--clr-grey-600));
@@ -327,7 +324,7 @@ body {
     grid-row: 3;
 
 
-    width: 100%;
+    width: 300%;
     justify-self: center;
     z-index: 3;
 }
@@ -510,9 +507,11 @@ h4 {
 .search-prompt {
     font-family: var(--ff-sansserif);
     font-size: var(--fs-xs);
-    color: rgba(var(--clr-grey-300), var(--alpha-800));
-    font-weight: 400;
+    color: rgba(var(--clr-grey-400), var(--alpha-800));
+    font-weight: 200;
     letter-spacing: 0.025em;
+
+    text-transform: uppercase;
 }
 
 .search-prompt:hover {
@@ -622,7 +621,7 @@ h4 {
 
 .metadata-grid small {
     font-size: var(--fs-xs);
-    color: rgb(var(--clr-grey-400));
+    color: rgb(var(--clr-grey-500), var(--alpha-800));
     font-weight: 400;
     letter-spacing: 0.025em;
     /* capitalise*/
@@ -654,6 +653,9 @@ h4 {
 .search {
     border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
     width: 100%;
+
+    position: absolute;
+    bottom: 0;
 }
 
 .search-input {
@@ -900,7 +902,7 @@ input[type="text"]:focus::placeholder {
 
 .key-caption {
     margin-left: 2px;
-    color: rgba(var(--clr-grey-500), var(--alpha-500));
+    color: rgba(var(--clr-grey-500), var(--alpha-600));
     font-size: var(--fs-sm);
 }
 
