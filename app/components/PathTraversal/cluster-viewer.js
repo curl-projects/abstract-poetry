@@ -6,7 +6,7 @@ import { useParams, useSubmit, Form } from "@remix-run/react";
 import { clusterNode } from "~/components/PathTraversal/cluster-node"
 import { slugifyDoi } from "~/utils/doi-manipulation";
 import ForceGraph2D from "./forceGraph.client"
-import {ClientOnly} from "remix-utils";
+import { ClientOnly } from "remix-utils";
 
 
 export function ClusterViewer(props) {
@@ -35,7 +35,6 @@ export function ClusterViewer(props) {
 
 
   function setLinkColors(link) {
-    console.log(String(link.source.id).includes("cluster"))
     if (String(link.target.id).includes('cluster')) {
       return 'rgb(243, 243, 243)'
     } else {
@@ -88,7 +87,8 @@ export function ClusterViewer(props) {
     if (node.nodeId === props.nodeState) {
       ctx.fillStyle = 'rgb(18, 18, 18)'
     } else if (node.type === "cluster") {
-      ctx.fillStyle = 'rgb(255,255,255)';
+      // ctx.fillStyle = 'rgb(255,255,255)';
+      ctx.fillStyle = 'rgb(182, 187, 201)'
     } else if (node.pinned) {
       ctx.fillStyle = 'rgb(238, 238, 238)';
     } else {
@@ -98,7 +98,7 @@ export function ClusterViewer(props) {
     ctx.strokeStyle = color;
 
     ctx.beginPath();
-    ctx.arc(node.x, node.y, 6, 0, 2 * Math.PI, false);
+    ctx.arc(node.x, node.y, node.val, 0, 2 * Math.PI, false);
     ctx.fill();
     ctx.stroke();
   }
@@ -109,24 +109,26 @@ export function ClusterViewer(props) {
       <Form ref={formRef} method="post" onSubmit={handleRedirectSubmit} />
 
       {(typeof window !== "undefined") &&
-        <ForceGraph2D
-          graphData={props.forceNodes ? graphData : { nodes: [], links: [] }}
-          ref={fgRef}
-          forceEngine="d3"
-          // d3AlphaMin={0.1}
-          d3AlphaDecay={0.1}
-          width={width}
-          height={height}
-          cooldownTicks={12}
-          d3VelocityDecay={0.1}
-          onEngineStop={() => fgRef.current.zoomToFit(400)}
+        <ClientOnly>
+          {()=><ForceGraph2D
+            graphData={props.forceNodes ? graphData : { nodes: [], links: [] }}
+            ref={fgRef}
+            forceEngine="d3"
+            d3AlphaMin={0.1}
+            // d3AlphaDecay={0.1}
+            width={width}
+            height={height}
+            cooldownTicks={12}
+            // d3VelocityDecay={0.1}
+            onEngineStop={() => fgRef.current.zoomToFit(800)}
 
-          nodeCanvasObject={(node, ctx) => nodePaint(node, getColor(node), ctx)}
+            nodeCanvasObject={(node, ctx) => nodePaint(node, getColor(node), ctx)}
 
-          onNodeClick={handleRedirectSubmit}
-          nodeLabel={resolveNodeLabel}
-          linkColor={setLinkColors}
-        />
+            onNodeClick={handleRedirectSubmit}
+            nodeLabel={resolveNodeLabel}
+            linkColor={setLinkColors}
+          />}
+      </ClientOnly>
       }
     </div>
   )
