@@ -72,13 +72,8 @@ export const action = async ({ request, params }) => {
   // the final version of this needs to return a DOI and the updated algorithm parameters
   let [nextPapers, clusterIndex] = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, nodeState, algParams, clusters)
 
-<<<<<<< HEAD
-  console.log("NEXT PAPERS:", nextPapers)
-  return (redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
-=======
   console.warn("NEXT PAPERS:", nextPapers)
   return(redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
->>>>>>> 375b4bc265bbd0365242e967e5064513550f8a62
 }
 
 export default function PaperId() {
@@ -102,16 +97,6 @@ export default function PaperId() {
     }
     console.log("UPDATED!")
     updateTraversalPath(deslugifyDoi(params.paperId),
-<<<<<<< HEAD
-      data.updateIndex,
-      data.impression,
-      setTraversalPath,
-      setNodeState,
-      setAlgParams,
-      setForceNodes,
-      data.metadata.title
-    )
-=======
                         data.updateIndex,
                         data.impression,
                         setTraversalPath,
@@ -121,7 +106,6 @@ export default function PaperId() {
                         setClusters,
                         data.metadata.title
                       )
->>>>>>> 375b4bc265bbd0365242e967e5064513550f8a62
 
     // TODO: might be unnecessary, using it for the control-panel form
     // const clusters = await localforage.getItem('clusters')

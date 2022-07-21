@@ -30,33 +30,6 @@ export function ControlPanel(props) {
   const [toggle, setToggle] = useState(true)
 
   // // ANDRE: EAGER LOADING
-<<<<<<< HEAD
-  useEffect(async () => {
-    if (params.paperId) {
-      if ((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters) {
-        fetcher.submit({
-          doi: deslugifyDoi(params.paperId),
-          traversalPath: JSON.stringify(props.traversalPath),
-          mostRecentNode: JSON.stringify(props.mostRecentNode),
-          algParams: JSON.stringify(props.algParams),
-          clusters: JSON.stringify(await localforage.getItem("clusters"))
-        },
-          { method: "post", action: '/preload-impressions' })
-      }
-      setToggle(false)
-    }
-  }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
-
-  useEffect(() => {
-    console.log("FETCHER DATA:", fetcher.data)
-  }, [fetcher.data])
-
-  useEffect(() => {
-    // Saves prefetched doi's into state
-    if (fetcher.data?.negativeImpression) {
-      setNegativeDOI({ negativeImpressionDOI: fetcher.data.negativeImpression.id, negativeImpressionClusterIndex: fetcher.data.negativeImpressionClusterIndex })
-      setPositiveDOI({ positiveImpressionDOI: fetcher.data.positiveImpression.id, positiveImpressionClusterIndex: fetcher.data.positiveImpressionClusterIndex })
-=======
    useEffect(async()=>{
      if(params.paperId){
        if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters && Object.keys(props.clusters).includes(deslugifyDoi(params.paperId))){
@@ -85,7 +58,6 @@ export function ControlPanel(props) {
     if(fetcher.data?.negativeImpression && fetcher.data.positiveImpression){
         setNegativeDOI({negativeImpressionDOI: fetcher.data.negativeImpression.id, negativeImpressionClusterIndex: fetcher.data.negativeImpressionClusterIndex})
         setPositiveDOI({positiveImpressionDOI: fetcher.data.positiveImpression.id, positiveImpressionClusterIndex: fetcher.data.positiveImpressionClusterIndex})
->>>>>>> 375b4bc265bbd0365242e967e5064513550f8a62
     }
   }, [fetcher.data])
 
