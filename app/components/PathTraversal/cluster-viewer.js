@@ -6,6 +6,7 @@ import { useParams, useSubmit, Form } from "@remix-run/react";
 import { clusterNode } from "~/components/PathTraversal/cluster-node"
 import { slugifyDoi } from "~/utils/doi-manipulation";
 import ForceGraph2D from "./forceGraph.client"
+import {ClientOnly} from "remix-utils";
 
 
 export function ClusterViewer(props) {
@@ -29,7 +30,6 @@ export function ClusterViewer(props) {
   useEffect(async () => {
     const forceNodeData = JSON.parse(await localStorage.getItem("forceNodes"));
     setGraphData(forceNodeData)
-    console.log(forceNodeData)
   }, [props.forceNodes])
 
   

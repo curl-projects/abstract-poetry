@@ -34,7 +34,7 @@ export default function Search(props){
   const coldStartFetcher = useFetcher();
   const ref = useRef();
   const [paperSelection, setPaperSelection] = useState(false)
-  const [headerMessage, setHeaderMessage] = useState("Start searching with a DOI or keyword")
+  const [headerMessage, setHeaderMessage] = useState("Explore all of PLOS with keywords, authors or DOIs")
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
@@ -62,11 +62,11 @@ export default function Search(props){
     }
     if(actionData?.action === 'select-papers'){
       setPaperSelection(true)
-      setHeaderMessage("Choose an initialisation paper")
+      setHeaderMessage("Where will you start your exploration?")
       console.log("DOI LIST DATA!!:", actionData.doiList)
     }
     else if(actionData?.action === 'redirect'){
-      setHeaderMessage(`Clustering papers around ${actionData.doiString}`)
+      setHeaderMessage(`Gathering papers for you...`)
       fetcher.submit({
         doi: deslugifyDoi(actionData.doiString),
         keywordSearch: false
@@ -92,7 +92,7 @@ export default function Search(props){
   useEffect(()=>{
     console.log("FETCHER STATE:", fetcher.state)
     if(fetcher.state === "submitting"){
-      setHeaderMessage(`Clustering papers`)
+      setHeaderMessage(`Gathering papers for you...`)
     }
   }, [fetcher.state])
 

@@ -102,7 +102,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
     const initialForceNodes = Array.from({length: initialParams.length}, (e, index) => ({id: `cluster-${index}`,
                                                                                          name: `Cluster ${index+1}`,
-                                                                                         val: 5,
+                                                                                         val: 2,
                                                                                          type: 'cluster',
                                                                                          nodeId: 0,
                                                                                          pinned: false
