@@ -30,12 +30,12 @@ export function ControlPanel(props) {
   // // ANDRE: EAGER LOADING
    useEffect(async()=>{
      if(params.paperId){
-       if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters){
+       if((Object.keys(props.traversalPath).length !== 0) && (typeof props.mostRecentNode === "number") && props.algParams && props.clusters && Object.keys(props.clusters).includes(deslugifyDoi(params.paperId))){
          fetcher.submit({doi: deslugifyDoi(params.paperId),
                          traversalPath: JSON.stringify(props.traversalPath),
                          mostRecentNode: JSON.stringify(props.mostRecentNode),
                          algParams: JSON.stringify(props.algParams),
-                         clusters: JSON.stringify(await localforage.getItem("clusters"))
+                         clusters: JSON.stringify(props.clusters)
                        },
                          {method: "post", action: '/preload-impressions'})
        }
@@ -48,8 +48,12 @@ export function ControlPanel(props) {
   }, [fetcher.data])
 
   useEffect(()=>{
+    console.log("CLUSTER PROP SIZE:", props.clusters ? Object.keys(props.clusters).length : 0, props.clusters)
+  }, [props.clusters])
+
+  useEffect(()=>{
     // Saves prefetched doi's into state
-    if(fetcher.data?.negativeImpression){
+    if(fetcher.data?.negativeImpression && fetcher.data.positiveImpression){
         setNegativeDOI({negativeImpressionDOI: fetcher.data.negativeImpression.id, negativeImpressionClusterIndex: fetcher.data.negativeImpressionClusterIndex})
         setPositiveDOI({positiveImpressionDOI: fetcher.data.positiveImpression.id, positiveImpressionClusterIndex: fetcher.data.positiveImpressionClusterIndex})
     }
@@ -94,8 +98,8 @@ export function ControlPanel(props) {
           <p className="br">{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
             <small>Influential</small>
           </div>
-          
-          
+
+
         </div>
       </div>
 

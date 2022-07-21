@@ -9,6 +9,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                                           recentNodeSetter=null,
                                           algParamsSetter=null,
                                           forceNodeSetter=null,
+                                          clusterSetter=null,
                                           title){
   try{
     console.log("UPDATING")
@@ -33,12 +34,14 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const currentAlgParams = await localforage.getItem("algParams")
     const forceNodes = await localforage.getItem('forceNodes')
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
+      var clusters = await localforage.getItem('clusters')
       localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
       if(pathSetter !== null){
         pathSetter(rootModel)
         recentNodeSetter(mostRecentNode.model.attributes.nodeId)
         algParamsSetter(currentAlgParams)
         forceNodeSetter(forceNodes)
+        clusterSetter(clusters)
       }
       return rootModel
     }
@@ -55,7 +58,13 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     else{
       currentAlgParams[algParamIndex][1] += 1
     }
-    const clusters = await localforage.getItem("clusters")
+
+    var clusters = await localforage.getItem('clusters')
+    if(!Object.keys(clusters).includes(doi)){
+      console.log("CLUSTER UPDATE EXECUTED")
+      clusters[`${doi}`] = algParamIndex
+    }
+
     const newNode = {id: `node-${nodeIdCounter+1}`,
                      name: `${deslugifyDoi(doi)}`,
                      doi: deslugifyDoi(doi),
@@ -64,7 +73,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                      nodeId: nodeIdCounter+1,
                      type: 'paper',
                      pinned: false}
-    const newLink = { "source": `cluster-${clusters[deslugifyDoi(doi)]}`, "target": `node-${nodeIdCounter+1}`}
+    const newLink = { "source": `cluster-${clusters[doi]}`, "target": `node-${nodeIdCounter+1}`}
     forceNodes.nodes.push(newNode)
     forceNodes.links.push(newLink)
 
@@ -75,15 +84,15 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     localforage.setItem("algParams", currentAlgParams)
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
-
     localforage.setItem("forceNodes", forceNodes)
     localStorage.setItem("forceNodes", JSON.stringify(forceNodes))
-
+    localforage.setItem('clusters', clusters)
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(nodeIdCounter+1)
       algParamsSetter(currentAlgParams)
       forceNodeSetter(forceNodes)
+      clusterSetter(clusters)
     }
     return rootModel
   }
@@ -133,6 +142,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
       recentNodeSetter(1)
       algParamsSetter(initialParams)
       forceNodeSetter({nodes: initialForceNodes, links: initialLinks})
+      clusterSetter(clusters)
     }
     return root
   }
