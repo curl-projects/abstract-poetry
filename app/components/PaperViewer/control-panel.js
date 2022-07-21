@@ -76,10 +76,12 @@ export function ControlPanel(props) {
         pinCurrentPaper(props.setTraversalPath, props.setForceNodes, setPinState)
       }
       else if (event.key === 'r' || event.key === "R") {
-        window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank")
+        window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, '_blank', 'noopener,noreferrer')
       }
     }
   })
+
+
 
 
   //TODO: refactor reading list form to use fetchers and add errors
@@ -98,7 +100,7 @@ export function ControlPanel(props) {
           </div>
           <div className="metadata-bit">
             <p className="br">{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
-            <small>Influential</small>
+            <small>Influential citation{props.metadata ? props.metadata.influentialCitationCount === 1 ? "": "s" : ""}</small>
           </div>
 
 
@@ -158,7 +160,7 @@ export function ControlPanel(props) {
 
               <img className="anchor" src={read} alt="Read Logo" />
               <Tooltip title="Read in PLOS">
-                <div className="key" onClick={() => params.paperId ? window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, "_blank") : {}}>
+                <div className="key" onClick={() => params.paperId ? window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, '_blank', 'noopener,noreferrer') : {}}>
                   <div className="key-cap">
                     R
                   </div>
