@@ -1,4 +1,4 @@
-import glass from "../../../public/assets/glass.svg";
+import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import { Form, useParams, Link } from "@remix-run/react"
 
