@@ -10,6 +10,10 @@ export function PaperMetadata(props) {
   const params = useParams();
 
   useEffect(() => {
+    console.log("METADATA:", props.metadata)
+  }, [props.metadata])
+
+  useEffect(() => {
     if(props.metadata?.authors){
       // necessary because in search.jsx authors is already parsed into a list,
       // but it's not in paperId
