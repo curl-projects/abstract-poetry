@@ -88,7 +88,10 @@ export default function PaperId() {
   const [clusters, setClusters] = useState(null)
   const [forceNodes, setForceNodes] = useState(null)
   const skipFetcher = useFetcher();
+  const redirectFetcher = useFetcher();
   const [traversalState, setTraversalState] = useState(true)
+  const [visitedPathList, setVisitedPathList] = useState([])
+  const [toggle, setToggle] = useState(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -104,11 +107,16 @@ export default function PaperId() {
                         setAlgParams,
                         setForceNodes,
                         setClusters,
-                        data.metadata.title
+                        setVisitedPathList,
+                        data.metadata
                       )
-
+    setToggle(false)
     // TODO: might be unnecessary, using it for the control-panel form
   }, [params.paperId, data.search])
+
+  useEffect(() => {
+    console.warn("VISITED PATH LIST:", visitedPathList)
+  }, [visitedPathList])
 
   useEffect(() => {
     console.log("LOADER DATA:", data)
@@ -121,11 +129,7 @@ export default function PaperId() {
   useEffect(() => {
     console.log("DATA:", data)
   }, [data])
-  //
-  // useEffect(()=>{
-  //   console.log("ALG PARAMS STATE:", algParams)
-  // }, [algParams])
-  // //
+
   useEffect(()=>{
     // Handle info messages passed from search
     if(data.message){
@@ -133,14 +137,9 @@ export default function PaperId() {
     }
   }, [data])
 
-  // useEffect(()=>{
-  //   console.log("NODE STATE:", nodeState)
-  // }, [nodeState])
-  //
-  //
-  // useEffect(() => {
-  //   console.log("ACTION DATA:", actionData)
-  // }, [actionData])
+  useEffect(() => {
+
+  })
 
   useEffect(()=>{
     console.log("CLUSTER SIZE:", clusters ? Object.keys(clusters).length : 0)
@@ -161,13 +160,15 @@ export default function PaperId() {
         algParams={algParams}
         clusters={clusters}
         metadata={data.metadata ? data.metadata : {}}
-
-
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
-        toggle={true}
+        toggle={toggle}
+        setToggle={setToggle}
+        paperList={visitedPathList}
+        nodeState={nodeState}
+        fetcher={redirectFetcher}
       />
 
       {traversalState ?

@@ -14,14 +14,14 @@ export const traversalNode = ({ nodeDatum, nodeState, visibleNodeTitle, setVisib
       onMouseOut={()=>setVisibleNodeTitle(nodeDatum)}
       >
       </circle>
-      <text x={(nodeDatum.attributes?.cluster && nodeDatum.attributes.cluster.toString().length === 2) ? -8 : -4}
+      <text x={(nodeDatum.attributes?.cluster && (nodeDatum.attributes.cluster+1).toString().length === 2) ? -8 : -4}
             y={5}
             style={{ pointerEvents: 'none'}}
             stroke="rgb(48, 85, 185)"
             strokeWidth="2px">{ typeof nodeDatum.attributes.cluster === 'number' ? nodeDatum.attributes.cluster+1 : ""}</text>
     </Link>
     <text x={12} y={-16} strokeWidth="1px">
-      {(visibleNodeTitle && visibleNodeTitle === nodeDatum.attributes.nodeId) ? nodeDatum.attributes.title : ""}
+      {(visibleNodeTitle && visibleNodeTitle === nodeDatum.attributes.nodeId) ? nodeDatum.attributes.metadata.title : ""}
     </text>
     </g>
   </React.Fragment>

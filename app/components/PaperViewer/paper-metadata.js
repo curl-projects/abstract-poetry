@@ -1,9 +1,13 @@
 import calendar from "../../../public/assets/calendar.svg";
 import authorIcon from "../../../public/assets/authors.svg";
 import { useState, useEffect } from "react";
+import { useParams } from "@remix-run/react"
+import { slugifyDoi } from "~/utils/doi-manipulation"
+
 export function PaperMetadata(props) {
   const [authorToggle, setAuthorToggle] = useState(false);
   const [authors, setAuthors] = useState(null)
+  const params = useParams();
 
   useEffect(() => {
     if(props.metadata?.authors){
@@ -23,21 +27,31 @@ export function PaperMetadata(props) {
   const date = props.metadata?.publicationDate ? new Date(props.metadata.publicationDate).toLocaleDateString('default', options ) : "n.d.";
 
   const handlePaperRedirect = () => {
-    props.fetcher.submit({
-      doi: null,
-      paperId: props.metadata.paperId,
-      keywordSearch: true
-    }, {
-      method: "post",
-      action: "/cluster-papers"
-    })
+    if(params.paperId){
+      props.fetcher.submit({
+        redirectString: `/${slugifyDoi(props.metadata.doi)}?nodeId=${props.metadata.nodeId}`
+      }, {
+        method: "post",
+        action: "/redirect-cluster-node"
+      })
+    }
+    else{
+      props.fetcher.submit({
+        doi: null,
+        paperId: props.metadata.paperId,
+        keywordSearch: true
+      }, {
+        method: "post",
+        action: "/cluster-papers"
+      })
+    }
   }
 
   if (props.metadata && authors){
     return (
       <>
         <div className="metadata flex-column" style={{ gap: "var(--space-xxs)" }}>
-          <h3 onClick={props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{props.metadata.title}</h3>
+          <h3 onClick={props.setToggle ? ()=>props.setToggle(prevState=>!prevState) : props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{props.metadata.title}</h3>
 
           <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch" }}>
             <div className="flex-row shrink">
@@ -85,6 +99,3 @@ export function PaperMetadata(props) {
     )
   }
 }
-
-
-// {props.algorithmRunning ? <p>Algorithm is running!</p>: props.params?.paperId ? <p>No metadata is available for this paper</p> : <p>Start searching with a DOI or keyword</p>}
