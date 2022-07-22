@@ -28,13 +28,13 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === parseInt(mostRecentNodeId)
     })
-
+    // const trave
+    visitedPathSetter(path)
     // If the current path (root to active node) contains a node with the active doi
     // don't update the tree
     const path = mostRecentNode.getPath()
     const currentAlgParams = await localforage.getItem("algParams")
     const forceNodes = await localforage.getItem('forceNodes')
-    visitedPathSetter(path)
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
       var clusters = await localforage.getItem('clusters')
       localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
