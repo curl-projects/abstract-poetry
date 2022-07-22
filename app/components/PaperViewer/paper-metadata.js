@@ -14,8 +14,9 @@ export function PaperMetadata(props) {
       // necessary because in search.jsx authors is already parsed into a list,
       // but it's not in paperId
       if(typeof props.metadata.authors === 'string'){
+
         //TODO: this currently removes inner-name hyphens (e.g. D'Souza): come up with a better system later
-        setAuthors(JSON.parse(props.metadata.authors.replace(/([a-zA-Z])+\'([a-zA-Z]+)/g, "$1$2").replace(/'/g, "\"")))
+        setAuthors(JSON.parse(props.metadata.authors.replace("None", "null").replace(/([a-zA-Z])+\'([a-zA-Z]+)/g, "$1$2").replace(/'/g, "\"")))
       }
       else{
         setAuthors(props.metadata.authors)
