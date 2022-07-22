@@ -62,11 +62,11 @@ export default function Search(props){
     }
     if(actionData?.action === 'select-papers'){
       setPaperSelection(true)
-      setHeaderMessage("Where will you start your exploration?")
+      setHeaderMessage("Where will you start your search?")
       console.log("DOI LIST DATA!!:", actionData.doiList)
     }
     else if(actionData?.action === 'redirect'){
-      setHeaderMessage(`Gathering papers for you...`)
+      setHeaderMessage(`Searching for relevant papers...`)
       fetcher.submit({
         doi: deslugifyDoi(actionData.doiString),
         keywordSearch: false
@@ -92,7 +92,7 @@ export default function Search(props){
   useEffect(()=>{
     console.log("FETCHER STATE:", fetcher.state)
     if(fetcher.state === "submitting"){
-      setHeaderMessage(`Gathering papers for you...`)
+      setHeaderMessage(`Searching for relevant papers...`)
     }
   }, [fetcher.state])
 

@@ -334,6 +334,7 @@ body {
     grid-row: 3;
     z-index: 4;
     position: relative;
+    pointer-events: none;
 }
 
 .traversal-share {

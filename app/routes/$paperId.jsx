@@ -108,8 +108,6 @@ export default function PaperId() {
                       )
 
     // TODO: might be unnecessary, using it for the control-panel form
-    // const clusters = await localforage.getItem('clusters')
-    // setClusters(clusters)
   }, [params.paperId, data.search])
 
   useEffect(() => {
@@ -128,14 +126,13 @@ export default function PaperId() {
   //   console.log("ALG PARAMS STATE:", algParams)
   // }, [algParams])
   // //
-  // useEffect(()=>{
-  //   // Handle info messages passed from search
-  //   if(data.message){
-  //     setMessageExists(true)
-  //     console.log(caseToMessage(data.messsage, data.searchString))
-  //   }
-  // }, [data])
-  //
+  useEffect(()=>{
+    // Handle info messages passed from search
+    if(data.message){
+      setMessageExists(true)
+    }
+  }, [data])
+
   // useEffect(()=>{
   //   console.log("NODE STATE:", nodeState)
   // }, [nodeState])

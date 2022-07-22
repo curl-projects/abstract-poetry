@@ -77,7 +77,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     forceNodes.nodes.push(newNode)
     forceNodes.links.push(newLink)
 
-    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: currentAlgParams, nodeId: nodeIdCounter+1, pinned: false}}
+    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: currentAlgParams, nodeId: nodeIdCounter+1, pinned: false, cluster: clusters[doi], title: title}}
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
 
     localforage.setItem("traversalPath", root.model)
@@ -108,7 +108,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     var tree = new TreeModel();
     const clusters = await localforage.getItem("clusters")
     const initialParams = Array.from({length: [...new Set(Object.values(clusters))].length}, e=> Array(2).fill(1))
-    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
+    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false, cluster: clusters[doi], title: title}}
     const initialForceNodes = Array.from({length: initialParams.length}, (e, index) => ({id: `cluster-${index}`,
                                                                                          name: `Cluster ${index+1}`,
                                                                                          val: 8,
