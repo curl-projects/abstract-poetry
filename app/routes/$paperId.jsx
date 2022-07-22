@@ -167,6 +167,7 @@ export default function PaperId() {
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
+        toggle={true}
       />
 
       {traversalState ?

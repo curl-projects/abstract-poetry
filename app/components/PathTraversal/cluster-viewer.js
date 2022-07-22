@@ -111,7 +111,7 @@ export function ClusterViewer(props) {
       {(typeof window !== "undefined") &&
         <ClientOnly>
           {()=><ForceGraph2D
-            graphData={props.forceNodes ? graphData : { nodes: [], links: [] }}
+            graphData={(props.forceNodes && graphData) ? graphData : { nodes: [], links: [] }}
             ref={fgRef}
             forceEngine="d3"
             d3AlphaMin={0.1}

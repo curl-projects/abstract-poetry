@@ -1,6 +1,6 @@
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
 import { PaperAbstract } from "~/components/PaperViewer/paper-abstract.js"
-
+import { SeedPapers } from "~/components/SeedSearch/seed-papers.js"
 import { useState, useEffect } from "react"
 import { useParams} from "@remix-run/react"
 
@@ -25,21 +25,11 @@ export function PaperData(props) {
         headerMessage={props.headerMessage}
       />
 
-      {toggle ?
-        <div className="flex-column" style={{ gap: 0, overflow: "auto" }}>
-
-          {props.paperList.map((metadata, i) => {
-            return (
-              <PaperMetadata
-                key={i}
-                doi={""}
-                metadata={metadata}
-                fetcher={props.fetcher}
-              />
-            )
-          }
-          )}
-        </div>
+    {toggle && props.paperList ?
+        <SeedPapers
+          paperList={props.paperList}
+          fetcher={props.fetcher}
+          />
         :
         <PaperAbstract
           doi={props.doi}
