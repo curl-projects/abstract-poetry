@@ -91,15 +91,17 @@ export function PaperMetadata(props) {
   }
   else {
     return (
-      <div className="PaperMetadata" style={{
+      <div className={props.headerMessage === "Searching for relevant papers" ? 'loading': "PaperMetadata"} style={{
         flex: 0.5,
         height: "100%",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: 'center'
       }}>
-          <p>{props.headerMessage}</p>
+          <p style={{
+              textAlign: "center"
+            }}>{props.headerMessage}</p>
       </div>
     )
   }

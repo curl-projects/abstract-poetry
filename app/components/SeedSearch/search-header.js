@@ -32,7 +32,7 @@ export function Header() {
         <div className="header">
           <Form method="post" className="search flex-space-between">
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
-              <input type="text" name="searchString" placeholder="abstract poetry" />
+              <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus />
             </div>
             <button type="submit" style={{ cursor: "pointer" }}>
               <img src={glass} alt="Glass Logo" />
