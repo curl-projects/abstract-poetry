@@ -1,8 +1,9 @@
 import calendar from "../../../public/assets/calendar.svg";
 import authorIcon from "../../../public/assets/authors.svg";
+import journalIcon from "../../../public/assets/journal.svg"
 import { useState, useEffect } from "react";
 import { useParams } from "@remix-run/react"
-import { slugifyDoi } from "~/utils/doi-manipulation"
+import { slugifyDoi, doiToJournal } from "~/utils/doi-manipulation"
 
 export function PaperMetadata(props) {
   const [authorToggle, setAuthorToggle] = useState(false);
@@ -61,9 +62,15 @@ export function PaperMetadata(props) {
           <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch" }}>
             <div className="flex-row shrink">
               <div className="icon">
-                <img src={calendar} alt={"Publication Date"} />
+                <img src={journalIcon} alt={"Publication Date"} style={{paddingLeft: '1px'}}/>
               </div>
               <small className="small">{date}</small>
+            </div>
+            <div className="flex-row shrink">
+              <div className="icon">
+                <img src={calendar} alt={"Publication Date"} />
+              </div>
+              <small className="small">{props.doi ? doiToJournal(props.doi) : ""}</small>
             </div>
             <div className="flex-row metadata-row" onClick={() => setAuthorToggle(!authorToggle)}>
               <div className="icon">

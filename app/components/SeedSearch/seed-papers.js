@@ -9,7 +9,7 @@ export function SeedPapers(props){
         return (
           <PaperMetadata
             key={i}
-            doi={""}
+            doi={metadata.doi}
             metadata={metadata}
             fetcher={props.fetcher}
           />
