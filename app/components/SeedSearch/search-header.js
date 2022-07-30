@@ -9,21 +9,47 @@ import Modal from '@mui/material/Modal';
 export function Header(props) {
   const params = useParams();
   const [modalOpen, setModalOpen] = useState(false)
+  const [url, setUrl] = useState('/')
+
+  useEffect(() => {
+    if(window){
+      setUrl(window.location.pathname)
+    }
+  }, [])
 
   if (params.paperId) {
     return (
       <>
         <div className="header-wrapper">
           <div className="user-control-wrapper">
-            {props.user && <p className="small">Hey {props.user.name?.givenName}!</p>}
-            <Form
-              method="post"
-              action={`/auth/${SocialsProvider.GOOGLE}`}
-              >
-              <button className="account-button">
-                  <img className="account-button" fill='black' src={account} alt="Account Button" />
+            {props.user &&
+              <>
+              <div className="user-text-wrapper">
+                  <div>
+                    <Form action="/logout" method="post">
+                      <input type='hidden' name="url" value={url}/>
+                      <button type="submit">
+                        <p className="logout-text">Logout</p>
+                      </button>
+                    </Form>
+                  </div>
+              </div>
+              <button onClick={()=>setModalOpen(true)}>
+                  <img src={account} className="account-button" fill='666666' alt="Account Button" />
               </button>
-            </Form>
+              </>
+            }
+            {!props.user &&
+              <Form
+                method="post"
+                action={`/auth/${SocialsProvider.GOOGLE}`}
+                >
+                <input type='hidden' name="url" value={url}/>
+                <button type='submit'>
+                    <img src={account} className="account-button" fill='666666' alt="Account Button" />
+                </button>
+              </Form>
+            }
           </div>
         </div>
         <div className="header">
@@ -53,6 +79,7 @@ export function Header(props) {
               <div className="user-text-wrapper">
                   <div>
                     <Form action="/logout" method="post">
+                      <input type='hidden' name="url" value={url}/>
                       <button type="submit">
                         <p className="logout-text">Logout</p>
                       </button>
@@ -69,7 +96,8 @@ export function Header(props) {
                 method="post"
                 action={`/auth/${SocialsProvider.GOOGLE}`}
                 >
-                <button>
+                <input type='hidden' name="url" value={url}/>
+                <button type='submit'>
                     <img src={account} className="account-button" fill='666666' alt="Account Button" />
                 </button>
               </Form>
@@ -99,8 +127,3 @@ export function Header(props) {
     )
   }
 }
-
-// // <Link to={'/search'} className="search flex-row" style={{cursor: "pointer", textDecoration: "none"}}>
-// <div>
-//   {props.user && <p className="small">Hey {props.user.name?.givenName}!</p>}
-// </div>
