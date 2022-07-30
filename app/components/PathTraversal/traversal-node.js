@@ -2,10 +2,10 @@ import React from "react"
 import { Link } from "@remix-run/react"
 import { slugifyDoi } from "~/utils/doi-manipulation"
 
-export const traversalNode = ({ nodeDatum, nodeState, visibleNodeTitle, setVisibleNodeTitle }) => (
+export const traversalNode = ({ nodeDatum, nodeState, visibleNodeTitle, setVisibleNodeTitle}) => (
   <React.Fragment>
     <g>
-    <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}?nodeId=${nodeDatum.attributes.nodeId}` : ""}>
+    <Link to={nodeDatum.attributes ? `/${slugifyDoi(nodeDatum.attributes.doi)}?nodeId=${nodeDatum.attributes.nodeId}&position=${undefined}` : ""}>
     <circle
       r={15}
       fill={nodeState === nodeDatum.attributes?.nodeId ? "rgb(18, 18, 18)" : "rgb(200, 200, 200)"}

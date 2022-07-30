@@ -324,7 +324,7 @@ body {
     grid-row: 3;
 
 
-    width: 300%;
+    width: 100%;
     justify-self: center;
     z-index: 3;
 }

@@ -13,14 +13,28 @@ import { traversalNode } from "~/components/PathTraversal/traversal-node"
 
 
 export function TraversalViewer(props) {
-  const [dimensions, translate, containerRef] = useCenteredTree();
   const [nodeState, setNodeState] = useState("")
   const [visibleNodeTitle, setVisibleNodeTitle] = useState(null)
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [dimensions, setDimensions] = useState();
+  const containerRef = useRef();
   const params = useParams();
 
   useEffect(() => {
     setNodeState(props.nodeState)
   }, [props.nodeState])
+
+  useEffect(() => {
+    // console.log("CONTAINER REF:", containerRef.current)
+    if (containerRef.current !== undefined) {
+      // let el = containerRef.current.getElementsByClassName("rd3t-g")
+      // console.log("IMPORTANT!:", el)
+      // console.log("EL 0", el[0])
+      const { width, height } = containerRef.current.getBoundingClientRect();
+      setDimensions({ width, height });
+      setTranslate({ x: width/2, y: height/2});
+    }
+  }, [containerRef.current])
 
   return (
     <div className="traversal-viewer" ref={containerRef}>
@@ -33,12 +47,11 @@ export function TraversalViewer(props) {
             translate={translate}
             zoomable={true}
             data={props.traversalPath}
-            onNodeClick={()=>console.log("HELLO!")}
+            // onUpdate={(target)=> setTranslate(target.translate)}
             renderCustomNodeElement={(rd3tProps) =>
-              traversalNode({ ...rd3tProps, nodeState, visibleNodeTitle, setVisibleNodeTitle })}
+              traversalNode({ ...rd3tProps, nodeState, visibleNodeTitle, setVisibleNodeTitle})}
             styles={{
               links: {
-
                 stroke: 'red',
                 strokeWidth: "1px",
               },

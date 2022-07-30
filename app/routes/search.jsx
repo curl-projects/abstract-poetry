@@ -120,7 +120,6 @@ export default function Search(props){
             fetcher={fetcher}
             />
 
-      <TraversalViewer/>
       <Background />
 
       <Snackbar

@@ -38,6 +38,7 @@ export const loader = async ({
     searchString: search.get('searchString'),
     updateIndex: search.get('updateIndex'),
     impression: search.get('impression'),
+    position: search.get('position')
   }
   return json(data)
 }
@@ -187,6 +188,7 @@ export default function PaperId() {
           traversalPath={traversalPath}
           nodeState={nodeState}
           className="traversal-viewer"
+          position={data.position}
         />
       }
 
