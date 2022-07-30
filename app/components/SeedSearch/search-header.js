@@ -8,6 +8,9 @@ export function Header(props) {
   const params = useParams();
 
   if (params.paperId) {
+
+
+
     return (
       <>
         <div className="header-wrapper" />
