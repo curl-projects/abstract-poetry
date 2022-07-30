@@ -92,6 +92,7 @@ export default function PaperId() {
   const [traversalState, setTraversalState] = useState(true)
   const [visitedPathList, setVisitedPathList] = useState([])
   const [toggle, setToggle] = useState(false)
+  const [searchString, setSearchString] = useState("")
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -111,7 +112,8 @@ export default function PaperId() {
                         data.metadata
                       )
     setToggle(false)
-    // TODO: might be unnecessary, using it for the control-panel form
+    let searchStringData = await localforage.getItem("searchString")
+    searchStringData ? setSearchString(searchStringData) : {}
   }, [params.paperId, data.search])
 
   useEffect(() => {
@@ -135,7 +137,9 @@ export default function PaperId() {
     if(data.message){
       setMessageExists(true)
     }
-  }, [data])
+    localforage.setItem("searchString", data.searchString)
+    setSearchString(data.searchString)
+  }, [data.message])
 
   useEffect(() => {
 
@@ -147,7 +151,9 @@ export default function PaperId() {
 
   return (
     <div className="container grid-view">
-      <Header />
+      <Header
+        searchString={searchString}
+        />
 
       <div className="axis" />
 

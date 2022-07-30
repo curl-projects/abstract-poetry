@@ -117,7 +117,7 @@ export function ControlPanel(props) {
           <input type="hidden" name="clusters" value={JSON.stringify(props.clusters)} />
 
           <div className="switch flex-row" style={{ gap: "0px" }}>
-            <Tooltip title="Less Like This (←)">
+            <Tooltip title="Fewer Papers Like This (←)">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -128,7 +128,7 @@ export function ControlPanel(props) {
                 <div className="circle left" />
               </button>
             </Tooltip>
-            <Tooltip title="More Like This (→)">
+            <Tooltip title="More Papers Like This (→)">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}

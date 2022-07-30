@@ -102,6 +102,11 @@ export function PaperMetadata(props) {
           <p style={{
               textAlign: "center"
             }}>{props.headerMessage}</p>
+          {props.headerMessage === 'Searching for relevant papers' &&
+            <div className="wave-center">
+              {[...Array(3)].map((e, i) => <div key={i} className="wave"></div>)}
+            </div>
+          }
       </div>
     )
   }
