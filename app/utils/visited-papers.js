@@ -10,7 +10,8 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                                           algParamsSetter=null,
                                           forceNodeSetter=null,
                                           clusterSetter=null,
-                                          title){
+                                          visitedPathSetter=null,
+                                          metadata){
   try{
     console.log("UPDATING")
     const rootModel = await localforage.getItem("traversalPath")
@@ -27,10 +28,13 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === parseInt(mostRecentNodeId)
     })
-
     // If the current path (root to active node) contains a node with the active doi
     // don't update the tree
+
     const path = mostRecentNode.getPath()
+
+    visitedPathSetter(path)
+
     const currentAlgParams = await localforage.getItem("algParams")
     const forceNodes = await localforage.getItem('forceNodes')
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
@@ -68,7 +72,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const newNode = {id: `node-${nodeIdCounter+1}`,
                      name: `${deslugifyDoi(doi)}`,
                      doi: deslugifyDoi(doi),
-                     title: title,
+                     title: metadata.title,
                      val: 5,
                      nodeId: nodeIdCounter+1,
                      type: 'paper',
@@ -77,7 +81,14 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     forceNodes.nodes.push(newNode)
     forceNodes.links.push(newLink)
 
-    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`, attributes: {doi: deslugifyDoi(doi), algParams: currentAlgParams, nodeId: nodeIdCounter+1, pinned: false}}
+    const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`,
+                         attributes: {doi: deslugifyDoi(doi),
+                                      algParams: currentAlgParams,
+                                      nodeId: nodeIdCounter+1,
+                                      pinned: false,
+                                      cluster: clusters[doi],
+                                      metadata: metadata}}
+
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
 
     localforage.setItem("traversalPath", root.model)
@@ -108,7 +119,13 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     var tree = new TreeModel();
     const clusters = await localforage.getItem("clusters")
     const initialParams = Array.from({length: [...new Set(Object.values(clusters))].length}, e=> Array(2).fill(1))
-    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`, attributes: {doi: deslugifyDoi(doi), algParams: initialParams, nodeId: 1, pinned: false}}
+    const childObject = {name: `${deslugifyDoi(doi)}-[[1]]`,
+                         attributes: {doi: deslugifyDoi(doi),
+                                      algParams: initialParams,
+                                      nodeId: 1,
+                                      pinned: false,
+                                      cluster: clusters[doi],
+                                      metadata: metadata}}
     const initialForceNodes = Array.from({length: initialParams.length}, (e, index) => ({id: `cluster-${index}`,
                                                                                          name: `Cluster ${index+1}`,
                                                                                          val: 8,
@@ -119,7 +136,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     initialForceNodes.push({id: `node-1`,
                             name: `${deslugifyDoi(doi)}-[[1]]`,
                             doi: deslugifyDoi(doi),
-                            title: title,
+                            title: metadata.title,
                             nodeId: 1,
                             val: 5,
                             type: 'paper',

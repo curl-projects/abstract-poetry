@@ -117,7 +117,7 @@ export function ControlPanel(props) {
           <input type="hidden" name="clusters" value={JSON.stringify(props.clusters)} />
 
           <div className="switch flex-row" style={{ gap: "0px" }}>
-            <Tooltip title="Less Like This">
+            <Tooltip title="Fewer Papers Like This (←)">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -128,7 +128,7 @@ export function ControlPanel(props) {
                 <div className="circle left" />
               </button>
             </Tooltip>
-            <Tooltip title="More Like This">
+            <Tooltip title="More Papers Like This (→)">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -145,7 +145,7 @@ export function ControlPanel(props) {
           <div className="button-column flex-column">
             <div className="button">
               <img className="anchor" src={pin} alt="Read Logo" />
-              <Tooltip title="Pin to your Reading List">
+              <Tooltip title="Pin to your Reading List (P)">
                 <div className="key" onClick={() => params.paperId ? pinCurrentPaper(props.setTraversalPath, props.setForceNodes, setPinState) : {}}>
                   <div className="key-cap">
                     P
@@ -159,7 +159,7 @@ export function ControlPanel(props) {
             <div className="button">
 
               <img className="anchor" src={read} alt="Read Logo" />
-              <Tooltip title="Read in PLOS">
+              <Tooltip title="Read in PLOS (R)">
                 <div className="key" onClick={() => params.paperId ? window.open(`https://www.doi.org/${deslugifyDoi(params.paperId)}`, '_blank', 'noopener,noreferrer') : {}}>
                   <div className="key-cap">
                     R

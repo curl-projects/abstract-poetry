@@ -38,6 +38,7 @@ export const loader = async ({
     searchString: search.get('searchString'),
     updateIndex: search.get('updateIndex'),
     impression: search.get('impression'),
+    position: search.get('position')
   }
   return json(data)
 }
@@ -88,7 +89,11 @@ export default function PaperId() {
   const [clusters, setClusters] = useState(null)
   const [forceNodes, setForceNodes] = useState(null)
   const skipFetcher = useFetcher();
+  const redirectFetcher = useFetcher();
   const [traversalState, setTraversalState] = useState(true)
+  const [visitedPathList, setVisitedPathList] = useState([])
+  const [toggle, setToggle] = useState(false)
+  const [searchString, setSearchString] = useState("")
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -104,13 +109,17 @@ export default function PaperId() {
                         setAlgParams,
                         setForceNodes,
                         setClusters,
-                        data.metadata.title
+                        setVisitedPathList,
+                        data.metadata
                       )
-
-    // TODO: might be unnecessary, using it for the control-panel form
-    // const clusters = await localforage.getItem('clusters')
-    // setClusters(clusters)
+    setToggle(false)
+    let searchStringData = await localforage.getItem("searchString")
+    searchStringData ? setSearchString(searchStringData) : {}
   }, [params.paperId, data.search])
+
+  useEffect(() => {
+    console.warn("VISITED PATH LIST:", visitedPathList)
+  }, [visitedPathList])
 
   useEffect(() => {
     console.log("LOADER DATA:", data)
@@ -123,27 +132,19 @@ export default function PaperId() {
   useEffect(() => {
     console.log("DATA:", data)
   }, [data])
-  //
-  // useEffect(()=>{
-  //   console.log("ALG PARAMS STATE:", algParams)
-  // }, [algParams])
-  // //
-  // useEffect(()=>{
-  //   // Handle info messages passed from search
-  //   if(data.message){
-  //     setMessageExists(true)
-  //     console.log(caseToMessage(data.messsage, data.searchString))
-  //   }
-  // }, [data])
-  //
-  // useEffect(()=>{
-  //   console.log("NODE STATE:", nodeState)
-  // }, [nodeState])
-  //
-  //
-  // useEffect(() => {
-  //   console.log("ACTION DATA:", actionData)
-  // }, [actionData])
+
+  useEffect(()=>{
+    // Handle info messages passed from search
+    if(data.message){
+      setMessageExists(true)
+    }
+    localforage.setItem("searchString", data.searchString)
+    setSearchString(data.searchString)
+  }, [data.message])
+
+  useEffect(() => {
+
+  })
 
   useEffect(()=>{
     console.log("CLUSTER SIZE:", clusters ? Object.keys(clusters).length : 0)
@@ -151,7 +152,9 @@ export default function PaperId() {
 
   return (
     <div className="container grid-view">
-      <Header searchString = {data.searchString? data.searchString : null}/>
+      <Header
+        searchString={searchString}
+        />
 
       <div className="axis" />
 
@@ -164,12 +167,15 @@ export default function PaperId() {
         algParams={algParams}
         clusters={clusters}
         metadata={data.metadata ? data.metadata : {}}
-
-
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
+        toggle={toggle}
+        setToggle={setToggle}
+        paperList={visitedPathList}
+        nodeState={nodeState}
+        fetcher={redirectFetcher}
       />
 
       {traversalState ?
@@ -182,6 +188,7 @@ export default function PaperId() {
           traversalPath={traversalPath}
           nodeState={nodeState}
           className="traversal-viewer"
+          position={data.position}
         />
       }
 
