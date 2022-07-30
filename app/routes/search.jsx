@@ -1,6 +1,6 @@
 import { SeedSearch } from "~/components/SeedSearch/seed-search.js"
 import { useEffect, useState, useRef } from 'react';
-import { useActionData, useFetcher, Link } from "@remix-run/react"
+import { useActionData, useLoaderData, useFetcher, Link } from "@remix-run/react"
 import { json, redirect } from "@remix-run/node"
 import { handleSearch, handleSearchv2 } from "~/models/search.server"
 import { clearTraversalPath } from "~/utils/visited-papers"
@@ -17,6 +17,12 @@ import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
+import { authenticator } from "~/models/auth.server.js";
+
+export const loader = async ({ request }) => {
+  const user = await authenticator.isAuthenticated(request)
+  return { user }
+}
 
 export const action = async ({ request, params }) => {
   const formData = await request.formData();
@@ -35,6 +41,7 @@ export default function Search(props){
   const ref = useRef();
   const [paperSelection, setPaperSelection] = useState(false)
   const [headerMessage, setHeaderMessage] = useState("")
+  const data = useLoaderData();
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
@@ -44,6 +51,10 @@ export default function Search(props){
     // Clears local storage whenever the search page loads, resetting the algorithm
       clearTraversalPath()
     }, [])
+
+  useEffect(()=>{
+    console.log("LOADER DATA:", data)
+  }, [data])
 
   useEffect(()=>{
     console.log("COLD START FETCHER DATA:", coldStartFetcher.data)
@@ -107,7 +118,9 @@ export default function Search(props){
   return(
     <>
     <div className="container">
-      <Header />
+      <Header
+        user={data.user}
+        />
 
       <div className="axis" />
 

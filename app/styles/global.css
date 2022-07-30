@@ -319,6 +319,51 @@ body {
     z-index: 5;
 }
 
+.user-control-wrapper {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 8px;
+  padding-top: 5px;
+}
+
+.user-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 6px;
+  padding-right: 4px;
+}
+
+.logout-text {
+  font-size: 10px;
+  color: rgba(var(--clr-grey-400));
+  cursor: pointer;
+}
+
+.account-button {
+  cursor: pointer;
+}
+
+.account-button:hover {
+  filter: brightness(110%);
+}
+
+.modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background-color: white;
+  box-shadow: 24;
+  border: 2px solid #000;
+}
+
 .traversal-viewer {
     grid-column: 1 / -1;
     grid-row: 3;

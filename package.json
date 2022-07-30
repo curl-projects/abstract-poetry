@@ -4,8 +4,8 @@
   "scripts": {
     "build": "remix build",
     "deploy": "fly deploy --remote-only",
-    "dev": "remix dev",
-    "start": "remix-serve build"
+    "dev": "node -r dotenv/config ./node_modules/.bin/remix dev",
+    "start": "node -r dotenv/config ./node_modules/.bin/remix-serve build"
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -19,6 +19,7 @@
     "@remix-run/serve": "^1.6.3",
     "@upstash/redis": "^1.7.0",
     "doi-regex": "^0.1.13",
+    "dotenv": "^16.0.1",
     "jstat": "^1.9.5",
     "local-storage": "^2.0.0",
     "localforage": "^1.10.0",
