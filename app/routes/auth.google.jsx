@@ -50,7 +50,6 @@ export const action = async ({ request }) => {
 
   const headers = new Headers();
 
-  console.log("RETURN TO COOKIE", returnToCookie)
   request.headers.set(
     "cookie",
     await returnCookie.serialize(returnToCookie)

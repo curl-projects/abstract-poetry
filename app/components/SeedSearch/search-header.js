@@ -74,7 +74,7 @@ export function Header(props) {
       <>
         <div className="header-wrapper">
           <div className="user-control-wrapper">
-            {props.user &&
+            {props && props.user &&
               <>
               <div className="user-text-wrapper">
                   <div>
@@ -86,12 +86,23 @@ export function Header(props) {
                     </Form>
                   </div>
               </div>
-              <button onClick={()=>setModalOpen(true)}>
-                  <img src={account} className="account-button" fill='666666' alt="Account Button" />
-              </button>
+              <div>
+                <button onClick={()=>setModalOpen(true)}>
+                    <img src={account} className="account-button" fill='666666' alt="Account Button" />
+                </button>
+              </div>
               </>
             }
-            {!props.user &&
+            {props && !props.user &&
+              <>
+              <div className="user-text-wrapper">
+                  <div>
+                      <input type='hidden' name="url" value={url}/>
+                      <button type="submit">
+                        <p className="logout-text"></p>
+                      </button>
+                  </div>
+              </div>
               <Form
                 method="post"
                 action={`/auth/${SocialsProvider.GOOGLE}`}
@@ -101,6 +112,7 @@ export function Header(props) {
                     <img src={account} className="account-button" fill='666666' alt="Account Button" />
                 </button>
               </Form>
+              </>
             }
           </div>
         </div>

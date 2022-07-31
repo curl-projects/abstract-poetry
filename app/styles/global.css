@@ -342,6 +342,7 @@ body {
   font-size: 10px;
   color: rgba(var(--clr-grey-400));
   cursor: pointer;
+  flex: 0;
 }
 
 .account-button {
