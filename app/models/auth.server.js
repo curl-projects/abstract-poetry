@@ -1,14 +1,19 @@
 import { Authenticator } from "remix-auth";
 import { sessionStorage } from "~/models/session.server";
 import { GoogleStrategy, SocialsProvider } from "remix-auth-socials";
-
+import { upsertUser } from "~/models/users.server";
 // Create an instance of the authenticator
 // It will take session storage as an input parameter and creates the user session on successful authentication
-export const authenticator = new Authenticator(sessionStorage);
+export const authenticator = new Authenticator(sessionStorage
+  // , {
+  // sessionKey: "_session"
+// }
+);
 
 async function handleSocialAuthCallback({ profile }) {
   // create user in your db here
   // profile object contains all the user data like image, displayName, id
+  // let user = await upsertUser(profile)
   return profile;
 }
 

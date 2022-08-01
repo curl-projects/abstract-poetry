@@ -1,19 +1,15 @@
 import { authenticator } from "~/models/auth.server";
 import { SocialsProvider } from "remix-auth-socials";
-import { returnCookie } from "~/routes/auth.google"
+import { returnCookie } from "~/cookies.js";
+import { getSession, commitSession } from "~/models/session.server"
 
 export async function loader({ request }){
-  console.log("REQUEST:", request)
-  // let returnTo =
-  //  (await returnCookie.parse(request.headers.get("Cookie"))) ?? "/";
 
-  let response = await request.headers.get("cookie")
+  let returnTo =
+    (await returnCookie.parse(request.headers.get("Cookie"))) ?? "/";
 
-  console.log("RESPONSE:", await returnCookie.parse(response))
-
-  // console.log("RETURN TO:", returnTo)
-  return authenticator.authenticate(SocialsProvider.GOOGLE, request, {
-    successRedirect: "/",
-    failureRedirect: '/'
+  return await authenticator.authenticate(SocialsProvider.GOOGLE, request, {
+    successRedirect: returnTo,
+    failureRedirect: "/",
   });
 };

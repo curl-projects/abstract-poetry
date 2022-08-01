@@ -74,7 +74,7 @@ export function Header(props) {
       <>
         <div className="header-wrapper">
           <div className="user-control-wrapper">
-            {props && props.user &&
+            {props?.user &&
               <>
               <div className="user-text-wrapper">
                   <div>
@@ -93,7 +93,7 @@ export function Header(props) {
               </div>
               </>
             }
-            {props && !props.user &&
+            {!props?.user &&
               <>
               <div className="user-text-wrapper">
                   <div>
@@ -105,7 +105,7 @@ export function Header(props) {
               </div>
               <Form
                 method="post"
-                action={`/auth/${SocialsProvider.GOOGLE}`}
+                action={`/auth/${SocialsProvider.GOOGLE}?returnTo=/test`}
                 >
                 <input type='hidden' name="url" value={url}/>
                 <button type='submit'>
