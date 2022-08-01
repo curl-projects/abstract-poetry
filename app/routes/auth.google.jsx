@@ -13,6 +13,7 @@ async function login(request) {
   const search = new URLSearchParams(url.search)
   const returnTo = search.get("returnTo");
 
+  console.log("RETURN TO:", returnTo)
   try {
     return await authenticator.authenticate(SocialsProvider.GOOGLE, request, {
       // TODO: redirect to previous url

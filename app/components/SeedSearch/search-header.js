@@ -42,9 +42,8 @@ export function Header(props) {
             {!props.user &&
               <Form
                 method="post"
-                action={`/auth/${SocialsProvider.GOOGLE}`}
+                action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
                 >
-                <input type='hidden' name="url" value={url}/>
                 <button type='submit'>
                     <img src={account} className="account-button" fill='666666' alt="Account Button" />
                 </button>
@@ -105,7 +104,7 @@ export function Header(props) {
               </div>
               <Form
                 method="post"
-                action={`/auth/${SocialsProvider.GOOGLE}?returnTo=/test`}
+                action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
                 >
                 <input type='hidden' name="url" value={url}/>
                 <button type='submit'>

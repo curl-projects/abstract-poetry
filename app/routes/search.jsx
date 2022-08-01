@@ -52,9 +52,9 @@ export default function Search(props){
       clearTraversalPath()
     }, [])
 
-  useEffect(()=>{
-    console.log("LOADER DATA:", data)
-  }, [data])
+  // useEffect(()=>{
+  //   console.log("LOADER DATA:", data)
+  // }, [data])
 
   useEffect(()=>{
     console.log("COLD START FETCHER DATA:", coldStartFetcher.data)

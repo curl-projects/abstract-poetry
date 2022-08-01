@@ -16,10 +16,14 @@ import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import * as localforage from "localforage";
+
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { Tooltip } from "@mui/material";
+
 import { caseToMessage } from "~/utils/messages-and-alerts"
+import { authenticator } from "~/models/auth.server.js";
 
 export const loader = async ({
   params, request
@@ -27,6 +31,7 @@ export const loader = async ({
   const url = new URL(request.url)
   const search = new URLSearchParams(url.search)
   const metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
+  const user = await authenticator.isAuthenticated(request)
 
   const data = {
     metadata: metadata,
@@ -35,6 +40,8 @@ export const loader = async ({
     searchString: search.get('searchString'),
     updateIndex: search.get('updateIndex'),
     impression: search.get('impression'),
+    position: search.get('position'),
+    user: user
   }
   return json(data)
 }
@@ -46,11 +53,11 @@ export const action = async ({ request, params }) => {
   const impression = formData.get('impression')
   // Determines whether the eager-loading has returned a result
 
-  if(negativeDOIString){
+  if (negativeDOIString) {
     const positiveDOI = JSON.parse(positiveDOIString)
     const negativeDOI = JSON.parse(negativeDOIString)
-    if(negativeDOI !== "" && (negativeDOI?.negativeImpressionDOI !== deslugifyDoi(params.paperId) && positiveDOI?.positiveImpressionDOI !== deslugifyDoi(params.paperId))){
-      if(JSON.parse(impression)){
+    if (negativeDOI !== "" && (negativeDOI?.negativeImpressionDOI !== deslugifyDoi(params.paperId) && positiveDOI?.positiveImpressionDOI !== deslugifyDoi(params.paperId))) {
+      if (JSON.parse(impression)) {
         return redirect(`/${slugifyDoi(positiveDOI.positiveImpressionDOI)}?updateIndex=${positiveDOI.positiveImpressionClusterIndex}&impression=true`)
       }
       else{
@@ -85,11 +92,15 @@ export default function PaperId() {
   const [clusters, setClusters] = useState(null)
   const [forceNodes, setForceNodes] = useState(null)
   const skipFetcher = useFetcher();
+  const redirectFetcher = useFetcher();
   const [traversalState, setTraversalState] = useState(true)
+  const [visitedPathList, setVisitedPathList] = useState([])
+  const [toggle, setToggle] = useState(false)
+  const [searchString, setSearchString] = useState("")
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    if(data.search){
+    if (data.search) {
       await localforage.setItem("activeNodeId", data.search)
     }
     console.log("UPDATED!")
@@ -101,13 +112,18 @@ export default function PaperId() {
                         setAlgParams,
                         setForceNodes,
                         setClusters,
-                        data.metadata.title
+                        setVisitedPathList,
+                        data.metadata
                       )
-
-    // TODO: might be unnecessary, using it for the control-panel form
-    // const clusters = await localforage.getItem('clusters')
-    // setClusters(clusters)
+    setToggle(false)
+    let searchStringData = await localforage.getItem("searchString")
+    console.log("SEARCH STRING DATA")
+    searchStringData ? setSearchString(searchStringData) : {}
   }, [params.paperId, data.search])
+
+  useEffect(() => {
+    console.warn("VISITED PATH LIST:", visitedPathList)
+  }, [visitedPathList])
 
   useEffect(() => {
     console.log("LOADER DATA:", data)
@@ -120,27 +136,20 @@ export default function PaperId() {
   useEffect(() => {
     console.log("DATA:", data)
   }, [data])
-  //
-  // useEffect(()=>{
-  //   console.log("ALG PARAMS STATE:", algParams)
-  // }, [algParams])
-  // //
-  // useEffect(()=>{
-  //   // Handle info messages passed from search
-  //   if(data.message){
-  //     setMessageExists(true)
-  //     console.log(caseToMessage(data.messsage, data.searchString))
-  //   }
-  // }, [data])
-  //
-  // useEffect(()=>{
-  //   console.log("NODE STATE:", nodeState)
-  // }, [nodeState])
-  //
-  //
-  // useEffect(() => {
-  //   console.log("ACTION DATA:", actionData)
-  // }, [actionData])
+
+  useEffect(()=>{
+    // Handle info messages passed from search
+    if(data.message){
+      setMessageExists(true)
+    }
+  }, [data.message])
+
+  useEffect(() => {
+    if(data.searchString){
+      localforage.setItem("searchString", data.searchString)
+      setSearchString(data.searchString)
+    }
+  }, [data.searchString])
 
   useEffect(()=>{
     console.log("CLUSTER SIZE:", clusters ? Object.keys(clusters).length : 0)
@@ -148,7 +157,10 @@ export default function PaperId() {
 
   return (
     <div className="container grid-view">
-      <Header />
+      <Header
+        searchString={searchString}
+        user={data.user}
+        />
 
       <div className="axis" />
 
@@ -160,36 +172,40 @@ export default function PaperId() {
         setForceNodes={setForceNodes}
         algParams={algParams}
         clusters={clusters}
-        metadata = {data.metadata? data.metadata : {}}
-
-
+        metadata={data.metadata ? data.metadata : {}}
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
+        toggle={toggle}
+        setToggle={setToggle}
+        paperList={visitedPathList}
+        nodeState={nodeState}
+        fetcher={redirectFetcher}
       />
 
-    {traversalState ?
-      <ClusterViewer
-        forceNodes={forceNodes}
-        nodeState={nodeState}
+      {traversalState ?
+        <ClusterViewer
+          forceNodes={forceNodes}
+          nodeState={nodeState}
         />
-      :
-      <TraversalViewer
-        traversalPath={traversalPath}
-        nodeState={nodeState}
-        className="traversal-viewer"
-      />
-    }
+        :
+        <TraversalViewer
+          traversalPath={traversalPath}
+          nodeState={nodeState}
+          className="traversal-viewer"
+          position={data.position}
+        />
+      }
 
       <Share
         traversalPath={traversalPath}
-        />
+      />
 
       <Controls
         setTraversalState={setTraversalState}
-        traversalState = {traversalState}
-        />
+        traversalState={traversalState}
+      />
 
 
       <Background />
@@ -198,7 +214,7 @@ export default function PaperId() {
         open={messageExists}
         autoHideDuration={6000}
         message={data.message && data.searchString ? caseToMessage(data.message, data.searchString) : ""}
-        onClose={()=>setMessageExists(false)}
+        onClose={() => setMessageExists(false)}
         action={
           <React.Fragment>
             <IconButton
@@ -206,12 +222,12 @@ export default function PaperId() {
               sx={{ p: 0.5 }}
               color="inherit"
               onClick={() => setMessageExists(false)}
-              >
+            >
               <CloseIcon />
             </IconButton>
           </React.Fragment>
         }
       />
-      </div>
+    </div>
   )
 }
