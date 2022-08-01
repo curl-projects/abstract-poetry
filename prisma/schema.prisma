@@ -11,13 +11,12 @@ datasource db {
 }
 
 model User {
-  userId BigInt @id @default(autoincrement())
+  userId String @id
   emailAddress String @unique()
-  traversalPaths TraversalPath[]
 }
 
-model TraversalPath {
-  pathId BigInt @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [userId])
-  userId BigInt
-}
+// model TraversalPath {
+//   pathId BigInt @id @default(autoincrement())
+//   user User @relation(fields: [userId], references: [userId])
+//   userId BigInt
+// }

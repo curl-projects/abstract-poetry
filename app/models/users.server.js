@@ -1,16 +1,17 @@
 import { db } from "~/models/db.server";
 
-export async function upsertUser(profile){
+export async function upsertUser(id, email){
   const upsertUser = await db.user.upsert({
     where: {
-      id: profile.id
+      userId: id
     },
     update: {},
     create: {
-      userId: profile.id,
+      userId: id,
       emailAddress: "placeholder"
     }
   });
 
+  console.log("UPSERT USER!:", upsertUser)
   return upsertUser
 }

@@ -13,7 +13,15 @@ export const authenticator = new Authenticator(sessionStorage
 async function handleSocialAuthCallback({ profile }) {
   // create user in your db here
   // profile object contains all the user data like image, displayName, id
-  // let user = await upsertUser(profile)
+  console.log("PROFILE:", profile.id, profile.emails[0].value)
+  try{
+    const user = await upsertUser(profile.id, profile.emails[0].value)
+    console.log("USER:", user)
+  }
+  catch(error){
+    console.log("USER ERROR", error)
+  }
+
   return profile;
 }
 
