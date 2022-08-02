@@ -11,6 +11,7 @@ export async function action({ request }){
   const searchString = formData.get('searchString')
   const traversalPath = formData.get('traversalPath')
   const pathId = formData.get('pathId')
+  const pathName = formData.get('pathName')
   const user = await authenticator.isAuthenticated(request)
   const userId = user.id
 
@@ -25,7 +26,8 @@ export async function action({ request }){
     parseInt(nodeIdCounter),
     searchString,
     traversalPath,
-    pathId
+    pathId,
+    pathName,
   )
   return upsertPathData
 }

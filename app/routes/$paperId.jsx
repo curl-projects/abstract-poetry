@@ -105,6 +105,8 @@ export default function PaperId() {
   const [searchString, setSearchString] = useState("")
   const [pathId, setPathId] = useState("")
   const [isPathRedirect, setIsPathRedirect] = useState(false)
+  const [saveModalOpen, setSaveModalOpen] = useState(false)
+  const [existingPathName, setExistingPathName] = useState(null)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -131,9 +133,13 @@ export default function PaperId() {
     let pathIdData = await localforage.getItem('pathId')
     pathIdData ? setPathId(pathIdData) : {}
 
+    let existingPathNameData = await localforage.getItem("pathName")
+    existingPathNameData ? setExistingPathName(existingPathNameData) : {}
+
     if(data.isPathRedirect){
       setIsPathRedirect(true)
     }
+
   }, [params.paperId, data.search, data.isPathRedirect])
 
   // useEffect(() => {
@@ -184,6 +190,11 @@ export default function PaperId() {
         user={data.user}
 
         setPathId={setPathId}
+
+        saveModalOpen={saveModalOpen}
+        setSaveModalOpen={setSaveModalOpen}
+        existingPathName={existingPathName}
+        setExistingPathName={setExistingPathName}
         />
 
       <div className="axis" />
@@ -197,6 +208,8 @@ export default function PaperId() {
         algParams={algParams}
         clusters={clusters}
         metadata={data.metadata ? data.metadata : {}}
+
+        saveModalOpen={saveModalOpen}
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}

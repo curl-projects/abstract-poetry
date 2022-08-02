@@ -18,6 +18,8 @@ model User {
 
 model TraversalPath {
   pathId String  @id @default(cuid())
+  pathName String @default("")
+  createdTime DateTime?
   user User @relation(fields: [userId], references: [userId])
   userId String
 

@@ -368,8 +368,36 @@ body {
   height: 400px;
   background-color: white;
   box-shadow: 24;
-  border: 2px solid #000;
 }
+
+.save-modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 150px;
+  background-color: white;
+  box-shadow: 24;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.save-input {
+  text-align: center;
+}
+
+.save-button {
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.save-button-text {
+    font-size: 16px;
+    color: rgba(var(--clr-grey-300));
+  }
 
 .traversal-viewer {
     grid-column: 1 / -1;

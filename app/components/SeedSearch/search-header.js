@@ -17,6 +17,7 @@ export function Header(props) {
   const readPathFetcher = useFetcher();
   const redirectFetcher = useFetcher();
   const submit = useSubmit();
+  const [pathName, setPathName] = useState("")
 
   useEffect(() => {
     if(window){
@@ -34,11 +35,14 @@ export function Header(props) {
       nodeIdCounter: JSON.stringify(props.nodeIdCounter),
       searchString: JSON.stringify(props.searchString),
       traversalPath: JSON.stringify(props.traversalPath),
-      pathId: props.pathId
+      pathId: props.pathId,
+      pathName: pathName,
     }, {
       method: "post",
       action: "/save-path"
     })
+    localforage.setItem("pathName", pathName)
+    setExistingPathName(pathName)
   }
 
   function handlePathInit(path){
@@ -50,6 +54,7 @@ export function Header(props) {
     localforage.setItem("pathId", path.pathId)
     localforage.setItem("searchString", JSON.parse(path.searchString))
     localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
+    localforage.setItem("pathName", JSON.parse(path.pathName))
 
     const tree = new TreeModel();
     const root = tree.parse(JSON.parse(path.traversalPath))
@@ -96,7 +101,7 @@ export function Header(props) {
               <>
               <div className="user-text-wrapper">
                   <div style={{marginRight: '5px'}}>
-                    <button onClick={handleSaveClick}>
+                    <button onClick={()=>props.setSaveModalOpen(true)}>
                       <p>Save</p>
                     </button>
                   </div>
@@ -157,6 +162,29 @@ export function Header(props) {
                 </div>
               )
             }
+          </div>
+        </Modal>
+        <Modal
+          open={props.saveModalOpen}
+          onClose={()=>props.setSaveModalOpen(false)}
+          >
+          <div className="save-modal-box">
+              <input type="text"
+                     className="save-input"
+                     autoFocus
+                     onChange={(e)=>setPathName(e.target.value)}
+                     placeholder={props.existingPathName ? props.existingPathName : "Give a name to your traversal path!"} />
+                   {savePathFetcher.type === 'init' &&
+              <button className="save-button" onClick={handleSaveClick}>
+                <p className="save-button-text">Save Search</p>
+              </button>
+              }
+              {savePathFetcher.state === "submitting" &&
+                <p className="save-button-text">Saving...</p>
+              }
+              {savePathFetcher.type === 'done' &&
+                <p className='save-button-text'>Saved!</p>
+              }
           </div>
         </Modal>
       </>
