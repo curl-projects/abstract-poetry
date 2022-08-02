@@ -41,12 +41,16 @@ export const loader = async ({
     updateIndex: search.get('updateIndex'),
     impression: search.get('impression'),
     position: search.get('position'),
-    user: user
+    user: user,
+    isPathRedirect: JSON.parse(search.get('isPathRedirect')),
   }
   return json(data)
 }
 
 export const action = async ({ request, params }) => {
+  const url = new URL(request.url)
+  const search = new URLSearchParams(url.search)
+
   const formData = await request.formData();
   const negativeDOIString = formData.get('negativeDOI')
   const positiveDOIString = formData.get('positiveDOI')
@@ -73,6 +77,7 @@ export const action = async ({ request, params }) => {
   const algParams = formData.get('algParams')
   const clusters = formData.get('clusters')
 
+  console.log("PARAMS PAPER IDDDDDD!!!!!!!", params.paperId)
   // the final version of this needs to return a DOI and the updated algorithm parameters
   let [nextPapers, clusterIndex] = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, nodeState, algParams, clusters)
 
@@ -99,6 +104,7 @@ export default function PaperId() {
   const [toggle, setToggle] = useState(false)
   const [searchString, setSearchString] = useState("")
   const [pathId, setPathId] = useState("")
+  const [isPathRedirect, setIsPathRedirect] = useState(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -124,7 +130,11 @@ export default function PaperId() {
 
     let pathIdData = await localforage.getItem('pathId')
     pathIdData ? setPathId(pathIdData) : {}
-  }, [params.paperId, data.search])
+
+    if(data.isPathRedirect){
+      setIsPathRedirect(true)
+    }
+  }, [params.paperId, data.search, data.isPathRedirect])
 
   useEffect(() => {
     console.warn("VISITED PATH LIST:", visitedPathList)
@@ -202,6 +212,7 @@ export default function PaperId() {
         <ClusterViewer
           forceNodes={forceNodes}
           nodeState={nodeState}
+          isPathRedirect={isPathRedirect}
         />
         :
         <TraversalViewer

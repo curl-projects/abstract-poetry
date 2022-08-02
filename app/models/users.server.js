@@ -5,14 +5,13 @@ export async function upsertUser(id, email){
     where: {
       userId: id
     },
-    update: {},
+    update: {
+    },
     create: {
       userId: id,
       emailAddress: email
     }
   });
-
-  console.log("UPSERT USER!:", upsertUser)
   return upsertUser
 }
 

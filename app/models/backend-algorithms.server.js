@@ -21,6 +21,8 @@ async function updateParams(doi, impression, clusters, parameters){
 }
 
 async function findNextPaper(updatedParams, doi, nodeState, traversedPapers, clusters) {
+
+  console.log("DOI:", doi)
   // Uses Thompson Sampling to find the next paper to visit
   const samples = updatedParams.map(param => beta.sample(param[0], param[1]))
   const clusterIdx = samples.indexOf(Math.max(...samples))

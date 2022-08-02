@@ -30,8 +30,11 @@ export function ClusterViewer(props) {
   useEffect(async () => {
     const forceNodeData = JSON.parse(await localStorage.getItem("forceNodes"));
     setGraphData(forceNodeData)
-  }, [props.forceNodes])
+  }, [props.forceNodes, props.isPathRedirect])
 
+  useEffect(() => {
+    console.warn("MY GRAPH DATA", graphData)
+  })
 
 
   function setLinkColors(link) {
@@ -111,7 +114,7 @@ export function ClusterViewer(props) {
       {(typeof window !== "undefined") &&
         <ClientOnly>
           {()=><ForceGraph2D
-            graphData={(props.forceNodes && graphData) ? graphData : { nodes: [], links: [] }}
+            graphData={(props.forceNodes && graphData) ? props.forceNodes : { nodes: [], links: [] }}
             ref={fgRef}
             forceEngine="d3"
             d3AlphaMin={0.1}

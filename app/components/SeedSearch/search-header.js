@@ -1,11 +1,13 @@
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import home from "../../../public/assets/home.svg";
-import { Form, useParams, Link, useFetcher } from "@remix-run/react";
+import { Form, useParams, Link, useFetcher, useSubmit } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { SocialsProvider } from "remix-auth-socials";
 import Modal from '@mui/material/Modal';
 import * as localforage from "localforage";
+import TreeModel from 'tree-model';
+import { slugifyDoi } from "~/utils/doi-manipulation"
 
 export function Header(props) {
   const params = useParams();
@@ -13,6 +15,8 @@ export function Header(props) {
   const [url, setUrl] = useState('/')
   const savePathFetcher = useFetcher();
   const readPathFetcher = useFetcher();
+  const redirectFetcher = useFetcher();
+  const submit = useSubmit();
 
   useEffect(() => {
     if(window){
@@ -20,15 +24,16 @@ export function Header(props) {
     }
   }, [])
 
+
   function handleSaveClick(){
     savePathFetcher.submit({
       activeNodeId: props.activeNodeId,
       algParams: JSON.stringify(props.algParams), // otherwise it gets rid of the nested list structure
-      clusters: props.clusters,
-      forceNodes: props.forceNodes,
-      nodeIdCounter: props.nodeIdCounter,
-      searchString: props.searchString,
-      traversalPath: props.traversalPath,
+      clusters: JSON.stringify(props.clusters),
+      forceNodes: JSON.stringify(props.forceNodes),
+      nodeIdCounter: JSON.stringify(props.nodeIdCounter),
+      searchString: JSON.stringify(props.searchString),
+      traversalPath: JSON.stringify(props.traversalPath),
       pathId: props.pathId
     }, {
       method: "post",
@@ -36,9 +41,35 @@ export function Header(props) {
     })
   }
 
+  function handlePathInit(path){
+    localforage.setItem("activeNodeId", parseInt(path.activeNodeId))
+    localforage.setItem("algParams", JSON.parse(path.algParams))
+    localforage.setItem("clusters", JSON.parse(path.clusters))
+    localforage.setItem("forceNodes", JSON.parse(path.forceNodes))
+    localforage.setItem("nodeIdCounter", parseInt(path.nodeIdCounter))
+    localforage.setItem("pathId", path.pathId)
+    localforage.setItem("searchString", JSON.parse(path.searchString))
+    localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
+
+    const tree = new TreeModel();
+    const root = tree.parse(JSON.parse(path.traversalPath))
+
+    const mostRecentNode = root.first(function(node){
+      return node.model.attributes.nodeId === parseInt(path.activeNodeId)
+    })
+    console.log("MOST RECENT NODE:", mostRecentNode)
+    const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
+    redirectFetcher.submit({redirectURL: `${redirectURL}?isPathRedirect=true`}, {
+      method: "post",
+      action: "/redirect-paths"
+    })
+  }
+
   useEffect(()=>{
+    console.log("MODAL OPEN?? ", modalOpen)
     if(modalOpen){
-      readPathFetcher.submit({}, {
+      readPathFetcher.submit({
+      }, {
         method: "get",
         action: "/get-paths"
       })
@@ -46,8 +77,8 @@ export function Header(props) {
   }, [modalOpen])
 
   useEffect(()=>{
-    console.log("SAVE PATH FETCHER DATA:", savePathFetcher.data)
-  }, [savePathFetcher])
+    console.log("READ PATH FETCHER DATA:", readPathFetcher.data)
+  }, [readPathFetcher])
 
   useEffect(()=>{
     if(savePathFetcher.data){
@@ -109,6 +140,25 @@ export function Header(props) {
           </div>
           {false ? <img src={account} alt="Account Login" /> : null}
         </div>
+        <Modal
+          open={modalOpen}
+          onClose={()=>setModalOpen(false)}
+          >
+          <div className="modal-box">
+            {(readPathFetcher.state === "submitting" || readPathFetcher.state === "loading")
+              ?
+              <h2>Loading</h2>
+              :
+              readPathFetcher.data?.traversalPaths.map((path, index) =>
+                <div key={index}>
+                  <button onClick={()=>handlePathInit(path)}>
+                    <p>{path.pathId} [{path.searchString}]</p>
+                  </button>
+                </div>
+              )
+            }
+          </div>
+        </Modal>
       </>
     )
   }
