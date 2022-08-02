@@ -370,6 +370,30 @@ body {
   box-shadow: 24;
 }
 
+.modal-path-box {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  cursor: pointer;
+  overflow: auto;
+}
+
+.path-metadata-box {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.modal-path-box-pathname:hover{
+  color: rgba(85, 85, 85, 0.6)
+}
+
+.path-metadata-box-separator {
+  width: 100%;
+  border: 1px solid rgba(120, 120, 120, 0.25);
+}
+
 .save-modal-box {
   position: absolute;
   top: 50%;

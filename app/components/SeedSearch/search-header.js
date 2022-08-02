@@ -8,6 +8,8 @@ import Modal from '@mui/material/Modal';
 import * as localforage from "localforage";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
+import journalIcon from "../../../public/assets/journal.svg"
+import calendar from "../../../public/assets/calendar.svg";
 
 export function Header(props) {
   const params = useParams();
@@ -155,10 +157,25 @@ export function Header(props) {
               <h2>Loading</h2>
               :
               readPathFetcher.data?.traversalPaths.map((path, index) =>
-                <div key={index}>
-                  <button onClick={()=>handlePathInit(path)}>
-                    <p>{path.pathId} [{path.searchString}]</p>
-                  </button>
+                <div key={index} className="modal-path-box" onClick={()=>handlePathInit(path)}>
+                    <div>
+                      <h2 className="modal-path-box-pathname">{path.pathName}</h2>
+                    </div>
+                    <div className='path-metadata-box'>
+                      <div className="flex-row shrink">
+                        <div className="icon">
+                          <img src={calendar} alt={"Created Date"} />
+                        </div>
+                        <small className="small">DateTime</small>
+                      </div>
+                      <div className="flex-row shrink">
+                        <div className="icon">
+                          <img src={journalIcon} alt={"Journal"} />
+                        </div>
+                        <small className="small">{path.searchString}</small>
+                      </div>
+                    </div>
+                  <div className="path-metadata-box-separator"/>
                 </div>
               )
             }
@@ -179,7 +196,7 @@ export function Header(props) {
                 <p className="save-button-text">Save Search</p>
               </button>
               }
-              {savePathFetcher.state === "submitting" &&
+              {(savePathFetcher.state === "submitting" || savePathFetcher.state === "loading") &&
                 <p className="save-button-text">Saving...</p>
               }
               {savePathFetcher.type === 'done' &&
