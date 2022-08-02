@@ -98,6 +98,7 @@ export default function PaperId() {
   const [nodeIdCounter, setNodeIdCounter] = useState(1)
   const [toggle, setToggle] = useState(false)
   const [searchString, setSearchString] = useState("")
+  const [pathId, setPathId] = useState("")
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -119,8 +120,10 @@ export default function PaperId() {
                       )
     setToggle(false)
     let searchStringData = await localforage.getItem("searchString")
-    console.log("SEARCH STRING DATA")
     searchStringData ? setSearchString(searchStringData) : {}
+
+    let pathIdData = await localforage.getItem('pathId')
+    pathIdData ? setPathId(pathIdData) : {}
   }, [params.paperId, data.search])
 
   useEffect(() => {
@@ -167,7 +170,10 @@ export default function PaperId() {
         nodeIdCounter={nodeIdCounter}
         searchString={searchString}
         traversalPath={traversalPath}
+        pathId={pathId}
         user={data.user}
+
+        setPathId={setPathId}
         />
 
       <div className="axis" />

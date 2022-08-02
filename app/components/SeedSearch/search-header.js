@@ -5,12 +5,14 @@ import { Form, useParams, Link, useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { SocialsProvider } from "remix-auth-socials";
 import Modal from '@mui/material/Modal';
+import * as localforage from "localforage";
 
 export function Header(props) {
   const params = useParams();
   const [modalOpen, setModalOpen] = useState(false)
   const [url, setUrl] = useState('/')
-  const fetcher = useFetcher();
+  const savePathFetcher = useFetcher();
+  const readPathFetcher = useFetcher();
 
   useEffect(() => {
     if(window){
@@ -19,7 +21,7 @@ export function Header(props) {
   }, [])
 
   function handleSaveClick(){
-    fetcher.submit({
+    savePathFetcher.submit({
       activeNodeId: props.activeNodeId,
       algParams: JSON.stringify(props.algParams), // otherwise it gets rid of the nested list structure
       clusters: props.clusters,
@@ -33,6 +35,26 @@ export function Header(props) {
       action: "/save-path"
     })
   }
+
+  useEffect(()=>{
+    if(modalOpen){
+      readPathFetcher.submit({}, {
+        method: "get",
+        action: "/get-paths"
+      })
+    }
+  }, [modalOpen])
+
+  useEffect(()=>{
+    console.log("SAVE PATH FETCHER DATA:", savePathFetcher.data)
+  }, [savePathFetcher])
+
+  useEffect(()=>{
+    if(savePathFetcher.data){
+        localforage.setItem('pathId', savePathFetcher.data.pathId)
+        props.setPathId(savePathFetcher.data.pathId)
+    }
+  }, [savePathFetcher])
 
   if (params.paperId) {
     return (
