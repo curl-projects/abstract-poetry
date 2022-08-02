@@ -8,6 +8,7 @@ export async function loader({ request }){
   let returnTo =
     (await returnCookie.parse(request.headers.get("Cookie"))) ?? "/";
 
+  console.log("RETURN TO:", returnTo)
   return await authenticator.authenticate(SocialsProvider.GOOGLE, request, {
     successRedirect: returnTo,
     failureRedirect: "/",

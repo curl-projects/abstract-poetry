@@ -30,7 +30,7 @@ authenticator.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     scope: ["openid email profile"],
-    callbackURL: `http://localhost:3000/auth/${SocialsProvider.GOOGLE}/callback`
+    callbackURL: process.env.CALLBACK_URL
   },
   handleSocialAuthCallback
 ));
