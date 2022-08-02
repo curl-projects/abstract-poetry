@@ -6,6 +6,7 @@ import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { ClusterViewer } from "~/components/PathTraversal/cluster-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
+import { SocialsBar } from "~/components/SocialFeatures/socials-bar.js"
 import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
 import { Background, Controls } from "~/components/PaperViewer/static.js"
 import { Header } from "~/components/SeedSearch/search-header"
@@ -248,6 +249,7 @@ export default function PaperId() {
 
       <Background />
 
+      <SocialsBar />
       <Snackbar
         open={messageExists}
         autoHideDuration={6000}

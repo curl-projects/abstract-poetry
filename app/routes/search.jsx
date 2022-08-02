@@ -17,6 +17,7 @@ import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
+import { SocialsBar } from "~/components/SocialFeatures/socials-bar" 
 import { authenticator } from "~/models/auth.server.js";
 
 export const loader = async ({ request }) => {
@@ -134,6 +135,8 @@ export default function Search(props){
             />
 
       <Background />
+
+      <SocialsBar />
 
       <Snackbar
         open={errorExists}

@@ -1134,9 +1134,25 @@ input[type="text"]:focus::placeholder {
     font-size: var(--fs-sm);
 }
 
+.socials-bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 200px;
+  height: 85px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
 
+.socials-box{
+  margin-right: 10px;
+}
 
-
+.socials-button:hover {
+  filter: brightness(110%);
+}
 /*
 .button:hover .effect-1,
 .button:hover .effect-2 {
