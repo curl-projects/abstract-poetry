@@ -32,11 +32,6 @@ export function ClusterViewer(props) {
     setGraphData(forceNodeData)
   }, [props.forceNodes, props.isPathRedirect])
 
-  useEffect(() => {
-    console.warn("MY GRAPH DATA", graphData)
-  })
-
-
   function setLinkColors(link) {
     if (String(link.target.id).includes('cluster')) {
       return 'rgb(243, 243, 243)'

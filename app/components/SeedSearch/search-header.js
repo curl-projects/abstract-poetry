@@ -77,8 +77,8 @@ export function Header(props) {
   }, [modalOpen])
 
   useEffect(()=>{
-    console.log("READ PATH FETCHER DATA:", readPathFetcher.data)
-  }, [readPathFetcher])
+    console.log("SAVE PATH FETCHER DATA:", savePathFetcher.data)
+  }, [savePathFetcher])
 
   useEffect(()=>{
     if(savePathFetcher.data){

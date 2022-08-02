@@ -136,9 +136,9 @@ export default function PaperId() {
     }
   }, [params.paperId, data.search, data.isPathRedirect])
 
-  useEffect(() => {
-    console.warn("VISITED PATH LIST:", visitedPathList)
-  }, [visitedPathList])
+  // useEffect(() => {
+  //   console.warn("VISITED PATH LIST:", visitedPathList)
+  // }, [visitedPathList])
 
   useEffect(() => {
     console.log("LOADER DATA:", data)

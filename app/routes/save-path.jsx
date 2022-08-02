@@ -14,25 +14,18 @@ export async function action({ request }){
   const user = await authenticator.isAuthenticated(request)
   const userId = user.id
 
-  console.log("ALG PARAMS:", algParams)
-
-  console.log("PATH ID", pathId)
-  try{
-    const upsertPathData = await upsertPath(
-      userId,
-      parseInt(activeNodeId),
-      algParams,
-      clusters,
-      forceNodes,
-      parseInt(nodeIdCounter),
-      searchString,
-      traversalPath,
-      pathId
-    )
-    return upsertPathData
-  }
-  catch(error){
-    console.log("SAVE ERROR:", error)
-    return error
-  }
+  console.log("CALLING UPSERT PATH DATA")
+  console.log("PATH ID:", pathId)
+  const upsertPathData = await upsertPath(
+    userId,
+    parseInt(activeNodeId),
+    algParams,
+    clusters,
+    forceNodes,
+    parseInt(nodeIdCounter),
+    searchString,
+    traversalPath,
+    pathId
+  )
+  return upsertPathData
 }
