@@ -338,6 +338,16 @@ body {
   padding-right: 4px;
 }
 
+.save-button {
+  cursor: pointer;
+}
+
+.save-button:hover {
+  filter: brightness(110%);
+}
+
+
+.save-button
 .logout-text-wrapper {
   display: flex;
   justify-content: center;

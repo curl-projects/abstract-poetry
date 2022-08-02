@@ -1,5 +1,6 @@
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
+import save from "../../../public/assets/save.svg";
 import home from "../../../public/assets/home.svg";
 import { Form, useParams, Link, useFetcher, useSubmit } from "@remix-run/react";
 import { useState, useEffect } from "react";
@@ -10,6 +11,7 @@ import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import journalIcon from "../../../public/assets/journal.svg"
 import calendar from "../../../public/assets/calendar.svg";
+import path from "../../../public/assets/path-search.svg";
 
 export function Header(props) {
   const params = useParams();
@@ -48,6 +50,7 @@ export function Header(props) {
   }
 
   function handlePathInit(path){
+    console.log("PATH:", path)
     localforage.setItem("activeNodeId", parseInt(path.activeNodeId))
     localforage.setItem("algParams", JSON.parse(path.algParams))
     localforage.setItem("clusters", JSON.parse(path.clusters))
@@ -56,7 +59,7 @@ export function Header(props) {
     localforage.setItem("pathId", path.pathId)
     localforage.setItem("searchString", JSON.parse(path.searchString))
     localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
-    localforage.setItem("pathName", JSON.parse(path.pathName))
+    localforage.setItem("pathName", path.pathName)
 
     const tree = new TreeModel();
     const root = tree.parse(JSON.parse(path.traversalPath))
@@ -102,22 +105,23 @@ export function Header(props) {
             {props.user &&
               <>
               <div className="user-text-wrapper">
-                  <div style={{marginRight: '5px'}}>
-                    <button onClick={()=>props.setSaveModalOpen(true)}>
-                      <p>Save</p>
-                    </button>
-                  </div>
-                  <div>
+                  <div style={{display: "flex", alignItems: "center"}}>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
-                      <button type="submit">
+                      <button type="submit" style={{width: "100%", height: "100%", marginTop: '4px'}}>
                         <p className="logout-text">Logout</p>
                       </button>
                     </Form>
                   </div>
+                  <div style={{marginRight: '5px', marginLeft: '10px'}}>
+                    <button onClick={()=>props.setSaveModalOpen(true)}
+                            className="save-button">
+                      <img src={save} alt="Save Button" />
+                    </button>
+                  </div>
               </div>
               <button onClick={()=>setModalOpen(true)}>
-                  <img src={account} className="account-button" fill='666666' alt="Account Button" />
+                  <img src={path} className="account-button" fill='666666' alt="Account Button" />
               </button>
               </>
             }
@@ -219,20 +223,18 @@ export function Header(props) {
             {props?.user &&
               <>
               <div className="user-text-wrapper">
-                  <div className="logout-text-wrapper">
+                  <div style={{display: "flex", alignItems: "center"}}>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
-                      <button type="submit">
+                      <button type="submit" style={{width: "100%", height: "100%", marginTop: '4px', marginRight: "5px"}}>
                         <p className="logout-text">Logout</p>
                       </button>
                     </Form>
                   </div>
               </div>
-              <div>
-                <button onClick={()=>setModalOpen(true)}>
-                    <img src={account} className="account-button" fill='666666' alt="Account Button" />
-                </button>
-              </div>
+              <button onClick={()=>setModalOpen(true)}>
+                  <img src={path} className="account-button" fill='666666' alt="Account Button" />
+              </button>
               </>
             }
             {!props?.user &&
@@ -274,7 +276,37 @@ export function Header(props) {
           onClose={()=>setModalOpen(false)}
           >
           <div className="modal-box">
-            <h2>Hello</h2>
+            {(readPathFetcher.state === "submitting" || readPathFetcher.state === "loading")
+              ?
+              <div className="modal-loading-box">
+                <div className="wave-center-modal">
+                  {[...Array(3)].map((e, i) => <div key={i} className="wave-modal"></div>)}
+                </div>
+              </div>
+              :
+              readPathFetcher.data?.traversalPaths.map((path, index) =>
+                <div key={index} className="modal-path-box" onClick={()=>handlePathInit(path)}>
+                    <div>
+                      <h2 className="modal-path-box-pathname">{path.pathName}</h2>
+                    </div>
+                    <div className='path-metadata-box'>
+                      <div className="flex-row shrink">
+                        <div className="icon">
+                          <img src={calendar} alt={"Created Date"} />
+                        </div>
+                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{new Date(path.createdTime).getYear()}</small>
+                      </div>
+                      <div className="flex-row shrink">
+                        <div className="icon">
+                          <img src={journalIcon} alt={"Journal"} />
+                        </div>
+                        <small className="small">{JSON.parse(path.searchString)}</small>
+                      </div>
+                    </div>
+                  <div className="path-metadata-box-separator"/>
+                </div>
+              )
+            }
           </div>
         </Modal>
       </>
