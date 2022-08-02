@@ -1,9 +1,16 @@
-import { useEffect, useState } from "react"
-
+import { useEffect, useState, useRef } from "react"
+import { useParams } from "@remix-run/react"
 
 export function PaperAbstract(props){
-
   const [abstract, setAbstract] = useState(null)
+  const abstractRef = useRef();
+  const params = useParams();
+
+  useEffect(() => {
+    if(abstractRef.current){
+      abstractRef.current.scrollTop = 0;
+    }
+  }, [params.paperId])
 
   useEffect(() => {
     if(props.abstract){
@@ -23,7 +30,7 @@ export function PaperAbstract(props){
 
   if(props.params.paperId){
     return(
-      <div className="abstract" dangerouslySetInnerHTML={{__html: abstract ? abstract : "<p>No abstract found for this paper</p>"}}/>
+      <div className="abstract" ref={abstractRef} dangerouslySetInnerHTML={{__html: abstract ? abstract : "<p>No abstract found for this paper</p>"}}/>
     )
   }
   else{

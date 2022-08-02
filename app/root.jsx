@@ -30,10 +30,11 @@ export default function App() {
       </head>
       <body style={{overflow: "hidden", height: "100%"}}>
         <Outlet />
-        <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
   );
 }
+
+// <ScrollRestoration />
