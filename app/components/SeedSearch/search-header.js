@@ -12,6 +12,7 @@ import { slugifyDoi } from "~/utils/doi-manipulation"
 import journalIcon from "../../../public/assets/journal.svg"
 import calendar from "../../../public/assets/calendar.svg";
 import path from "../../../public/assets/path-search.svg";
+import { Tooltip } from "@mui/material";
 
 export function Header(props) {
   const params = useParams();
@@ -114,15 +115,19 @@ export function Header(props) {
                     </Form>
                   </div>
                   <div style={{marginRight: '5px', marginLeft: '10px'}}>
-                    <button onClick={()=>props.setSaveModalOpen(true)}
-                            className="save-button">
-                      <img src={save} alt="Save Button" />
-                    </button>
+                    <Tooltip title="Save Search Session">
+                      <button onClick={()=>props.setSaveModalOpen(true)}
+                              className="save-button">
+                        <img src={save} alt="Save Button" />
+                      </button>
+                    </Tooltip>
                   </div>
               </div>
-              <button onClick={()=>setModalOpen(true)}>
-                  <img src={path} className="account-button" fill='666666' alt="Account Button" />
-              </button>
+              <Tooltip title="Find Saved Session">
+                <button onClick={()=>setModalOpen(true)}>
+                    <img src={path} className="account-button" fill='666666' alt="Account Button" />
+                </button>
+              </Tooltip>
               </>
             }
             {!props.user &&
@@ -130,9 +135,11 @@ export function Header(props) {
                 method="post"
                 action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
                 >
-                <button type='submit'>
-                    <img src={account} className="account-button" fill='666666' alt="Account Button" />
-                </button>
+                <Tooltip title="Login">
+                  <button type='submit'>
+                      <img src={account} className="account-button" fill='666666' alt="Account Button" />
+                  </button>
+                </Tooltip>
               </Form>
             }
           </div>
@@ -144,9 +151,11 @@ export function Header(props) {
               <input type="text" disabled="disabled" name="searchString" placeholder={props.searchString ? props.searchString : "abstract poetry"} />
             </div>
             <Link to="/search">
-              <button type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
-                <img src={home} alt="Home Logo" />
-              </button>
+              <Tooltip title="Start New Search">
+                <button type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
+                  <img src={home} alt="Home Logo" />
+                </button>
+              </Tooltip>
             </Link>
           </div>
           {false ? <img src={account} alt="Account Login" /> : null}
@@ -232,9 +241,11 @@ export function Header(props) {
                     </Form>
                   </div>
               </div>
-              <button onClick={()=>setModalOpen(true)}>
-                  <img src={path} className="account-button" fill='666666' alt="Account Button" />
-              </button>
+              <Tooltip title="Find Saved Session">
+                <button onClick={()=>setModalOpen(true)}>
+                    <img src={path} className="account-button" fill='666666' alt="Account Button" />
+                </button>
+              </Tooltip>
               </>
             }
             {!props?.user &&
@@ -252,9 +263,11 @@ export function Header(props) {
                 action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
                 >
                 <input type='hidden' name="url" value={url}/>
-                <button type='submit'>
-                    <img src={account} className="account-button" fill='666666' alt="Account Button" />
-                </button>
+                <Tooltip title="Login">
+                  <button type='submit'>
+                      <img src={account} className="account-button" fill='666666' alt="Account Button" />
+                  </button>
+                </Tooltip>
               </Form>
               </>
             }
