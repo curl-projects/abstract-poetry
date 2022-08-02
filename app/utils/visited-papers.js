@@ -11,6 +11,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                                           forceNodeSetter=null,
                                           clusterSetter=null,
                                           visitedPathSetter=null,
+                                          nodeIdCounterSetter=null,
                                           metadata){
   try{
     console.log("UPDATING")
@@ -104,6 +105,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
       algParamsSetter(currentAlgParams)
       forceNodeSetter(forceNodes)
       clusterSetter(clusters)
+      nodeIdCounterSetter(nodeIdCounter+1)
     }
     return rootModel
   }
@@ -159,6 +161,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
       algParamsSetter(initialParams)
       forceNodeSetter({nodes: initialForceNodes, links: initialLinks})
       clusterSetter(clusters)
+      nodeIdCounterSetter(1)
     }
     return root
   }

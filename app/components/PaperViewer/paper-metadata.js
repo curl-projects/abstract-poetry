@@ -62,13 +62,13 @@ export function PaperMetadata(props) {
           <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch" }}>
             <div className="flex-row shrink">
               <div className="icon">
-                <img src={journalIcon} alt={"Publication Date"} style={{paddingLeft: '1px'}}/>
+                <img src={calendar} alt={"Publication Date"} style={{paddingLeft: '1px'}}/>
               </div>
               <small className="small">{date}</small>
             </div>
             <div className="flex-row shrink">
               <div className="icon">
-                <img src={calendar} alt={"Publication Date"} />
+                <img src={journalIcon} alt={"Journal"} />
               </div>
               <small className="small">{props.doi ? doiToJournal(props.doi) : ""}</small>
             </div>

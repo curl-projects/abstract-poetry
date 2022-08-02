@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Tooltip } from "@mui/material";
 
 import { caseToMessage } from "~/utils/messages-and-alerts"
+import { authenticator } from "~/models/auth.server.js";
 
 export const loader = async ({
   params, request
@@ -30,6 +31,7 @@ export const loader = async ({
   const url = new URL(request.url)
   const search = new URLSearchParams(url.search)
   const metadata = await getMetadataFromPaperId(deslugifyDoi(params.paperId))
+  const user = await authenticator.isAuthenticated(request)
 
   const data = {
     metadata: metadata,
@@ -38,12 +40,17 @@ export const loader = async ({
     searchString: search.get('searchString'),
     updateIndex: search.get('updateIndex'),
     impression: search.get('impression'),
-    position: search.get('position')
+    position: search.get('position'),
+    user: user,
+    isPathRedirect: JSON.parse(search.get('isPathRedirect')),
   }
   return json(data)
 }
 
 export const action = async ({ request, params }) => {
+  const url = new URL(request.url)
+  const search = new URLSearchParams(url.search)
+
   const formData = await request.formData();
   const negativeDOIString = formData.get('negativeDOI')
   const positiveDOIString = formData.get('positiveDOI')
@@ -70,6 +77,7 @@ export const action = async ({ request, params }) => {
   const algParams = formData.get('algParams')
   const clusters = formData.get('clusters')
 
+  console.log("PARAMS PAPER IDDDDDD!!!!!!!", params.paperId)
   // the final version of this needs to return a DOI and the updated algorithm parameters
   let [nextPapers, clusterIndex] = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, nodeState, algParams, clusters)
 
@@ -92,8 +100,13 @@ export default function PaperId() {
   const redirectFetcher = useFetcher();
   const [traversalState, setTraversalState] = useState(true)
   const [visitedPathList, setVisitedPathList] = useState([])
+  const [nodeIdCounter, setNodeIdCounter] = useState(1)
   const [toggle, setToggle] = useState(false)
   const [searchString, setSearchString] = useState("")
+  const [pathId, setPathId] = useState("")
+  const [isPathRedirect, setIsPathRedirect] = useState(false)
+  const [saveModalOpen, setSaveModalOpen] = useState(false)
+  const [existingPathName, setExistingPathName] = useState(null)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -110,16 +123,28 @@ export default function PaperId() {
                         setForceNodes,
                         setClusters,
                         setVisitedPathList,
+                        setNodeIdCounter,
                         data.metadata
                       )
     setToggle(false)
     let searchStringData = await localforage.getItem("searchString")
     searchStringData ? setSearchString(searchStringData) : {}
-  }, [params.paperId, data.search])
 
-  useEffect(() => {
-    console.warn("VISITED PATH LIST:", visitedPathList)
-  }, [visitedPathList])
+    let pathIdData = await localforage.getItem('pathId')
+    pathIdData ? setPathId(pathIdData) : {}
+
+    let existingPathNameData = await localforage.getItem("pathName")
+    existingPathNameData ? setExistingPathName(existingPathNameData) : {}
+
+    if(data.isPathRedirect){
+      setIsPathRedirect(true)
+    }
+
+  }, [params.paperId, data.search, data.isPathRedirect])
+
+  // useEffect(() => {
+  //   console.warn("VISITED PATH LIST:", visitedPathList)
+  // }, [visitedPathList])
 
   useEffect(() => {
     console.log("LOADER DATA:", data)
@@ -138,13 +163,14 @@ export default function PaperId() {
     if(data.message){
       setMessageExists(true)
     }
-    localforage.setItem("searchString", data.searchString)
-    setSearchString(data.searchString)
   }, [data.message])
 
   useEffect(() => {
-
-  })
+    if(data.searchString){
+      localforage.setItem("searchString", data.searchString)
+      setSearchString(data.searchString)
+    }
+  }, [data.searchString])
 
   useEffect(()=>{
     console.log("CLUSTER SIZE:", clusters ? Object.keys(clusters).length : 0)
@@ -153,7 +179,22 @@ export default function PaperId() {
   return (
     <div className="container grid-view">
       <Header
+        activeNodeId={nodeState}
+        algParams={algParams}
+        clusters={clusters}
+        forceNodes={forceNodes}
+        nodeIdCounter={nodeIdCounter}
         searchString={searchString}
+        traversalPath={traversalPath}
+        pathId={pathId}
+        user={data.user}
+
+        setPathId={setPathId}
+
+        saveModalOpen={saveModalOpen}
+        setSaveModalOpen={setSaveModalOpen}
+        existingPathName={existingPathName}
+        setExistingPathName={setExistingPathName}
         />
 
       <div className="axis" />
@@ -167,6 +208,8 @@ export default function PaperId() {
         algParams={algParams}
         clusters={clusters}
         metadata={data.metadata ? data.metadata : {}}
+
+        saveModalOpen={saveModalOpen}
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}
@@ -182,6 +225,7 @@ export default function PaperId() {
         <ClusterViewer
           forceNodes={forceNodes}
           nodeState={nodeState}
+          isPathRedirect={isPathRedirect}
         />
         :
         <TraversalViewer
