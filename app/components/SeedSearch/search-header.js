@@ -44,7 +44,7 @@ export function Header(props) {
       action: "/save-path"
     })
     localforage.setItem("pathName", pathName)
-    setExistingPathName(pathName)
+    props.setExistingPathName(pathName)
   }
 
   function handlePathInit(path){
@@ -154,7 +154,11 @@ export function Header(props) {
           <div className="modal-box">
             {(readPathFetcher.state === "submitting" || readPathFetcher.state === "loading")
               ?
-              <h2>Loading</h2>
+              <div className="modal-loading-box">
+                <div className="wave-center-modal">
+                  {[...Array(3)].map((e, i) => <div key={i} className="wave-modal"></div>)}
+                </div>
+              </div>
               :
               readPathFetcher.data?.traversalPaths.map((path, index) =>
                 <div key={index} className="modal-path-box" onClick={()=>handlePathInit(path)}>
@@ -166,13 +170,13 @@ export function Header(props) {
                         <div className="icon">
                           <img src={calendar} alt={"Created Date"} />
                         </div>
-                        <small className="small">DateTime</small>
+                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{new Date(path.createdTime).getYear()}</small>
                       </div>
                       <div className="flex-row shrink">
                         <div className="icon">
                           <img src={journalIcon} alt={"Journal"} />
                         </div>
-                        <small className="small">{path.searchString}</small>
+                        <small className="small">{JSON.parse(path.searchString)}</small>
                       </div>
                     </div>
                   <div className="path-metadata-box-separator"/>
