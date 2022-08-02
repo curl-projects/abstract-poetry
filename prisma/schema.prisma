@@ -13,10 +13,19 @@ datasource db {
 model User {
   userId String @id
   emailAddress String @unique()
+  traversalPaths TraversalPath[]
 }
 
-// model TraversalPath {
-//   pathId BigInt @id @default(autoincrement())
-//   user User @relation(fields: [userId], references: [userId])
-//   userId BigInt
-// }
+model TraversalPath {
+  pathId String  @id @default(cuid())
+  user User @relation(fields: [userId], references: [userId])
+  userId String
+
+  activeNodeId Int @default(1)
+  algParams String
+  clusters String
+  forceNodes String
+  nodeIdCounter Int
+  searchString String
+  traversalPath String
+}

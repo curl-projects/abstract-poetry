@@ -1,7 +1,7 @@
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import home from "../../../public/assets/home.svg";
-import { Form, useParams, Link } from "@remix-run/react";
+import { Form, useParams, Link, useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { SocialsProvider } from "remix-auth-socials";
 import Modal from '@mui/material/Modal';
@@ -10,12 +10,29 @@ export function Header(props) {
   const params = useParams();
   const [modalOpen, setModalOpen] = useState(false)
   const [url, setUrl] = useState('/')
+  const fetcher = useFetcher();
 
   useEffect(() => {
     if(window){
       setUrl(window.location.pathname)
     }
   }, [])
+
+  function handleSaveClick(){
+    fetcher.submit({
+      activeNodeId: props.activeNodeId,
+      algParams: JSON.stringify(props.algParams), // otherwise it gets rid of the nested list structure
+      clusters: props.clusters,
+      forceNodes: props.forceNodes,
+      nodeIdCounter: props.nodeIdCounter,
+      searchString: props.searchString,
+      traversalPath: props.traversalPath,
+      pathId: props.pathId
+    }, {
+      method: "post",
+      action: "/save-path"
+    })
+  }
 
   if (params.paperId) {
     return (
@@ -25,6 +42,11 @@ export function Header(props) {
             {props.user &&
               <>
               <div className="user-text-wrapper">
+                  <div style={{marginRight: '5px'}}>
+                    <button onClick={handleSaveClick}>
+                      <p>Save</p>
+                    </button>
+                  </div>
                   <div>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
@@ -76,7 +98,7 @@ export function Header(props) {
             {props?.user &&
               <>
               <div className="user-text-wrapper">
-                  <div>
+                  <div className="logout-text-wrapper">
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
                       <button type="submit">

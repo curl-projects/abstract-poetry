@@ -333,9 +333,15 @@ body {
 
 .user-text-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   padding-bottom: 6px;
   padding-right: 4px;
+}
+
+.logout-text-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logout-text {

@@ -95,6 +95,7 @@ export default function PaperId() {
   const redirectFetcher = useFetcher();
   const [traversalState, setTraversalState] = useState(true)
   const [visitedPathList, setVisitedPathList] = useState([])
+  const [nodeIdCounter, setNodeIdCounter] = useState(1)
   const [toggle, setToggle] = useState(false)
   const [searchString, setSearchString] = useState("")
 
@@ -113,6 +114,7 @@ export default function PaperId() {
                         setForceNodes,
                         setClusters,
                         setVisitedPathList,
+                        setNodeIdCounter,
                         data.metadata
                       )
     setToggle(false)
@@ -158,7 +160,13 @@ export default function PaperId() {
   return (
     <div className="container grid-view">
       <Header
+        activeNodeId={nodeState}
+        algParams={algParams}
+        clusters={clusters}
+        forceNodes={forceNodes}
+        nodeIdCounter={nodeIdCounter}
         searchString={searchString}
+        traversalPath={traversalPath}
         user={data.user}
         />
 
