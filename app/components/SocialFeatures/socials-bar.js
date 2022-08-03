@@ -1,5 +1,6 @@
 import discord from "../../../public/assets/discord.svg";
-import slack from "../../../public/assets/slack.svg"
+import slack from "../../../public/assets/slack.svg";
+import calendly from "../../../public/assets/calendly.svg";
 import { Tooltip } from "@mui/material";
 
 export const SocialsBar = () => {
@@ -19,6 +20,15 @@ export const SocialsBar = () => {
           <a href="https://join.slack.com/t/curl-projects/shared_invite/zt-1dez98is7-Yxtu3GKvB4ae3RDG~9qF5g" target="_blank">
             <button className="socials-button" type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
               <img src={slack} alt="Slack Logo" />
+            </button>
+          </a>
+        </div>
+      </Tooltip>
+      <Tooltip title="Chat with us! (We love people who chat with us)">
+        <div className="socials-box">
+          <a href="https://join.slack.com/t/curl-projects/shared_invite/zt-1dez98is7-Yxtu3GKvB4ae3RDG~9qF5g" target="_blank">
+            <button className="socials-button" type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
+              <img src={calendly} alt="Calendly Logo" />
             </button>
           </a>
         </div>

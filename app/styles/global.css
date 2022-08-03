@@ -1162,10 +1162,11 @@ input[type="text"]:focus::placeholder {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  gap: 10px;
+  margin-right: 20px;
 }
 
 .socials-box{
-  margin-right: 10px;
 }
 
 .socials-button:hover {
