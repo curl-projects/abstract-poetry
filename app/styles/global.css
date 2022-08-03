@@ -442,6 +442,28 @@ body {
     color: rgba(var(--clr-grey-300));
   }
 
+.share-wrapper{
+  display: flex;
+  flex-direction: row;
+}
+
+.share-input {
+  text-align: left;
+}
+
+.share-copy-button {
+  height: 100%;
+  width: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.share-copy-button:hover {
+  filter: brightness(110%);
+}
+
 .traversal-viewer {
     grid-column: 1 / -1;
     grid-row: 3;

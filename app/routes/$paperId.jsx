@@ -44,6 +44,7 @@ export const loader = async ({
     position: search.get('position'),
     user: user,
     isPathRedirect: JSON.parse(search.get('isPathRedirect')),
+    urlPrefix: process.env.SHARE_URL_PREFIX
   }
   return json(data)
 }
@@ -107,6 +108,7 @@ export default function PaperId() {
   const [pathId, setPathId] = useState("")
   const [isPathRedirect, setIsPathRedirect] = useState(false)
   const [saveModalOpen, setSaveModalOpen] = useState(false)
+  const [shareModalOpen, setShareModalOpen] = useState(false)
   const [existingPathName, setExistingPathName] = useState(null)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,11 +191,14 @@ export default function PaperId() {
         traversalPath={traversalPath}
         pathId={pathId}
         user={data.user}
-
+        urlPrefix={data.urlPrefix}
         setPathId={setPathId}
 
         saveModalOpen={saveModalOpen}
         setSaveModalOpen={setSaveModalOpen}
+
+        shareModalOpen={shareModalOpen}
+        setShareModalOpen={setShareModalOpen}
         existingPathName={existingPathName}
         setExistingPathName={setExistingPathName}
         />
@@ -211,6 +216,7 @@ export default function PaperId() {
         metadata={data.metadata ? data.metadata : {}}
 
         saveModalOpen={saveModalOpen}
+        shareModalOpen={shareModalOpen}
       />
       <PaperData
         doi={deslugifyDoi(params.paperId)}

@@ -68,3 +68,12 @@ export async function readPaths(userId){
   })
   return pathUser
 }
+
+export async function readPath(pathId){
+  const path = await db.traversalPath.findUnique({
+    where: {
+      pathId: pathId
+    }
+  })
+  return path
+}

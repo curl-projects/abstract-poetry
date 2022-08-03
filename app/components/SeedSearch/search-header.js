@@ -2,8 +2,9 @@ import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import save from "../../../public/assets/save.svg";
 import home from "../../../public/assets/home.svg";
+import copy from "../../../public/assets/copy.svg";
 import { Form, useParams, Link, useFetcher, useSubmit } from "@remix-run/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SocialsProvider } from "remix-auth-socials";
 import Modal from '@mui/material/Modal';
 import * as localforage from "localforage";
@@ -23,6 +24,8 @@ export function Header(props) {
   const redirectFetcher = useFetcher();
   const submit = useSubmit();
   const [pathName, setPathName] = useState("")
+  const [showCopied, setShowCopied] = useState(false)
+  const shareRef = useRef();
 
   useEffect(() => {
     if(window){
@@ -106,6 +109,23 @@ export function Header(props) {
             {props.user &&
               <>
               <div className="user-text-wrapper">
+                  <div style={{marginRight: '5px', marginLeft: '10px'}}>
+                    {props.pathId &&
+                    <Tooltip title="Share Search">
+                      <button onClick={()=>props.setShareModalOpen(true)}
+                              className="save-button">
+                        <p>Share</p>
+                      </button>
+                    </Tooltip>
+                    }
+                    {!props.pathId &&
+                      <Tooltip title="Save your search first to share it">
+                        <button className="save-button">
+                          <p>Share</p>
+                        </button>
+                      </Tooltip>
+                    }
+                  </div>
                   <div style={{display: "flex", alignItems: "center"}}>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
@@ -219,6 +239,25 @@ export function Header(props) {
               {savePathFetcher.type === 'done' &&
                 <p className='save-button-text'>Saved!</p>
               }
+          </div>
+        </Modal>
+
+        <Modal
+          open={props.shareModalOpen}
+          onClose={()=>props.setShareModalOpen(false)}
+          >
+          <div className="save-modal-box">
+            <div className="share-wrapper">
+              <p ref={shareRef}>{props.urlPrefix}{props.pathId}</p>
+            <div className="share-copy-button" onClick={(e)=> {setShowCopied(true); navigator.clipboard.writeText(`${props.urlPrefix}${props.pathId}`)}}>
+              <img src={copy} alt="Copy Link"></img>
+            </div>
+            </div>
+            {showCopied &&
+            <div>
+              <p style={{color: "rgb(60, 60, 60, 0.8)"}}>Copied</p>
+            </div>
+            }
           </div>
         </Modal>
       </>
