@@ -17,7 +17,7 @@ import { ControlPanel } from "~/components/PaperViewer/control-panel.js"
 import { TraversalViewer } from "~/components/PathTraversal/traversal-viewer.js"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
-import { SocialsBar } from "~/components/SocialFeatures/socials-bar" 
+import { SocialsBar } from "~/components/SocialFeatures/socials-bar"
 import { authenticator } from "~/models/auth.server.js";
 
 export const loader = async ({ request }) => {
@@ -43,6 +43,7 @@ export default function Search(props){
   const [paperSelection, setPaperSelection] = useState(false)
   const [headerMessage, setHeaderMessage] = useState("")
   const data = useLoaderData();
+  const searchBarRef = useRef();
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
@@ -121,6 +122,7 @@ export default function Search(props){
     <div className="container">
       <Header
         user={data.user}
+        searchBarRef={searchBarRef}
         />
 
       <div className="axis" />
@@ -132,6 +134,7 @@ export default function Search(props){
             paperList={actionData?.doiList ? actionData.doiList : Array(10).fill(0)}
             headerMessage={headerMessage}
             fetcher={fetcher}
+            searchBarRef={searchBarRef}
             />
 
       <Background />

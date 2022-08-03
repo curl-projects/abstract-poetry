@@ -325,7 +325,7 @@ export function Header(props) {
         <div className="header">
           <Form method="post" className="search flex-space-between">
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
-              <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus />
+              <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus ref={props.searchBarRef}/>
             </div>
               <button type="submit" style={{ cursor: "pointer" }}>
                 <img src={glass} alt="Glass Logo" />
@@ -346,7 +346,6 @@ export function Header(props) {
                 </div>
               </div>
               :
-
               readPathFetcher.data?.traversalPaths.length !== 0 ?
 
               readPathFetcher.data?.traversalPaths.sort(function(a,b){return new Date(b.createdTime) - new Date(a.createdTime)}).map((path, index) =>

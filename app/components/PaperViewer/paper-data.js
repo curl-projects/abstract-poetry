@@ -56,7 +56,9 @@ export function PaperData(props) {
           abstract={props.metadata ? props.metadata.abstract : ""}
           params={params}
         />
-      : <Introduction />
+      : <Introduction
+          searchBarRef={props.searchBarRef}
+      />
     }
 
     </div>
