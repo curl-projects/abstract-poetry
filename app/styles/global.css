@@ -379,6 +379,7 @@ body {
   height: 400px;
   background-color: white;
   box-shadow: 24;
+  overflow-y: auto;
 }
 
 .modal-loading-box{
@@ -403,6 +404,15 @@ body {
   align-items: flex-start;
   margin-top: 5px;
   margin-bottom: 10px;
+}
+
+.modal-path-title-wrapper{
+  display: flex;
+  flex-direction: row;
+}
+
+.modal-path-toolbar {
+
 }
 
 .modal-path-box-pathname:hover{

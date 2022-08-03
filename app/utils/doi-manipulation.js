@@ -32,6 +32,9 @@ export function doiToJournal(doiSlug){
   else if(doiSlug.includes('pntd')){
     return "PLoS Neglected Tropical Diseases"
   }
+  else if(doiSlug.includes('pmed')){
+    return "PLoS Medicine"
+  }
   else {
     return "Unknown Journal"
   }

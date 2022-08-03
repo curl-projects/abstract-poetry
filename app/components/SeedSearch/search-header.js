@@ -195,17 +195,23 @@ export function Header(props) {
                 </div>
               </div>
               :
-              readPathFetcher.data?.traversalPaths.map((path, index) =>
+              readPathFetcher.data?.traversalPaths.sort(function(a,b){return new Date(b.createdTime) - new Date(a.createdTime)}).map((path, index) =>
                 <div key={index} className="modal-path-box" onClick={()=>handlePathInit(path)}>
-                    <div>
+                    <div className="modal-path-title-wrapper">
                       <h2 className="modal-path-box-pathname">{path.pathName}</h2>
+                      <div style={{flex: 1}}/>
+                      {false &&
+                      <div className="modal-path-toolbar">
+                        <p className="small">Rename</p>
+                      </div>
+                      }
                     </div>
                     <div className='path-metadata-box'>
                       <div className="flex-row shrink">
                         <div className="icon">
                           <img src={calendar} alt={"Created Date"} />
                         </div>
-                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{new Date(path.createdTime).getYear()}</small>
+                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{`${new Date(path.createdTime).getYear()}`.slice(1)}</small>
                       </div>
                       <div className="flex-row shrink">
                         <div className="icon">
@@ -230,16 +236,16 @@ export function Header(props) {
                      autoFocus
                      onChange={(e)=>setPathName(e.target.value)}
                      placeholder={props.existingPathName ? props.existingPathName : "Give a name to your traversal path!"} />
-                   {savePathFetcher.type === 'init' &&
-              <button className="save-button" onClick={handleSaveClick}>
-                <p className="save-button-text">Save Search</p>
-              </button>
+                  {savePathFetcher.type === 'init' &&
+                    <button className="save-button" onClick={handleSaveClick}>
+                        {props.existingPathName ? <p className="save-button-text">Update Search</p> : <p className="save-button-text">Save Search</p>}
+                    </button>
               }
               {(savePathFetcher.state === "submitting" || savePathFetcher.state === "loading") &&
-                <p className="save-button-text">Saving...</p>
+                <>{props.existingPathName ? <p className="save-button-text">Updating...</p> : <p className="save-button-text">Saving...</p>}</>
               }
               {savePathFetcher.type === 'done' &&
-                <p className='save-button-text'>Saved!</p>
+                <>{props.existingPathName ? <p className="save-button-text">Updated</p> : <p className="save-button-text">Saved!</p>}</>
               }
           </div>
         </Modal>
@@ -340,7 +346,10 @@ export function Header(props) {
                 </div>
               </div>
               :
-              readPathFetcher.data?.traversalPaths.map((path, index) =>
+
+              readPathFetcher.data?.traversalPaths.length !== 0 ?
+
+              readPathFetcher.data?.traversalPaths.sort(function(a,b){return new Date(b.createdTime) - new Date(a.createdTime)}).map((path, index) =>
                 <div key={index} className="modal-path-box" onClick={()=>handlePathInit(path)}>
                     <div>
                       <h2 className="modal-path-box-pathname">{path.pathName}</h2>
@@ -350,7 +359,7 @@ export function Header(props) {
                         <div className="icon">
                           <img src={calendar} alt={"Created Date"} />
                         </div>
-                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{new Date(path.createdTime).getYear()}</small>
+                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{`${new Date(path.createdTime).getYear()}`.slice(1)}</small>
                       </div>
                       <div className="flex-row shrink">
                         <div className="icon">
@@ -362,6 +371,10 @@ export function Header(props) {
                   <div className="path-metadata-box-separator"/>
                 </div>
               )
+              :
+              <div>
+                <p>No search paths found</p>
+              </div>
             }
           </div>
         </Modal>
