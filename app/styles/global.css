@@ -441,6 +441,7 @@ body {
 .share-wrapper{
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .share-input {

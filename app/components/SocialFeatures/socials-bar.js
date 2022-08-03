@@ -26,7 +26,7 @@ export const SocialsBar = () => {
       </Tooltip>
       <Tooltip title="Chat with us! (We love people who chat with us)">
         <div className="socials-box">
-          <a href="https://join.slack.com/t/curl-projects/shared_invite/zt-1dez98is7-Yxtu3GKvB4ae3RDG~9qF5g" target="_blank">
+          <a href="https://calendly.com/curl-projects/30min" target="_blank">
             <button className="socials-button" type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
               <img src={calendly} alt="Calendly Logo" />
             </button>

@@ -250,7 +250,9 @@ export function Header(props) {
           >
           <div className="save-modal-box">
             <div className="share-wrapper">
-              <p ref={shareRef}>{props.urlPrefix}{props.pathId}</p>
+              <div style={{overflow: 'hidden', maxWidth: "80%"}}>
+                <p ref={shareRef}>{props.urlPrefix}{props.pathId}</p>
+              </div>
             <div className="share-copy-button" onClick={(e)=> {setShowCopied(true); navigator.clipboard.writeText(`${props.urlPrefix}${props.pathId}`)}}>
               <img src={copy} alt="Copy Link"></img>
             </div>
