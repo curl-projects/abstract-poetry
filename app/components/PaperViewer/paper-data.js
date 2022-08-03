@@ -3,6 +3,7 @@ import { PaperAbstract } from "~/components/PaperViewer/paper-abstract.js"
 import { SeedPapers } from "~/components/SeedSearch/seed-papers.js"
 import { useState, useEffect } from "react"
 import { useParams} from "@remix-run/react"
+import { Introduction } from "~/components/SocialFeatures/introduction.js"
 
 export function PaperData(props) {
   const [paperList, setPaperList] = useState([])
@@ -37,25 +38,26 @@ export function PaperData(props) {
         setToggle={props.setToggle}
       />
 
-    {(props.toggle && props.paperList) ?
-        params.paperId ?
-        <SeedPapers
+    {
+      (props.toggle && props.paperList && params.paperId)
+      ? <SeedPapers
           paperList={paperList}
           fetcher={props.fetcher}
           />
-        :
-        <SeedPapers
+      : (props.toggle && props.paperList && !params.paperId)
+      ? <SeedPapers
           paperList={props.paperList}
           fetcher={props.fetcher}
           />
-        :
-        <PaperAbstract
+      : (params.paperId)
+      ? <PaperAbstract
           doi={props.doi}
           title={props.metadata ? props.metadata.title : ""}
           abstract={props.metadata ? props.metadata.abstract : ""}
           params={params}
         />
-      }
+      : <Introduction />
+    }
 
     </div>
   )
