@@ -3,6 +3,8 @@ import account from "../../../public/assets/account.svg";
 import save from "../../../public/assets/save.svg";
 import home from "../../../public/assets/home.svg";
 import copy from "../../../public/assets/copy.svg";
+import sharePath from "../../../public/assets/share-path.svg";
+import logout from "../../../public/assets/logout.svg";
 import { Form, useParams, Link, useFetcher, useSubmit } from "@remix-run/react";
 import { useState, useEffect, useRef } from "react";
 import { SocialsProvider } from "remix-auth-socials";
@@ -108,33 +110,34 @@ export function Header(props) {
           <div className="user-control-wrapper">
             {props.user &&
               <>
-              <div className="user-text-wrapper">
-                  <div style={{marginRight: '5px', marginLeft: '10px'}}>
+                  <div style={{display: "flex", alignItems: "center"}}>
+                    <Form action="/logout" method="post">
+                      <input type='hidden' name="url" value={url}/>
+                      <Tooltip title="Logout">
+                        <button type="submit" className="save-button" style={{width: "100%", height: "100%"}}>
+                          <img src={logout} alt="Logout"/>
+                        </button>
+                      </Tooltip>
+                    </Form>
+                  </div>
+                  <div>
                     {props.pathId &&
                     <Tooltip title="Share Search">
                       <button onClick={()=>props.setShareModalOpen(true)}
                               className="save-button">
-                        <p>Share</p>
+                        <img src={sharePath} alt="Share Search" />
                       </button>
                     </Tooltip>
                     }
                     {!props.pathId &&
                       <Tooltip title="Save your search first to share it">
                         <button className="save-button">
-                          <p>Share</p>
+                          <img src={sharePath} alt="Share Search" />
                         </button>
                       </Tooltip>
                     }
                   </div>
-                  <div style={{display: "flex", alignItems: "center"}}>
-                    <Form action="/logout" method="post">
-                      <input type='hidden' name="url" value={url}/>
-                      <button type="submit" style={{width: "100%", height: "100%", marginTop: '4px'}}>
-                        <p className="logout-text">Logout</p>
-                      </button>
-                    </Form>
-                  </div>
-                  <div style={{marginRight: '5px', marginLeft: '10px'}}>
+                  <div>
                     <Tooltip title="Save Search Session">
                       <button onClick={()=>props.setSaveModalOpen(true)}
                               className="save-button">
@@ -142,7 +145,6 @@ export function Header(props) {
                       </button>
                     </Tooltip>
                   </div>
-              </div>
               <Tooltip title="Find Saved Session">
                 <button onClick={()=>setModalOpen(true)}>
                     <img src={path} className="account-button" fill='666666' alt="Account Button" />
@@ -270,16 +272,16 @@ export function Header(props) {
           <div className="user-control-wrapper">
             {props?.user &&
               <>
-              <div className="user-text-wrapper">
                   <div style={{display: "flex", alignItems: "center"}}>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
-                      <button type="submit" style={{width: "100%", height: "100%", marginTop: '4px', marginRight: "5px"}}>
-                        <p className="logout-text">Logout</p>
-                      </button>
+                      <Tooltip title="Logout">
+                        <button type="submit" className="save-button" style={{width: "100%", height: "100%"}}>
+                          <img src={logout} alt="Logout"/>
+                        </button>
+                      </Tooltip>
                     </Form>
                   </div>
-              </div>
               <Tooltip title="Find Saved Session">
                 <button onClick={()=>setModalOpen(true)}>
                     <img src={path} className="account-button" fill='666666' alt="Account Button" />

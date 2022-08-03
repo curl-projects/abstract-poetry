@@ -324,9 +324,11 @@ body {
   right: 0;
   top: 0;
   height: 100%;
+  width: 150px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 10px;
   padding-right: 8px;
   padding-top: 5px;
 }
@@ -347,7 +349,6 @@ body {
 }
 
 
-.save-button
 .logout-text-wrapper {
   display: flex;
   justify-content: center;
@@ -430,11 +431,6 @@ body {
 
 .save-input {
   text-align: center;
-}
-
-.save-button {
-  cursor: pointer;
-  margin-top: 10px;
 }
 
 .save-button-text {
