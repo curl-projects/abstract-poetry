@@ -64,3 +64,5 @@ export function PaperData(props) {
     </div>
   )
 }
+
+// http://localhost:3000/share/cl6df3s440000j3315oa0mkg7

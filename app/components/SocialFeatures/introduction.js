@@ -1,5 +1,6 @@
 import back from "../../../public/assets/back.svg";
 import { useState } from 'react';
+import { Link } from "@remix-run/react"
 import { Markup } from "interweave";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SearchIcon from '@mui/icons-material/Search';
@@ -15,7 +16,9 @@ export function Introduction(props){
     "Third, we work with <b>meaning</b> rather than <b>metadata</b> (mostly). All of the papers that the algorithm finds are grouped by how similar their content is, and the search space that you’re traversing is a semantic one. We want to provide a different perspective on academic research, and to show you papers that you’re not going to find as easily searching Google Scholar.",
     "As part of our goal of enabling a conversation between user and search engine, we want to pull back the curtain of traditional search and let you see what patterns the computer’s found in your search so far. We’ve built two systems to help with that: the cluster view and the path view.",
     "The cluster view shows you the groups of papers that the computer has decided are similar to each other. The goal of our algorithm is to identify the clusters that you find the most interesting, so you can use the cluster viewer to understand the patterns that the search engine’s working with.",
-    "The path view shows you all of the decisions that you’ve made in your search, and allows you to go back and change any of them. When you do, a new path is created, with all of the computer’s knowledge reverted to its previous state."
+    "The path view shows you all of the decisions that you’ve made in your search, and allows you to go back and change any of them. When you do, a new path is created, with all of the computer’s knowledge reverted to its previous state.",
+    "Abstract Poetry is still a work in progress. We currently host all of the Public Library of Science, which is approximately 300,000 papers across medicine, biology and physics. That’s a lot of papers, but it’s still only about 0.15% of those that we have access to. Unfortunately, hosting such a massive corpus is expensive (we’re working on it!). We’re also tweaking our algorithm everyday, and you can expect it to get a lot better soon! If you want to join the discussion about those improvements, you can find our social links on the bottom right of the app.",
+    "We want Abstract Poetry to cultivate a sense of discovery and exploration. It’s unlikely that you’ll stumble across the specific paper you were thinking of while searching (at least for now!). Instead, we’ve designed it to return those papers that you weren’t thinking of, but which are still relevant and useful. We hope you like it!"
   ]
   return(
     <div className="abstract">
@@ -38,12 +41,14 @@ export function Introduction(props){
             </div>
             <p className="call-to-action-text" onClick={()=> props.searchBarRef.current.focus()}> Start search</p>
           </div>
-          <div className='call-to-action'>
-            <div className='call-to-action-icon'>
-              <ArrowForwardIosIcon/>
+          <Link to={`/share/cl6df3s440000j3315oa0mkg7`} style={{textDecoration: 'none'}}>
+            <div className='call-to-action'>
+              <div className='call-to-action-icon'>
+                <ArrowForwardIosIcon/>
+              </div>
+              <p className="call-to-action-text">See Example</p>
             </div>
-            <p className="call-to-action-text">See Example</p>
-          </div>
+          </Link>
         </div>
         <div style={{ width: "100%", height: "60px"}}/>
         </>

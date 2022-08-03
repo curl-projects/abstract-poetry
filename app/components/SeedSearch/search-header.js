@@ -242,14 +242,13 @@ export function Header(props) {
                     </button>
               }
               {(savePathFetcher.state === "submitting" || savePathFetcher.state === "loading") &&
-                <>{props.existingPathName ? <p className="save-button-text">Updating...</p> : <p className="save-button-text">Saving...</p>}</>
+                <><p className="save-button-text">Saving...</p>}</>
               }
               {savePathFetcher.type === 'done' &&
-                <>{props.existingPathName ? <p className="save-button-text">Updated</p> : <p className="save-button-text">Saved!</p>}</>
+                <><p className="save-button-text">Saved!</p></>
               }
           </div>
         </Modal>
-
         <Modal
           open={props.shareModalOpen}
           onClose={()=>props.setShareModalOpen(false)}
