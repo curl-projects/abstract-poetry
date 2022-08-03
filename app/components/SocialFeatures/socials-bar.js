@@ -24,7 +24,7 @@ export const SocialsBar = () => {
           </a>
         </div>
       </Tooltip>
-      <Tooltip title="Chat with us! (We love people who chat with us)">
+      <Tooltip title="Talk to us! (We love people who talk to us)">
         <div className="socials-box">
           <a href="https://calendly.com/curl-projects/30min" target="_blank">
             <button className="socials-button" type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
