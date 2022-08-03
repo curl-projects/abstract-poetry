@@ -2,8 +2,11 @@ import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import save from "../../../public/assets/save.svg";
 import home from "../../../public/assets/home.svg";
+import copy from "../../../public/assets/copy.svg";
+import sharePath from "../../../public/assets/share-path.svg";
+import logout from "../../../public/assets/logout.svg";
 import { Form, useParams, Link, useFetcher, useSubmit } from "@remix-run/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SocialsProvider } from "remix-auth-socials";
 import Modal from '@mui/material/Modal';
 import * as localforage from "localforage";
@@ -23,6 +26,8 @@ export function Header(props) {
   const redirectFetcher = useFetcher();
   const submit = useSubmit();
   const [pathName, setPathName] = useState("")
+  const [showCopied, setShowCopied] = useState(false)
+  const shareRef = useRef();
 
   useEffect(() => {
     if(window){
@@ -105,16 +110,34 @@ export function Header(props) {
           <div className="user-control-wrapper">
             {props.user &&
               <>
-              <div className="user-text-wrapper">
                   <div style={{display: "flex", alignItems: "center"}}>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
-                      <button type="submit" style={{width: "100%", height: "100%", marginTop: '4px'}}>
-                        <p className="logout-text">Logout</p>
-                      </button>
+                      <Tooltip title="Logout">
+                        <button type="submit" className="save-button" style={{width: "100%", height: "100%"}}>
+                          <img src={logout} alt="Logout"/>
+                        </button>
+                      </Tooltip>
                     </Form>
                   </div>
-                  <div style={{marginRight: '5px', marginLeft: '10px'}}>
+                  <div>
+                    {props.pathId &&
+                    <Tooltip title="Share Search">
+                      <button onClick={()=>props.setShareModalOpen(true)}
+                              className="save-button">
+                        <img src={sharePath} alt="Share Search" />
+                      </button>
+                    </Tooltip>
+                    }
+                    {!props.pathId &&
+                      <Tooltip title="Save your search first to share it">
+                        <button className="save-button">
+                          <img src={sharePath} alt="Share Search" />
+                        </button>
+                      </Tooltip>
+                    }
+                  </div>
+                  <div>
                     <Tooltip title="Save Search Session">
                       <button onClick={()=>props.setSaveModalOpen(true)}
                               className="save-button">
@@ -122,7 +145,6 @@ export function Header(props) {
                       </button>
                     </Tooltip>
                   </div>
-              </div>
               <Tooltip title="Find Saved Session">
                 <button onClick={()=>setModalOpen(true)}>
                     <img src={path} className="account-button" fill='666666' alt="Account Button" />
@@ -221,6 +243,27 @@ export function Header(props) {
               }
           </div>
         </Modal>
+
+        <Modal
+          open={props.shareModalOpen}
+          onClose={()=>props.setShareModalOpen(false)}
+          >
+          <div className="save-modal-box">
+            <div className="share-wrapper">
+              <div style={{overflow: 'hidden', maxWidth: "80%"}}>
+                <p ref={shareRef}>{props.urlPrefix}{props.pathId}</p>
+              </div>
+            <div className="share-copy-button" onClick={(e)=> {setShowCopied(true); navigator.clipboard.writeText(`${props.urlPrefix}${props.pathId}`)}}>
+              <img src={copy} alt="Copy Link"></img>
+            </div>
+            </div>
+            {showCopied &&
+            <div>
+              <p style={{color: "rgb(60, 60, 60, 0.8)"}}>Copied</p>
+            </div>
+            }
+          </div>
+        </Modal>
       </>
     )
   }
@@ -231,16 +274,16 @@ export function Header(props) {
           <div className="user-control-wrapper">
             {props?.user &&
               <>
-              <div className="user-text-wrapper">
                   <div style={{display: "flex", alignItems: "center"}}>
                     <Form action="/logout" method="post">
                       <input type='hidden' name="url" value={url}/>
-                      <button type="submit" style={{width: "100%", height: "100%", marginTop: '4px', marginRight: "5px"}}>
-                        <p className="logout-text">Logout</p>
-                      </button>
+                      <Tooltip title="Logout">
+                        <button type="submit" className="save-button" style={{width: "100%", height: "100%"}}>
+                          <img src={logout} alt="Logout"/>
+                        </button>
+                      </Tooltip>
                     </Form>
                   </div>
-              </div>
               <Tooltip title="Find Saved Session">
                 <button onClick={()=>setModalOpen(true)}>
                     <img src={path} className="account-button" fill='666666' alt="Account Button" />
