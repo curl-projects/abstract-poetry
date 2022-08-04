@@ -29,7 +29,7 @@ export default function ShareId(){
       localforage.setItem("algParams", JSON.parse(data.path.algParams));
       localforage.setItem("clusters", JSON.parse(data.path.clusters));
       localforage.setItem("forceNodes", JSON.parse(data.path.forceNodes));
-      localforage.setItem("nodeIdCounter", parseInt(data.path.nodeIdCounter));
+      localforage.setItem("nodeIdCounter", parseInt(JSON.parse(data.path.forceNodes).links.length));
       localforage.setItem("searchString", JSON.parse(data.path.searchString));
       localforage.setItem("traversalPath", JSON.parse(data.path.traversalPath));
       localforage.setItem("pathName", data.path.pathName);

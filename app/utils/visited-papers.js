@@ -14,7 +14,6 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                                           nodeIdCounterSetter=null,
                                           metadata){
   try{
-    console.log("UPDATING")
     const rootModel = await localforage.getItem("traversalPath")
     if(rootModel === null){
       // This error is desired: it's thrown when the tree doesn't exist
@@ -81,7 +80,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const newLink = { "source": `cluster-${clusters[doi]}`, "target": `node-${nodeIdCounter+1}`}
     forceNodes.nodes.push(newNode)
     forceNodes.links.push(newLink)
-
+    console.log("NEW NODE:", newNode)
     const childObject = {name: `${deslugifyDoi(doi)}-[[${nodeIdCounter+1}]]`,
                          attributes: {doi: deslugifyDoi(doi),
                                       algParams: currentAlgParams,
@@ -91,13 +90,12 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                                       metadata: metadata}}
 
     const currentNode = mostRecentNode.addChild(tree.parse(childObject))
-
+    console.log("FORCE NODES:", forceNodes)
     localforage.setItem("traversalPath", root.model)
     localforage.setItem("algParams", currentAlgParams)
     localforage.setItem("activeNodeId", nodeIdCounter+1)
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
     localforage.setItem("forceNodes", forceNodes)
-    localStorage.setItem("forceNodes", JSON.stringify(forceNodes))
     localforage.setItem('clusters', clusters)
     if(pathSetter !== null){
       pathSetter(root.model)

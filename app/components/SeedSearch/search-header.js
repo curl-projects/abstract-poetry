@@ -61,7 +61,7 @@ export function Header(props) {
     localforage.setItem("algParams", JSON.parse(path.algParams))
     localforage.setItem("clusters", JSON.parse(path.clusters))
     localforage.setItem("forceNodes", JSON.parse(path.forceNodes))
-    localforage.setItem("nodeIdCounter", parseInt(path.nodeIdCounter))
+    localforage.setItem("nodeIdCounter", parseInt(JSON.parse(path.forceNodes).links.length)) // TODO: unnecessary, maybe a bad refactor? Did so bc error conditions were ambiguous
     localforage.setItem("pathId", path.pathId)
     localforage.setItem("searchString", JSON.parse(path.searchString))
     localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
@@ -75,7 +75,9 @@ export function Header(props) {
     })
     console.log("MOST RECENT NODE:", mostRecentNode)
     const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
-    redirectFetcher.submit({redirectURL: `${redirectURL}?isPathRedirect=true`}, {
+    const updateIndex = JSON.parse(path.clusters)[mostRecentNode.model.attributes.doi]
+
+    redirectFetcher.submit({redirectURL: `${redirectURL}?isPathRedirect=true&updateIndex=${updateIndex}&impression=true`}, {
       method: "post",
       action: "/redirect-paths"
     })
