@@ -42,8 +42,8 @@ export default function ShareId(){
       })
       console.log("MOST RECENT NODE:", mostRecentNode)
       const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
-
-      redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true` :`${redirectURL}?isPathRedirect=true&`}, {
+      const updateIndex = JSON.parse(data.path.clusters)[mostRecentNode.model.attributes.doi]
+      redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true&updateIndex=${updateIndex}&impression=true` :`${redirectURL}?isPathRedirect=true&updateIndex=${updateIndex}&impression=true`}, {
         method: "post",
         action: "/redirect-paths"
       })
