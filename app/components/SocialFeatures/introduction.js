@@ -28,10 +28,7 @@ export function Introduction(props){
         <div className="call-to-action-wrapper">
           <Link to={`/share/cl6df3s440000j3315oa0mkg7?tour=true`} style={{textDecoration: 'none'}}>
             <div className='call-to-action'>
-              <div className='call-to-action-icon'>
-                <ArrowForwardIosIcon/>
-              </div>
-              <p className="call-to-action-text">Take a Tour</p>
+              <p className="intro-text" style={{fontWeight: "bold"}}>Take a Tour</p>
             </div>
           </Link>
         </div>
@@ -49,3 +46,7 @@ export function Introduction(props){
     </div>
   )
 }
+
+// <div className='call-to-action-icon'>
+//   <ArrowForwardIosIcon/>
+// </div>
