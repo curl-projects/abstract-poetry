@@ -6,7 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SearchIcon from '@mui/icons-material/Search';
 
 export function Introduction(props){
-  const [introOpen, setIntroOpen] = useState(false);
+  const [introOpen, setIntroOpen] = useState(true);
   const introText = [
     "Hey! Welcome to Abstract Poetry. We’re Finn, Andre and Ellie.",
     "The goal of Abstract Poetry is to create a new way to search academia, one that’s more intuitive and exploratory than a search bar. This interface probably looks very different than the search engines that you’re used to, so we wrote this to provide an introduction to the way that we think about search.",
@@ -54,12 +54,12 @@ export function Introduction(props){
         </>
       }
       {!introOpen &&
-      <div className="intro-center">
-        <p style={{cursor: 'pointer'}} onClick={()=>setIntroOpen(true)}>
-          New to Abstract Poetry? Check out our <span onClick={()=>setIntroOpen(true)}
-                                                       className="intro-span">introduction</span>.
-        </p>
-      </div>
+        <div className="intro-back-div">
+          <div style={{flex: 1}}/>
+          <button className="intro-back-button" onClick={()=>setIntroOpen(true)}>
+            <img src={back} alt="Back" style={{ transform: "rotate(180deg)"}}/>
+          </button>
+        </div>
       }
     </div>
   )

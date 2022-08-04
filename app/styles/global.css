@@ -563,6 +563,7 @@ body {
     grid-row: 2;
 
     max-height: 100%;
+    max-width: 60vw;
     height: calc(100% - var(--grid-gap));
     width: 97%;
     resize: horizontal;
