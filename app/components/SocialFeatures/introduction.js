@@ -10,6 +10,7 @@ export function Introduction(props){
   const introText = [
     "Hey! Welcome to Abstract Poetry.",
     "Our goal is to create a new way to search academia, one that’s more intuitive and exploratory than a search bar. We want to turn search into a conversation between a user and a search engine, where each learns how the other thinks.",
+    "Right now, we're best at searches in medicine, biology and physics."
   ]
   return(
     <div className="abstract">
