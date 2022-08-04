@@ -84,6 +84,7 @@ export const loader = async ({
     updateIndex: search.get('updateIndex'),
     impression: search.get('impression'),
     position: search.get('position'),
+    tour: search.get('tour'),
     user: user,
     isPathRedirect: JSON.parse(search.get('isPathRedirect')),
     urlPrefix: process.env.SHARE_URL_PREFIX
@@ -156,19 +157,24 @@ export default function PaperId() {
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [existingPathName, setExistingPathName] = useState(null)
-  const [tourOpen, setTourOpen] = useState(true)
+  const [tourOpen, setTourOpen] = useState(false)
 
 
   const controlTourState = (curr) => {
     switch(curr){
       case 7:
-      console.log("EXECUTED STEP 7")
         setTraversalState(false)
     }
   }
   useEffect(()=>{
     console.log("TRAVERSAL PATH", traversalPath)
   }, [traversalPath])
+
+  useEffect(() => {
+    if(data.tour){
+      setTourOpen(true)
+    }
+  }, [data.tour])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -315,8 +321,6 @@ export default function PaperId() {
 
 
       <Background />
-      <button onClick={()=>setTourOpen(true)}><h1>Start Tour</h1></button>
-
       <SocialsBar />
 
       <ClientOnly>

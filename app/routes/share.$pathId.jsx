@@ -4,9 +4,15 @@ import * as localforage from "localforage";
 import { useLoaderData, useFetcher } from "@remix-run/react";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
+
+
 export const loader = async ({ params, request }) => {
   const path = await readPath(params.pathId);
-  return {path}
+
+  const url = new URL(request.url)
+  const search = new URLSearchParams(url.search)
+  const tour = search.get("tour")
+  return {path, tour}
 }
 
 export default function ShareId(){
@@ -36,7 +42,8 @@ export default function ShareId(){
       })
       console.log("MOST RECENT NODE:", mostRecentNode)
       const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
-      redirectFetcher.submit({redirectURL: `${redirectURL}?isPathRedirect=true`}, {
+
+      redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true` :`${redirectURL}?isPathRedirect=true&`}, {
         method: "post",
         action: "/redirect-paths"
       })
