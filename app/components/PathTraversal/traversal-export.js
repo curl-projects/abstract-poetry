@@ -11,7 +11,7 @@ export function Share(props) {
         <form method="post" action="/create-reading-list">
           <input type="hidden" name="rootModel" value={JSON.stringify(props.traversalPath)} />
           <input type="hidden" name="citationStyle" value="apa" />
-            <button type="submit" className="abs-left toolbar panel-glass"
+            <button id="export-button" type="submit" className="abs-left toolbar panel-glass"
               style={{ pointerEvents: 'auto', cursor: "pointer" }} >
               <Tooltip title="Export Reading List to .txt">
                 <img src={share} alt="Share or Export Reading List" />

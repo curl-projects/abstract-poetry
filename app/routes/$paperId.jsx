@@ -12,19 +12,61 @@ import { Background, Controls } from "~/components/PaperViewer/static.js"
 import { Header } from "~/components/SeedSearch/search-header"
 import { Share } from "~/components/PathTraversal/traversal-export.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
-
+import Tour from "~/components/SocialFeatures/tour.client"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import * as localforage from "localforage";
+import { ClientOnly } from "remix-utils";
 
 import Snackbar from "@mui/material/Snackbar";
+
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Tooltip } from "@mui/material";
 
 import { caseToMessage } from "~/utils/messages-and-alerts"
 import { authenticator } from "~/models/auth.server.js";
+
+
+const steps = [
+  {
+    content: "Hey! Welcome to Abstract Poetry. This interface probably looks very different than the search engines that you’re used to, so we wrote this to provide an introduction to the way that we think about search.",
+  },
+  {
+    selector: '#searchbar',
+    content: 'Search in Abstract Poetry starts with a keyword or DOI. If you search with a keyword, we’ll show you some example papers to get started with. Choose the one that’s closest to what you’re looking for, and we’ll find the closest match to it in our database. Use the home button to start a new search.'
+  },
+  {
+    selector: '#impression-buttons',
+    content: 'After that initial search, your job is to provide impressions on the papers that the search engine finds: whether you want more or less like what we’re showing you. You can use these buttons, or the left and right arrow keys! Try pressing one of them, and the example paper and cluster viewer will update.'
+  },
+  {
+    selector: '#control-buttons',
+    content: 'At any point, you can pin or read the paper that you’re looking at. Either use these buttons, or the “P” and “R” keys. Try pressing the Pin button.'
+  },
+  {
+    selector: '#export-button',
+    content: 'You can export your pinned papers at any time with this button.'
+  },
+  {
+    selector: '.user-control-wrapper',
+    content: 'You can also save your paths and share them with others with the toolbar up here.'
+  },
+  {
+    selector: '.force-graph-container',
+    content: 'The cluster view shows you the groups of papers that the computer has decided are similar to each other. The goal of our algorithm is to identify the clusters that you find the most interesting, so you can use the cluster viewer to understand the patterns that the search engine’s working with. Click on any of the nodes to view the associated paper. Pinned papers have a purple outline, and the paper that you’re currently on is coloured black. Try dragging the clusters around!'
+  },
+  {
+    selector: '.rd3t-tree-container',
+    content: 'The path view shows you all of the decisions that you’ve made in your search, and allows you to go back and change any of them. When you do, a new path is created, with all of the computer’s knowledge reverted to its previous state.'
+  },
+  {
+    selector: '#paper-list',
+    content: 'If you want to browse through all of the papers that you’ve visited before, click the title or press "L" and you can see a list view of them. Try it now!'
+  }
+]
+
 
 export const loader = async ({
   params, request
@@ -72,6 +114,10 @@ export const action = async ({ request, params }) => {
     }
   }
 
+  useEffect(() => {
+    console.log("TOGGLE", toggle)
+  }, [toggle])
+
   // this triggers when the user is faster than the preloading
   console.log("RUNNING ALGORITHM SYNCHRONOUSLY")
   const traversedPapers = formData.get('traversalPath')
@@ -110,6 +156,21 @@ export default function PaperId() {
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [existingPathName, setExistingPathName] = useState(null)
+  const [tourOpen, setTourOpen] = useState(true)
+
+
+  const controlTourState = (curr) => {
+    switch(curr){
+      case 7:
+      console.log("EXECUTED STEP 7")
+        setTraversalPath(false)
+      case 8:
+        setToggle(true)
+    }
+  }
+  useEffect(()=>{
+    console.log("TRAVERSAL PATH", traversalPath)
+  }, [traversalPath])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -214,10 +275,11 @@ export default function PaperId() {
         algParams={algParams}
         clusters={clusters}
         metadata={data.metadata ? data.metadata : {}}
-
+        setToggle={setToggle}
         saveModalOpen={saveModalOpen}
         shareModalOpen={shareModalOpen}
       />
+
       <PaperData
         doi={deslugifyDoi(params.paperId)}
         metadata={data.metadata ? data.metadata : {}}
@@ -254,8 +316,23 @@ export default function PaperId() {
 
 
       <Background />
+      <button onClick={()=>setTourOpen(true)}><h1>Start Tour</h1></button>
 
       <SocialsBar />
+
+      <ClientOnly>
+        {
+          ()=><Tour
+                accentColor="rgb(48, 76, 156)"
+                isOpen={tourOpen}
+                onRequestClose={()=>setTourOpen(false)}
+                steps={steps}
+                getCurrentStep={(curr)=>controlTourState(curr)}
+                className="ap-tour-helper"
+                closeWithMask={false}
+              />
+        }
+      </ClientOnly>
       <Snackbar
         open={messageExists}
         autoHideDuration={6000}

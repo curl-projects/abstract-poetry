@@ -167,7 +167,7 @@ export function Header(props) {
           </div>
         </div>
         <div className="header">
-          <div className="search flex-space-between">
+          <div id="searchbar" className="search flex-space-between">
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
               <label className="search-input-label">Searching semantic regions associated with</label>
               <input type="text" disabled="disabled" name="searchString" placeholder={props.searchString ? props.searchString : "abstract poetry"} />
