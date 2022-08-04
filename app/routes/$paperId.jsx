@@ -62,7 +62,7 @@ const steps = [
     content: 'The path view shows you all of the decisions that you’ve made in your search, and allows you to go back and change any of them. When you do, a new path is created, with all of the computer’s knowledge reverted to its previous state.'
   },
   {
-    selector: '#paper-list',
+    selector: '.paper-viewer',
     content: 'If you want to browse through all of the papers that you’ve visited before, click the title or press "L" and you can see a list view of them. Try it now!'
   }
 ]
@@ -163,9 +163,7 @@ export default function PaperId() {
     switch(curr){
       case 7:
       console.log("EXECUTED STEP 7")
-        setTraversalPath(false)
-      case 8:
-        setToggle(true)
+        setTraversalState(false)
     }
   }
   useEffect(()=>{
@@ -278,6 +276,7 @@ export default function PaperId() {
         setToggle={setToggle}
         saveModalOpen={saveModalOpen}
         shareModalOpen={shareModalOpen}
+        tourOpen={tourOpen}
       />
 
       <PaperData

@@ -63,7 +63,7 @@ export function ControlPanel(props) {
 
   // Key-Press Control
   useKeyPress(keys, event => {
-    if (params.paperId && !props.saveModalOpen && !props.shareModalOpen) {
+    if (params.paperId && !props.saveModalOpen && !props.shareModalOpen && !props.tourOpen) {
       if (event.key === "ArrowRight") {
         positiveSubmitRef.current.click()
       }

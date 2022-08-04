@@ -3,7 +3,7 @@ import React from 'react';
 
 export function SeedPapers(props){
   return(
-    <div id="paper-list" className="flex-column" style={{ gap: 0, overflow: "auto" }}>
+    <div className="flex-column paper-list" style={{ gap: 0, overflow: "auto" }}>
 
       {props.paperList.map((metadata, i) => {
         return (
