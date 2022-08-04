@@ -82,7 +82,8 @@ export default function Search(props){
       setHeaderMessage("Searching for relevant papers")
       fetcher.submit({
         doi: deslugifyDoi(actionData.doiString),
-        keywordSearch: false
+        keywordSearch: false,
+        referencesList: actionData.referencesList
       }, {
         method: "post",
         action: "/cluster-papers"
