@@ -16,7 +16,7 @@ import pin from "../../../public/assets/pin.svg";
 
 export function ControlPanel(props) {
   const params = useParams();
-  const keys = ['p', "P", 'r', "R", "e", "E", 'ArrowLeft', "ArrowRight"]
+  const keys = ['p', "P", 'r', "R", "e", "E", 'ArrowLeft', "ArrowRight", "L", "l"]
   const positiveSubmitRef = useRef();
   const negativeSubmitRef = useRef();
   const exportRef = useRef();
@@ -63,13 +63,17 @@ export function ControlPanel(props) {
 
   // Key-Press Control
   useKeyPress(keys, event => {
-    if (params.paperId && !props.saveModalOpen && !props.shareModalOpen) {
+    if (params.paperId && !props.saveModalOpen && !props.shareModalOpen && !props.tourOpen) {
       if (event.key === "ArrowRight") {
         positiveSubmitRef.current.click()
       }
 
       else if (event.key === "ArrowLeft") {
         negativeSubmitRef.current.click()
+      }
+
+      else if (event.key === "l" || event.key === "L"){
+        props.setToggle(prevState=>!prevState)
       }
 
       else if (event.key === 'p' || event.key === 'P') {
@@ -116,7 +120,7 @@ export function ControlPanel(props) {
           <input type="hidden" name="positiveDOI" value={positiveDOI ? JSON.stringify(positiveDOI) : ""} />
           <input type="hidden" name="clusters" value={JSON.stringify(props.clusters)} />
 
-          <div className="switch flex-row" style={{ gap: "0px" }}>
+          <div id="impression-buttons" className="switch flex-row" style={{ gap: "0px" }}>
             <Tooltip title="Fewer Papers Like This (←)">
               <button
                 name="impression"
@@ -141,7 +145,7 @@ export function ControlPanel(props) {
             </Tooltip>
           </div>
         </Form>
-        <div className="button-wrapper flex-row">
+        <div id='control-buttons' className="button-wrapper flex-row">
           <div className="button-column flex-column">
             <div className="button">
               <img className="anchor" src={pin} alt="Read Logo" />
