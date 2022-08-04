@@ -83,7 +83,7 @@ export async function handleSearchv2(searchString){
         return { action: 'redirect', case: "exact-doi-exists", message: `Redirected you to the DOI '${extractedDoi}'`, doiString: slugifyDoi(extractedDoi)}
       }
       else{
-        // Find the closest DOI to the one that was entered that is in our database\
+        // Find the closest DOI to the one that was entered that is in our database
         const extractedDoi = searchString.match(doiRegex())[0]
         let knn = await findMostRelatedScholarPaper(extractedDoi)
         console.log("KNN", knn)

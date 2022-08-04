@@ -235,14 +235,16 @@ export function Header(props) {
                      className="save-input"
                      autoFocus
                      onChange={(e)=>setPathName(e.target.value)}
-                     placeholder={props.existingPathName ? props.existingPathName : "Give a name to your traversal path!"} />
+                     placeholder={props.existingPathName ? props.existingPathName : "Give a name to your traversal path!"}
+                     value={props.existingPathName ? props.existingPathName : null}
+                      />
                   {savePathFetcher.type === 'init' &&
                     <button className="save-button" onClick={handleSaveClick}>
                         {props.existingPathName ? <p className="save-button-text">Update Search</p> : <p className="save-button-text">Save Search</p>}
                     </button>
               }
               {(savePathFetcher.state === "submitting" || savePathFetcher.state === "loading") &&
-                <><p className="save-button-text">Saving...</p>}</>
+                <><p className="save-button-text">Saving...</p></>
               }
               {savePathFetcher.type === 'done' &&
                 <><p className="save-button-text">Saved!</p></>
