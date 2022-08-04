@@ -175,7 +175,7 @@ export function Header(props) {
             <Link to="/search">
               <Tooltip title="Start New Search">
                 <button type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
-                  <img src={home} alt="Home Logo" />
+                  <img id="home-button" src={home} alt="Home Logo" />
                 </button>
               </Tooltip>
             </Link>

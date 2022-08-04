@@ -64,6 +64,10 @@ const steps = [
   {
     selector: '.paper-viewer',
     content: 'If you want to browse through all of the papers that you’ve visited before, click the title or press "L" and you can see a list view of them. Try it now!'
+  },
+  {
+    selector: "#home-button",
+    content: "Use this button to restart your search. Click it now if you want to try Abstract Poetry out for yourself, or close this box if you want to play around with our example search."
   }
 ]
 
