@@ -47,6 +47,7 @@ export function Header(props) {
       traversalPath: JSON.stringify(props.traversalPath),
       pathId: props.pathId,
       pathName: pathName,
+      clusterCounter: JSON.stringify(props.clusterCounter),
     }, {
       method: "post",
       action: "/save-path"
@@ -66,6 +67,7 @@ export function Header(props) {
     localforage.setItem("searchString", JSON.parse(path.searchString))
     localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
     localforage.setItem("pathName", path.pathName)
+    localforage.setItem("clusterCounter", JSON.parse(path.clusterCounter))
 
     const tree = new TreeModel();
     const root = tree.parse(JSON.parse(path.traversalPath))
@@ -82,6 +84,12 @@ export function Header(props) {
       action: "/redirect-paths"
     })
   }
+
+useEffect(()=>{
+  if(props.existingPathName){
+      setPathName(props.existingPathName)
+  }
+}, [props.existingPathName])
 
   useEffect(()=>{
     console.log("MODAL OPEN?? ", modalOpen)
@@ -238,7 +246,7 @@ export function Header(props) {
                      autoFocus
                      onChange={(e)=>setPathName(e.target.value)}
                      placeholder={props.existingPathName ? props.existingPathName : "Give a name to your traversal path!"}
-                     value={props.existingPathName ? props.existingPathName : null}
+                     value={pathName}
                       />
                   {savePathFetcher.type === 'init' &&
                     <button className="save-button" onClick={handleSaveClick}>

@@ -24,7 +24,8 @@ export async function upsertPath(userId,
                                  searchString,
                                  traversalPath,
                                  pathId,
-                                 pathName
+                                 pathName,
+                                 clusterCounter
                                 ){
 
     const upsertPath = await db.traversalPath.upsert({
@@ -39,7 +40,8 @@ export async function upsertPath(userId,
         nodeIdCounter: nodeIdCounter,
         searchString: searchString,
         traversalPath: traversalPath,
-        pathName: pathName
+        pathName: pathName,
+        clusterCounter: clusterCounter
       },
       create: {
         userId: userId,
@@ -51,7 +53,8 @@ export async function upsertPath(userId,
         searchString: searchString,
         traversalPath: traversalPath,
         pathName: pathName,
-        createdTime: new Date()
+        createdTime: new Date(),
+        clusterCounter: clusterCounter
       }
     })
     return upsertPath

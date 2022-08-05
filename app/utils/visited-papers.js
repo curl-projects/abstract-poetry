@@ -12,6 +12,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                                           clusterSetter=null,
                                           visitedPathSetter=null,
                                           nodeIdCounterSetter=null,
+                                          clusterCounterSetter=null,
                                           metadata){
   try{
     const rootModel = await localforage.getItem("traversalPath")
@@ -37,6 +38,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
 
     const currentAlgParams = await localforage.getItem("algParams")
     const forceNodes = await localforage.getItem('forceNodes')
+    const clusterCounter = await localforage.getItem('clusterCounter')
     if(path.filter(node => node.model.attributes.doi === deslugifyDoi(doi)).length !== 0){
       var clusters = await localforage.getItem('clusters')
       localforage.setItem("activeNodeId", mostRecentNode.model.attributes.nodeId)
@@ -46,6 +48,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
         algParamsSetter(currentAlgParams)
         forceNodeSetter(forceNodes)
         clusterSetter(clusters)
+        clusterCounterSetter(clusterCounter)
       }
       return rootModel
     }
@@ -65,10 +68,11 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
 
     var clusters = await localforage.getItem('clusters')
     if(!Object.keys(clusters).includes(doi)){
-      console.log("CLUSTER UPDATE EXECUTED")
       clusters[`${doi}`] = algParamIndex
     }
 
+    clusterCounter[algParamIndex] = (clusterCounter[algParamIndex] || 0) + 1
+    
     const newNode = {id: `node-${nodeIdCounter+1}`,
                      name: `${deslugifyDoi(doi)}`,
                      doi: deslugifyDoi(doi),
@@ -97,6 +101,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     localforage.setItem("nodeIdCounter", nodeIdCounter+1)
     localforage.setItem("forceNodes", forceNodes)
     localforage.setItem('clusters', clusters)
+    localforage.setItem("clusterCounter", clusterCounter)
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(nodeIdCounter+1)
@@ -104,6 +109,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
       forceNodeSetter(forceNodes)
       clusterSetter(clusters)
       nodeIdCounterSetter(nodeIdCounter+1)
+      clusterCounterSetter(clusterCounter)
     }
     return rootModel
   }
@@ -152,7 +158,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     localforage.setItem("algParams", initialParams)
     localforage.setItem("forceNodes", {nodes: initialForceNodes, links: initialLinks})
     localStorage.setItem("forceNodes", JSON.stringify({nodes: initialForceNodes, links: initialLinks}))
-
+    localforage.setItem("clusterCounter", {[clusters[deslugifyDoi(doi)]]: 1})
     if(pathSetter !== null){
       pathSetter(root.model)
       recentNodeSetter(1)
@@ -160,6 +166,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
       forceNodeSetter({nodes: initialForceNodes, links: initialLinks})
       clusterSetter(clusters)
       nodeIdCounterSetter(1)
+      clusterCounterSetter({[clusters[deslugifyDoi(doi)]]: 1})
     }
     return root
   }

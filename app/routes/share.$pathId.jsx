@@ -33,6 +33,7 @@ export default function ShareId(){
       localforage.setItem("searchString", JSON.parse(data.path.searchString));
       localforage.setItem("traversalPath", JSON.parse(data.path.traversalPath));
       localforage.setItem("pathName", data.path.pathName);
+      localforage.setItem("clusterCounter", JSON.parse(data.path.clusterCounter));
 
       const tree = new TreeModel();
       const root = tree.parse(JSON.parse(data.path.traversalPath))

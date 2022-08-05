@@ -28,6 +28,7 @@ import { Tooltip } from "@mui/material";
 import { caseToMessage } from "~/utils/messages-and-alerts"
 import { authenticator } from "~/models/auth.server.js";
 
+import { Counter } from "~/utils/cluster-manipulation"
 
 const steps = [
   {
@@ -119,10 +120,6 @@ export const action = async ({ request, params }) => {
     }
   }
 
-  useEffect(() => {
-    console.log("TOGGLE", toggle)
-  }, [toggle])
-
   // this triggers when the user is faster than the preloading
   console.log("RUNNING ALGORITHM SYNCHRONOUSLY")
   const traversedPapers = formData.get('traversalPath')
@@ -162,6 +159,7 @@ export default function PaperId() {
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [existingPathName, setExistingPathName] = useState(null)
   const [tourOpen, setTourOpen] = useState(false)
+  const [clusterCounter, setClusterCounter] = useState({})
 
 
   const controlTourState = (curr) => {
@@ -196,6 +194,7 @@ export default function PaperId() {
                         setClusters,
                         setVisitedPathList,
                         setNodeIdCounter,
+                        setClusterCounter,
                         data.metadata
                       )
     setToggle(false)
@@ -211,6 +210,10 @@ export default function PaperId() {
     if(data.isPathRedirect){
       setIsPathRedirect(true)
     }
+
+    let clusters = await localforage.getItem('clusters');
+    console.log("NUMBER OF ITEMS PER CLUSTER:", Counter(Object.values(clusters)))
+
 
   }, [params.paperId, data.search, data.isPathRedirect])
 
@@ -270,6 +273,8 @@ export default function PaperId() {
         setShareModalOpen={setShareModalOpen}
         existingPathName={existingPathName}
         setExistingPathName={setExistingPathName}
+
+        clusterCounter={clusterCounter}
         />
 
       <div className="axis" />

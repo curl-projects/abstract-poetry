@@ -12,6 +12,7 @@ export async function action({ request }){
   const traversalPath = formData.get('traversalPath')
   const pathId = formData.get('pathId')
   const pathName = formData.get('pathName')
+  const clusterCounter = formData.get('clusterCounter')
   const user = await authenticator.isAuthenticated(request)
   const userId = user.id
 
@@ -28,6 +29,7 @@ export async function action({ request }){
     traversalPath,
     pathId,
     pathName,
+    clusterCounter
   )
   return upsertPathData
 }
