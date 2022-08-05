@@ -101,7 +101,7 @@ export async function handleSearchv2(searchString){
           return { action: 'redirect', case: "closest-doi-match",
                    message: `We don't have the DOI '${extractedDoi}' in our database. Here's our closest match.`,
                    doiString: slugifyDoi(knn.matches[0].id),
-                   referencesList: referencesList}
+                   referencesList: JSON.stringify(referencesList)}
         }
       }
     }
@@ -117,42 +117,6 @@ export async function handleSearchv2(searchString){
     }
 }
 
-export async function handleSearchv3(searchString){
-  // First, check if the search term dis a DOI using regex
-    const containsDoi = doiRegex().test(searchString)
-
-    // // If it is a DOI, then check if it exists in the Pinecone database
-    if(containsDoi){
-      const extractedDoi = searchString.match(doiRegex())[0]
-      const existsInDB = await checkDoi(extractedDoi)
-      if(existsInDB){
-        return { action: 'redirect', case: "exact-doi-exists", message: `Redirected you to the DOI '${extractedDoi}'`, doiString: slugifyDoi(extractedDoi)}
-      }
-      else{
-        // Find the closest DOI to the one that was entered that is in our database
-        const extractedDoi = searchString.match(doiRegex())[0]
-        let knn = await findMostRelatedScholarPaper(extractedDoi)
-        console.log("KNN", knn)
-        if(!knn.matches){
-          // If the search doesn't return any close matches
-          return { action: 'error', case: "not-in-db", message: `We couldn't find any close matches in our database to the DOI '${extractedDoi}'.`, doiString: ""}
-        }
-        else{
-          return { action: 'redirect', case: "closest-doi-match", message: `We don't have the DOI '${extractedDoi}' in our database. Here's our closest match.`, doiString: slugifyDoi(knn.matches[0].id) }
-        }
-      }
-    }
-    else{
-      // If the searchString doesn't contain a DOI
-      let jsonResponse = await handleScholarKeywordSearch(searchString, limit=10)
-      if(jsonResponse.error || jsonResponse.data.length === 0){
-        return { action: 'error', case: "no-search-matches", message: `We couldn't find any papers in our database closely related to the search '${searchString}'`, doiString: "" }
-      }
-      else {
-        return { action: 'select-papers', case: "closest-search-match", message: `Here's the paper in our database most closely related to the search '${searchString}'`, doiString: null, doiList: jsonResponse.data }
-      }
-    }
-}
 
 export async function findRelevantReferences(paperId){
     let url = `https://api.semanticscholar.org/graph/v1/paper/${paperId}/references?fields=citationCount`
@@ -172,7 +136,11 @@ export async function findRelevantReferences(paperId){
     let filteredList = refList.filter(function(ref){ return ref['citationCount'] !== null && ref['paperId'] !== null})
     let sortedRefList = filteredList.sort(function(a, b){ return (b.citationCount) - (a.citationCount)})
     let slicedList = sortedRefList.slice(0, 10)
-    return slicedList
+    let unpackedRefList = []
+    for(let el of slicedList){
+      unpackedRefList.push(el['referenceId'])
+    }
+    return unpackedRefList
 }
 
 export async function handleScholarKeywordSearch(searchString, limit=1){
