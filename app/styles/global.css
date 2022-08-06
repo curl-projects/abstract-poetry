@@ -1522,3 +1522,32 @@ input[type="text"]:focus::placeholder {
     /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
 }
+
+/* BIBLIOGRAPHY */
+.bibliography-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.bibliography-form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bib-flex-space-between {
+  display: flex;
+    width: 50%;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    align-items: center;
+}
+
+.bib-search {
+  border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
+}

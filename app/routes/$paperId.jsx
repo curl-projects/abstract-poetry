@@ -28,7 +28,7 @@ import { Tooltip } from "@mui/material";
 import { caseToMessage } from "~/utils/messages-and-alerts"
 import { authenticator } from "~/models/auth.server.js";
 
-import { Counter } from "~/utils/cluster-manipulation"
+import { Counter, getKeyByValue, getClusterPapers } from "~/utils/cluster-manipulation";
 
 const steps = [
   {
@@ -211,12 +211,37 @@ export default function PaperId() {
       setIsPathRedirect(true)
     }
 
-    let clusters = await localforage.getItem('clusters');
-    console.log("NUMBER OF ITEMS PER CLUSTER:", Counter(Object.values(clusters)))
+    let clusterCounter = await localforage.getItem('clusterCounter');
 
+    const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
+      return clusterCount > 2
+    })
+    console.log("THRESHOLD INDEX:", thresholdIndex)
 
+    if(thresholdIndex !== -1){
+        let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
+        let clusters = await localforage.getItem('clusters')
+        let doiList = getClusterPapers(clusters, clusterKey)
+        console.log("DOI LIST:", doiList)
+    }
+    
   }, [params.paperId, data.search, data.isPathRedirect])
 
+  useEffect(async() => {
+    let clusterCounter = await localforage.getItem('clusterCounter');
+
+    const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
+      return clusterCount > 2
+    })
+    console.log("THRESHOLD INDEX:", thresholdIndex)
+
+    if(thresholdIndex !== -1){
+        let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
+        let clusters = await localforage.getItem('clusters')
+        let doiList = getClusterPapers(clusters, clusterKey)
+        console.log("DOI LIST:", doiList)
+    }
+  }, [params.paperId])
   // useEffect(() => {
   //   console.warn("VISITED PATH LIST:", visitedPathList)
   // }, [visitedPathList])

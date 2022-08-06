@@ -12,21 +12,17 @@ export async function action({ request, params }) {
     // here, we're finding the references of the selected paper, not the seedDOI. Is this better?
     const referencesList = await findRelevantReferences(paperId)
 
-    console.log("REFERENCES LIST (KEYWORD)!", referencesList)
-    console.log("REFERENCES LIST LENGTH! (KEYWORD)", referencesList.length)
     const knn = await findMostRelatedScholarPaper(paperId)
     if (!knn.matches) {
       return { error: 'No closely related papers' }
     }
     const seedDOI = knn.matches[0].id
-    const cluster = await clusterDOIs(knn.matches[0].id, JSON.stringify(referencesList))
+    const cluster = await clusterDOIsv2(knn.matches[0].id, referencesList)
     return { cluster, seedDOI }
   }
 
   const referencesList = formData.get('referencesList')
-  console.log("REFERENCES LIST!", referencesList)
-  console.log("REFERENCES LIST LENGTH!", referencesList.length)
 
-  const cluster = await clusterDOIs(doi, referencesList)
+  const cluster = await clusterDOIsv2(doi, referencesList)
   return { cluster }
 }

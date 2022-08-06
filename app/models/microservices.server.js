@@ -10,6 +10,18 @@ export async function warmupMicroservice(){
     return res.json()
 }
 
+export async function warmupMicroservicev2(){
+    let data = {
+      "command": "warmup"
+    }
+    let url = "https://abstract-poetry-microservice.azurewebsites.net/api/ClusterEmbeddingsV2?code=ODR_3JP6aQenrJBRMhwVkvxPLrwTUCp4QTIEIEI8a_hsAzFu_M7POg=="
+    let res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    return res.json()
+}
+
 export async function clusterDOIs(doi, referencesList){
   let data = {
     "doiList": [doi],
@@ -35,5 +47,11 @@ export async function clusterDOIsv2(doi, referencesList){
     body: JSON.stringify(data)
   })
 
+  console.log("RESPONSE:", res)
+
   return res.json()
+}
+
+export async function splitCluster(doiList){
+
 }

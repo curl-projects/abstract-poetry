@@ -16,6 +16,7 @@ function optimiseSearchString(searchString){
   return plusString
 }
 
+
 export async function handleSearch(searchString){
   // First, check if the search term dis a DOI using regex
     const containsDoi = doiRegex().test(searchString)
@@ -88,8 +89,8 @@ export async function handleSearchv2(searchString){
 
         // This ensures search consistency between keyword and paper search, because in both cases we're using the seed paper, rather than the closest match in our db`
         const referencesList = await findRelevantReferences(extractedDoi)
-        console.log("REFERENCES LIST!", referencesList)
-        console.log("REFERENCES LIST LENGTH!", referencesList.length)
+        // console.log("REFERENCES LIST!", referencesList)
+        // console.log("REFERENCES LIST LENGTH!", referencesList.length)
 
         let knn = await findMostRelatedScholarPaper(extractedDoi)
         console.log("KNN", knn)
@@ -101,7 +102,8 @@ export async function handleSearchv2(searchString){
           return { action: 'redirect', case: "closest-doi-match",
                    message: `We don't have the DOI '${extractedDoi}' in our database. Here's our closest match.`,
                    doiString: slugifyDoi(knn.matches[0].id),
-                   referencesList: JSON.stringify(referencesList)}
+                   referencesList: JSON.stringify(referencesList)
+                 }
         }
       }
     }
@@ -135,7 +137,7 @@ export async function findRelevantReferences(paperId){
     }
     let filteredList = refList.filter(function(ref){ return ref['citationCount'] !== null && ref['paperId'] !== null})
     let sortedRefList = filteredList.sort(function(a, b){ return (b.citationCount) - (a.citationCount)})
-    let slicedList = sortedRefList.slice(0, 10)
+    let slicedList = sortedRefList.slice(0, 5)
     let unpackedRefList = []
     for(let el of slicedList){
       unpackedRefList.push(el['referenceId'])
