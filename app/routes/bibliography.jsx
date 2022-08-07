@@ -3,7 +3,7 @@ import { Form, useActionData, useFetcher, useLoaderData } from "@remix-run/react
 import { json } from "@remix-run/node"
 import { Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
-import { handleBibliographySearch, gatherAndFilterReferences, processBibliography } from "~/models/semantic-bibliography.server";
+import { handleBibliographySearch, gatherAndFilterReferences, processBibliography, uploadBibliographyMetadata } from "~/models/semantic-bibliography.server";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,12 +30,18 @@ export async function action({ request }){
 
   const bibliographySearchResult = await handleBibliographySearch(doiInput)
   if(bibliographySearchResult.case !== 'no-match'){
-    const processedBibliography = await processBibliography(bibliographySearchResult.references,
+    let processBibliographyPromise = processBibliography(bibliographySearchResult.references,
                                                             bibliographySearchResult.clusteredReferences,
                                                             bibliographySearchResult.refDict,
                                                             bibliographySearchResult.doi,
                                                             user.id)
-    return { bibliographySearchResult, processedBibliography }
+    let uploadBibliographyMetadataPromise = uploadBibliographyMetadata(bibliographySearchResult.refDict)
+
+    let [processedBibliography, metadataResponse] = await Promise.all([
+      processBibliographyPromise,
+      uploadBibliographyMetadataPromise
+    ])
+    return { bibliographySearchResult, processedBibliography, metadataResponse }
   }
   return { bibliographySearchResult }
 }
@@ -62,7 +68,7 @@ export default function BibliographySearch(props){
   }, []);
 
   useEffect(()=>{
-    console.log("ACTION DATA:", data)
+    console.warn("ACTION DATA:", data)
   }, [data])
 
   useEffect(()=>{

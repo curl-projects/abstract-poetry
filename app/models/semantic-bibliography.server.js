@@ -2,8 +2,8 @@ var doiRegex = require('doi-regex')
 import { deslugifyDoi, doiToJournal } from "~/utils/doi-manipulation";
 import { checkDoi } from "~/models/search.server";
 import { getMetadataFromPaperId } from "~/models/metadata.server"
-import { upsertPath } from "~/models/users.server"
-
+import { upsertPath } from "~/models/users.server";
+import { redis } from "~/models/redis.server";
 import TreeModel from 'tree-model';
 import FlatToNested from 'flat-to-nested';
 
@@ -29,7 +29,7 @@ export async function handleBibliographySearch(doiInput){
 }
 
 export async function gatherAndFilterReferences(doi){
-  let url = `https://api.semanticscholar.org/graph/v1/paper/${doi}/references?fields=citationCount,externalIds,title,abstract,referenceCount,citationCount,influentialCitationCount,fieldsOfStudy,publicationDate,authors,publicationTypes`
+  let url = `https://api.semanticscholar.org/graph/v1/paper/${doi}/references?fields=citationCount,externalIds,title,abstract,referenceCount,citationCount,influentialCitationCount,fieldsOfStudy,publicationDate,authors,publicationTypes,journal`
   let res = await fetch(url, {
     method: "GET",
     headers: {
@@ -52,6 +52,7 @@ export async function gatherAndFilterReferences(doi){
                   fieldsOfStudy: reference['citedPaper']['fieldsOfStudy'] ? reference['citedPaper']['fieldsOfStudy'] : [],
                   publicationDate: reference['citedPaper']['publicationDate'] ? reference['citedPaper']['publicationDate'] : "",
                   authors: reference['citedPaper']['authors'] ? reference['citedPaper']['authors'] : [],
+                  journal: reference['citedPaper']['journal'] ? reference['citedPaper']['journal'] : {}
                 })
   }
   let filteredList = refList.filter(function(ref){ return ref['citationCount'] !== null && ref['paperId'] !== null})
@@ -60,6 +61,22 @@ export async function gatherAndFilterReferences(doi){
     unpackedRefList.push(el['paperId'])
   }
   return {unpackedRefList: unpackedRefList, refList: refList}
+}
+
+export async function uploadBibliographyMetadata(refDict){
+  try{
+    for(let [key, value] of Object.entries(refDict)){
+      let exists = await redis.exists(key)
+      if(!exists){
+        redis.set(key, JSON.stringify(value))
+      }
+    }
+    return "Done"
+  }
+  catch(err){
+    console.log("ERROR!!!!", err)
+    return "ERROR"
+  }
 }
 
 export async function warmupBibliographyMicroservice(){
