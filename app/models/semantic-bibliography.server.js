@@ -1,4 +1,11 @@
 var doiRegex = require('doi-regex')
+import { deslugifyDoi, doiToJournal } from "~/utils/doi-manipulation";
+import { checkDoi } from "~/models/search.server";
+import { getMetadataFromPaperId } from "~/models/metadata.server"
+import { upsertPath } from "~/models/users.server"
+
+import TreeModel from 'tree-model';
+import FlatToNested from 'flat-to-nested';
 
 export async function handleBibliographySearch(doiInput){
     const containsDoi = doiRegex().test(doiInput)
@@ -6,11 +13,15 @@ export async function handleBibliographySearch(doiInput){
       const extractedDoi = doiInput.match(doiRegex())[0]
       const refData = await gatherAndFilterReferences(extractedDoi)
       const clusteredReferences = await clusterReferences(refData.unpackedRefList)
+      const refDict = Object.assign(...refData.unpackedRefList.map((k, i) => ({[k]: refData.refList[i]})))
+
       return { case: "doi",
                doi: extractedDoi,
                references: refData.unpackedRefList,
                clusteredReferences: clusteredReferences,
-               referencesMetadata: refData.refList}
+               referencesMetadata: refData.refList,
+               refDict: refDict
+             }
     }
     else{
       return { case: "no-match", message: "We couldn't find a doi in your search string"}
@@ -74,4 +85,127 @@ export async function clusterReferences(referencesList){
   })
 
   return res.json()
+}
+
+// ACTIVE NODE ID
+
+// ALG PARAMS
+
+// CLUSTERS
+
+// FORCE NODES
+
+// NODEIDCOUNTER
+
+// SEARCH STRING
+
+// TRAVERSAL PATH
+
+// PATHNAME
+
+// CLUSTER COUNTER
+
+export async function processBibliography(references, bibliographyClusters, metadataMap, seedDOI, userId){
+  // DATA STRUCTURE INITIATE
+  var tree = new TreeModel();
+  const algParams = Array.from({length: [...new Set(Object.values(bibliographyClusters))].length}, e=> Array(2).fill(1))
+  const initialNodes = Array.from({length: algParams.length}, (e, index) => ({id: `cluster-${index}`,
+                                                                                       name: `Cluster ${index+1}`,
+                                                                                       val: 8,
+                                                                                       type: 'cluster',
+                                                                                       nodeId: 0,
+                                                                                       pinned: false
+                                                                                     }))
+  const initialLinks = []
+  const forceNodes = {nodes: initialNodes, links: initialLinks}
+  const initialChildObject = {name: `removedNode`,
+                              attributes: {}
+                             }
+  const root = tree.parse(initialChildObject)
+  var mostRecentNode = root
+  const searchString = seedDOI
+  var clusterCounter = {}
+  var nodeIdCounter = 1
+
+  var parentId = undefined
+
+  // ITERATION:
+  for(let ref of references){
+
+
+    // ALG PARAMS UPDATE (POSITIVE IF)
+    algParams[bibliographyClusters[ref]][0] += 1
+
+    // FORCE NODES UPDATE
+    let newNode = {id: `node-${nodeIdCounter}`,
+                     name: `${ref}`,
+                     doi: ref,
+                     title: metadataMap[ref]['title'],
+                     val: 5,
+                     nodeId: nodeIdCounter,
+                     type: 'paper',
+                     pinned: false}
+    let newLink = { "source": `cluster-${bibliographyClusters[ref]}`, "target": `node-${nodeIdCounter}`}
+    forceNodes.nodes.push(newNode)
+    forceNodes.links.push(newLink)
+
+    // TRAVERSAL PATH UPDATE
+    const childObject = {name: `${ref}-[[${nodeIdCounter}]]`,
+                         attributes: {doi: ref,
+                                      algParams: algParams,
+                                      nodeId: nodeIdCounter,
+                                      pinned: false,
+                                      cluster: bibliographyClusters[ref],
+                                      metadata: metadataMap[ref]}}
+    mostRecentNode = mostRecentNode.addChild(tree.parse(childObject))
+    // CLUSTER COUNTER UPDATE
+    clusterCounter[bibliographyClusters[ref]] = (clusterCounter[bibliographyClusters[ref]] || 0) + 1
+
+    // NODE ID COUNTER UPDATE
+    nodeIdCounter += 1
+  }
+
+
+  // FINAL DATA STRUCTURE CREATION
+  // flatToNested = new FlatToNested({
+  //   id: "name",
+  //   parent: 'parent',
+  //   children: 'children'
+  // })
+  // console.log("TRAVERSAL NODES:", traversalNodes)
+  // const nestedPath = flatToNested.convert(traversalNodes)
+  const firstChild = root.first(function(node){
+    return node.model.attributes.nodeId === 1
+  })
+  const traversalPath = firstChild
+  const activeNodeId = nodeIdCounter - 1
+  const pathId = undefined
+  const pathName = `Bibliography for ${seedDOI}`
+
+  const upsertPathData = await upsertPath(
+    userId,
+    activeNodeId,
+    JSON.stringify(algParams),
+    JSON.stringify(bibliographyClusters),
+    JSON.stringify(forceNodes),
+    nodeIdCounter,
+    searchString,
+    JSON.stringify(traversalPath.model),
+    "undefined",
+    pathName,
+    JSON.stringify(clusterCounter)
+  )
+
+  return {
+    activeNodeId: activeNodeId,
+    algParams: algParams,
+    clusterCounter: clusterCounter,
+    clusters: bibliographyClusters,
+    forceNodes: forceNodes,
+    nodeIdCounter: nodeIdCounter,
+    searchString: searchString,
+    traversalPath: traversalPath.model,
+    pathId: upsertPathData.pathId,
+    pathName: upsertPathData.pathName
+  }
 }

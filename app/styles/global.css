@@ -1551,3 +1551,12 @@ input[type="text"]:focus::placeholder {
 .bib-search {
   border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
 }
+
+.bib-login-text {
+  color: #666666;
+  cursor: pointer;
+ }
+
+ .bib-login-text:hover {
+   filter: brightness(105%);
+ }

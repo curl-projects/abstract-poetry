@@ -375,7 +375,7 @@ useEffect(()=>{
                         <div className="icon">
                           <img src={journalIcon} alt={"Journal"} />
                         </div>
-                        <small className="small">{JSON.parse(path.searchString)}</small>
+                        <small className="small">{path.searchString}</small>
                       </div>
                     </div>
                   <div className="path-metadata-box-separator"/>

@@ -1,32 +1,65 @@
 import glass from "../../public/assets/Glass.svg";
-import { Form, useActionData, useFetcher } from "@remix-run/react";
+import { Form, useActionData, useFetcher, useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/node"
 import { Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
-import { handleBibliographySearch, gatherAndFilterReferences } from "~/models/semantic-bibliography.server";
+import { handleBibliographySearch, gatherAndFilterReferences, processBibliography } from "~/models/semantic-bibliography.server";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { authenticator } from "~/models/auth.server.js";
+import { SocialsProvider } from "remix-auth-socials";
+import TreeModel from 'tree-model';
+import { slugifyDoi } from "~/utils/doi-manipulation"
+import * as localforage from "localforage";
+
+import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
+
+export async function loader({ request }){
+  const user = await authenticator.isAuthenticated(request)
+  const data = {
+    user: user
+  }
+  return json(data)
+}
 
 export async function action({ request }){
+  const user = await authenticator.isAuthenticated(request)
   const formData = await request.formData();
   const doiInput = formData.get('doiInput')
 
   const bibliographySearchResult = await handleBibliographySearch(doiInput)
-
+  if(bibliographySearchResult.case !== 'no-match'){
+    const processedBibliography = await processBibliography(bibliographySearchResult.references,
+                                                            bibliographySearchResult.clusteredReferences,
+                                                            bibliographySearchResult.refDict,
+                                                            bibliographySearchResult.doi,
+                                                            user.id)
+    return { bibliographySearchResult, processedBibliography }
+  }
   return { bibliographySearchResult }
 }
 
 export default function BibliographySearch(props){
+  const loaderData = useLoaderData();
   const data = useActionData();
   const [messageExists, setMessageExists] = useState(false)
   const coldStartFetcher = useFetcher();
+  const redirectFetcher = useFetcher();
+  const [url, setUrl] = useState('/');
+
+  useEffect(() => {
+    if(window){
+      setUrl(window.location.pathname)
+    }
+  }, []);
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
       method: "post",
       action: "/warmup-bibliography-microservice"
     })
-  }, [])
+  }, []);
 
   useEffect(()=>{
     console.log("ACTION DATA:", data)
@@ -38,7 +71,37 @@ export default function BibliographySearch(props){
 
 
   useEffect(()=>{
-    if(data?.bibliographySearchResult){
+    if(data?.processedBibliography){
+      localforage.setItem("activeNodeId", data.processedBibliography.activeNodeId);
+      localforage.setItem("algParams", data.processedBibliography.algParams);
+      localforage.setItem("clusters", data.processedBibliography.clusters);
+      localforage.setItem("forceNodes", data.processedBibliography.forceNodes);
+      localforage.setItem("nodeIdCounter", data.processedBibliography.nodeIdCounter);
+      localforage.setItem("searchString", data.processedBibliography.searchString);
+      localforage.setItem("traversalPath", data.processedBibliography.traversalPath);
+      localforage.setItem("pathName", data.processedBibliography.pathName);
+      localforage.setItem("clusterCounter", data.processedBibliography.clusterCounter);
+      localforage.setItem("pathId", data.processedBibliography.pathId);
+
+      const tree = new TreeModel();
+      const root = tree.parse(data.processedBibliography.traversalPath)
+      console.log("ROOT MODEL", data.processedBibliography.traversalPath)
+      console.log("ROOT", root)
+      const mostRecentNode = root.first(function(node){
+        console.log("NODE!!", node)
+        return node.model.attributes.nodeId === data.processedBibliography.activeNodeId
+      })
+
+      console.log("MOST RECENT NODE:", mostRecentNode)
+      const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
+      const updateIndex = data.processedBibliography.clusters[mostRecentNode.model.attributes.doi]
+      redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true&updateIndex=${updateIndex}&impression=true` :`${redirectURL}?isPathRedirect=true&updateIndex=${updateIndex}&impression=true`}, {
+        method: "post",
+        action: "/redirect-paths"
+      })
+    }
+
+    else if(data?.bibliographySearchResult){
       if(data.bibliographySearchResult.case === 'no-match'){
         setMessageExists(true)
       }
@@ -47,17 +110,31 @@ export default function BibliographySearch(props){
 
   return(
     <div className="bibliography-container">
+
+      <BibliographyHeader
+        user={loaderData.user}
+        url={url}
+        />
       <Form method='post' className="bibliography-form">
       <div id="searchbar" className="bib-search bib-flex-space-between">
 
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
-            <input type="text" name="doiInput" placeholder="Generate bibliography from DOI" />
+            <input type="text" autoFocus name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
           </div>
-            <Tooltip title="Start New Search">
-              <button type="submit" style={{ cursor: "pointer"}}>
-                <img id="home-button" src={glass} alt="Home Logo" />
-              </button>
-            </Tooltip>
+          {loaderData.user
+            ? <Tooltip title="Start New Search">
+                <button type="submit" style = {loaderData.user ? { cursor: "pointer"} : { filter: "brightness(200%)"}}>
+                  <img id="home-button" src={glass} alt="Home Logo" />
+                </button>
+              </Tooltip>
+            : <Form
+              method="post"
+              action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
+              >
+                <input type='hidden' name="url" value={url}/>
+                <button type="submit"><p className="bib-login-text">Log in</p></button>
+              </Form>
+          }
       </div>
     </Form>
     <Snackbar

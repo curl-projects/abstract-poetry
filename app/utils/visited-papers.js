@@ -72,7 +72,7 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     }
 
     clusterCounter[algParamIndex] = (clusterCounter[algParamIndex] || 0) + 1
-    
+
     const newNode = {id: `node-${nodeIdCounter+1}`,
                      name: `${deslugifyDoi(doi)}`,
                      doi: deslugifyDoi(doi),
