@@ -31,8 +31,6 @@ export function ClusterViewer(props) {
   }, [graphData])
 
   useEffect(async () => {
-    const myForceNodes = await localforage.getItem("forceNodes")
-    console.warn("MY FORCE NODE: ", myForceNodes, typeof myForceNodes, props.forceNodes)
     const forceNodeData = await localStorage.getItem("forceNodes");
     setGraphData(forceNodeData)
   }, [props.forceNodes, props.isPathRedirect])
