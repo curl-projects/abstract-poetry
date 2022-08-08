@@ -2,7 +2,7 @@ import glass from "../../public/assets/Glass.svg";
 import { Form, useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node"
 import { Tooltip } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { handleBibliographySearch, gatherAndFilterReferences, processBibliography, uploadBibliographyMetadata } from "~/models/semantic-bibliography.server";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +12,7 @@ import { SocialsProvider } from "remix-auth-socials";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import * as localforage from "localforage";
+import LinearProgress from '@mui/material/LinearProgress';
 
 import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
 
@@ -49,10 +50,12 @@ export async function action({ request }){
 export default function BibliographySearch(props){
   const loaderData = useLoaderData();
   const data = useActionData();
-  const [messageExists, setMessageExists] = useState(false)
+  const [messageExists, setMessageExists] = useState(false);
+  const [searchWidth, setSearchWidth] = useState("100%");
   const coldStartFetcher = useFetcher();
   const redirectFetcher = useFetcher();
   const [url, setUrl] = useState('/');
+  const searchRef = useRef();
 
   useEffect(() => {
     if(window){
@@ -75,6 +78,11 @@ export default function BibliographySearch(props){
     console.log("COLD START STATUS:", coldStartFetcher.data)
   }, [coldStartFetcher.data])
 
+  useEffect(()=>{
+    if(searchRef.current){
+        setSearchWidth(searchRef.current.clientWidth)
+    }
+  }, [searchRef.current])
 
   useEffect(()=>{
     if(data?.processedBibliography){
@@ -122,10 +130,10 @@ export default function BibliographySearch(props){
         url={url}
         />
       <Form method='post' className="bibliography-form">
-      <div id="searchbar" className="bib-search bib-flex-space-between">
-
+      <div id="searchbar" className="bib-search bib-flex-space-between" ref={searchRef}>
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
             <input type="text" autoFocus name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
+                <LinearProgress variant="determinate" value={80} style={{width: searchWidth, height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>
           </div>
           {loaderData.user
             ? <Tooltip title="Start New Search">

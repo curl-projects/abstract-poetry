@@ -1560,3 +1560,7 @@ input[type="text"]:focus::placeholder {
  .bib-login-text:hover {
    filter: brightness(105%);
  }
+
+.MuiLinearProgress-bar {
+  background-color: rgb(100, 0, 236) !important;
+}
