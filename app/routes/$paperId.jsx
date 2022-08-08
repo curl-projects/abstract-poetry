@@ -127,11 +127,9 @@ export const action = async ({ request, params }) => {
   const algParams = formData.get('algParams')
   const clusters = formData.get('clusters')
 
-  console.log("PARAMS PAPER IDDDDDD!!!!!!!", params.paperId)
   // the final version of this needs to return a DOI and the updated algorithm parameters
   let [nextPapers, clusterIndex] = await nearestNewPaper(deslugifyDoi(params.paperId), impression, traversedPapers, nodeState, algParams, clusters)
 
-  console.warn("NEXT PAPERS:", nextPapers)
   return(redirect(`/${slugifyDoi(nextPapers['id'])}?updateIndex=${clusterIndex}&impression=${impression}`))
 }
 
@@ -183,7 +181,6 @@ export default function PaperId() {
     if (data.search) {
       await localforage.setItem("activeNodeId", data.search)
     }
-    console.log("UPDATED!")
     updateTraversalPath(deslugifyDoi(params.paperId),
                         data.updateIndex,
                         data.impression,
@@ -224,7 +221,7 @@ export default function PaperId() {
         let doiList = getClusterPapers(clusters, clusterKey)
         console.log("DOI LIST:", doiList)
     }
-    
+
   }, [params.paperId, data.search, data.isPathRedirect])
 
   useEffect(async() => {
@@ -257,6 +254,10 @@ export default function PaperId() {
   useEffect(() => {
     console.log("DATA:", data)
   }, [data])
+
+  useEffect(()=>{
+    console.log("FORCE NODES:", forceNodes)
+  }, [forceNodes])
 
   useEffect(()=>{
     // Handle info messages passed from search

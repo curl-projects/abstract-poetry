@@ -36,12 +36,16 @@ export function Header(props) {
   }, [])
 
 
-  function handleSaveClick(){
+  async function handleSaveClick(){
+    console.log("FORCE NODE PROPS:", props.forceNodes)
+    console.log("FORCE NODE PROPS (STRING):", JSON.stringify(props.forceNodes))
+    const forceNodes = await localforage.getItem('forceNodes')
+    console.log("NEW FORCE NODES:", forceNodes)
     savePathFetcher.submit({
       activeNodeId: props.activeNodeId,
       algParams: JSON.stringify(props.algParams), // otherwise it gets rid of the nested list structure
       clusters: JSON.stringify(props.clusters),
-      forceNodes: JSON.stringify(props.forceNodes),
+      forceNodes: JSON.stringify(forceNodes),
       nodeIdCounter: JSON.stringify(props.nodeIdCounter),
       searchString: JSON.stringify(props.searchString),
       traversalPath: JSON.stringify(props.traversalPath),
@@ -64,7 +68,7 @@ export function Header(props) {
     localforage.setItem("forceNodes", JSON.parse(path.forceNodes))
     localforage.setItem("nodeIdCounter", parseInt(JSON.parse(path.forceNodes).links.length)) // TODO: unnecessary, maybe a bad refactor? Did so bc error conditions were ambiguous
     localforage.setItem("pathId", path.pathId)
-    localforage.setItem("searchString", JSON.parse(path.searchString))
+    localforage.setItem("searchString", path.searchString)
     localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
     localforage.setItem("pathName", path.pathName)
     localforage.setItem("clusterCounter", JSON.parse(path.clusterCounter))
@@ -227,7 +231,7 @@ useEffect(()=>{
                         <div className="icon">
                           <img src={journalIcon} alt={"Journal"} />
                         </div>
-                        <small className="small">{JSON.parse(path.searchString)}</small>
+                        <small className="small">{path.searchString}</small>
                       </div>
                     </div>
                   <div className="path-metadata-box-separator"/>

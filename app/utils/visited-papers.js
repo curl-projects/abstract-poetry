@@ -148,8 +148,6 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
                             type: 'paper',
                             pinned: false})
     const initialLinks = [{ "source": `cluster-${clusters[deslugifyDoi(doi)]}`, "target": "node-1"}]
-    // const moreLinks = Array.from({length: initialParams.length - 1}, (e, index) => ({source: `cluster-${index}`, target: `cluster-${index + 1}`}))
-    // initialLinks.push(...moreLinks)
 
     var root = tree.parse(childObject)
     localforage.setItem("nodeIdCounter", 1)
@@ -157,7 +155,6 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     localforage.setItem("activeNodeId", 1)
     localforage.setItem("algParams", initialParams)
     localforage.setItem("forceNodes", {nodes: initialForceNodes, links: initialLinks})
-    localStorage.setItem("forceNodes", JSON.stringify({nodes: initialForceNodes, links: initialLinks}))
     localforage.setItem("clusterCounter", {[clusters[deslugifyDoi(doi)]]: 1})
     if(pathSetter !== null){
       pathSetter(root.model)

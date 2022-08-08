@@ -26,9 +26,14 @@ export function ClusterViewer(props) {
     setHeight(containerRef.current.clientHeight)
   }, [containerRef.current])
 
+  useEffect(() => {
+    console.log("GRAPH DATA:", graphData)
+  }, [graphData])
 
   useEffect(async () => {
-    const forceNodeData = JSON.parse(await localStorage.getItem("forceNodes"));
+    const myForceNodes = await localforage.getItem("forceNodes")
+    console.warn("MY FORCE NODE: ", myForceNodes, typeof myForceNodes, props.forceNodes)
+    const forceNodeData = await localStorage.getItem("forceNodes");
     setGraphData(forceNodeData)
   }, [props.forceNodes, props.isPathRedirect])
 

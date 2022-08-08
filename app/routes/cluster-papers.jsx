@@ -17,12 +17,12 @@ export async function action({ request, params }) {
       return { error: 'No closely related papers' }
     }
     const seedDOI = knn.matches[0].id
-    const cluster = await clusterDOIsv2(knn.matches[0].id, referencesList)
+    const cluster = await clusterDOIs(knn.matches[0].id, referencesList)
     return { cluster, seedDOI }
   }
 
   const referencesList = formData.get('referencesList')
 
-  const cluster = await clusterDOIsv2(doi, referencesList)
+  const cluster = await clusterDOIs(doi, referencesList)
   return { cluster }
 }
