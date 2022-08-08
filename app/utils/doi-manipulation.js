@@ -8,7 +8,7 @@ export function deslugifyDoi(doiSlug){
 
 export function doiToJournal(doiSlug){
   if(typeof doiSlug !== "string"){
-    throw "DOI slug must be a stringß"
+    throw "DOI slug must be a string"
   }
 
   else if(doiSlug.includes('pone')){

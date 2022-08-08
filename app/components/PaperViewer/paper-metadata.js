@@ -7,8 +7,29 @@ import { slugifyDoi, doiToJournal } from "~/utils/doi-manipulation"
 
 export function PaperMetadata(props) {
   const [authorToggle, setAuthorToggle] = useState(false);
+  const [journalToggle, setJournalToggle] = useState(false);
+  const [journal, setJournal] = useState("Unknown Journal")
   const [authors, setAuthors] = useState(null)
   const params = useParams();
+
+
+  useEffect(()=>{
+    if(props.metadata.journal && props.metadata.journal?.name !== ""){
+      if(journalToggle){
+        setJournal(props.metadata.journal.name)
+      }
+      else{
+        setJournal(`${props.metadata.journal.name.slice(0, 14)}...`)
+      }
+    }
+    else if(props.doi){
+      setJournal(doiToJournal(doi))
+    }
+    else{
+        setJournal("Unknown Journal")
+      }
+  }, [props.doi, props.metadata, journalToggle])
+
 
   useEffect(() => {
     console.log("METADATA:", props.metadata)
@@ -70,7 +91,7 @@ export function PaperMetadata(props) {
               <div className="icon">
                 <img src={journalIcon} alt={"Journal"} />
               </div>
-              <small className="small">{props.doi ? doiToJournal(props.doi) : ""}</small>
+              <small className="small" onClick={() => setJournalToggle(prevState => !prevState)}>{journal}</small>
             </div>
             <div className="flex-row metadata-row" onClick={() => setAuthorToggle(!authorToggle)}>
               <div className="icon">
