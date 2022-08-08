@@ -39,3 +39,14 @@ export function doiToJournal(doiSlug){
     return "Unknown Journal"
   }
 }
+
+export function parseSearchString(searchString){
+  if(searchString){
+    try {
+      return JSON.parse(searchString)
+    }
+    catch {
+      return searchString
+    }
+  } return "abstract poetry"
+}

@@ -268,8 +268,8 @@ export default function PaperId() {
 
   useEffect(() => {
     if(data.searchString){
-      localforage.setItem("searchString", data.searchString)
-      setSearchString(data.searchString)
+      localforage.setItem("searchString", JSON.stringify(data.searchString))
+      setSearchString(JSON.stringify(data.searchString))
     }
   }, [data.searchString])
 
@@ -283,7 +283,6 @@ export default function PaperId() {
         activeNodeId={nodeState}
         algParams={algParams}
         clusters={clusters}
-        forceNodes={forceNodes}
         nodeIdCounter={nodeIdCounter}
         searchString={searchString}
         traversalPath={traversalPath}

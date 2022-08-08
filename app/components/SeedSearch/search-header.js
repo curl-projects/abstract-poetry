@@ -16,6 +16,7 @@ import journalIcon from "../../../public/assets/journal.svg"
 import calendar from "../../../public/assets/calendar.svg";
 import path from "../../../public/assets/path-search.svg";
 import { Tooltip } from "@mui/material";
+import { parseSearchString } from "~/utils/doi-manipulation";
 
 export function Header(props) {
   const params = useParams();
@@ -35,19 +36,15 @@ export function Header(props) {
     }
   }, [])
 
-
   async function handleSaveClick(){
-    console.log("FORCE NODE PROPS:", props.forceNodes)
-    console.log("FORCE NODE PROPS (STRING):", JSON.stringify(props.forceNodes))
-    const forceNodes = await localforage.getItem('forceNodes')
-    console.log("NEW FORCE NODES:", forceNodes)
+    const forceNodes = await localforage.getItem('forceNodes') // bandaid because some of the server conversion changes the schema of forceNodes
     savePathFetcher.submit({
       activeNodeId: props.activeNodeId,
       algParams: JSON.stringify(props.algParams), // otherwise it gets rid of the nested list structure
       clusters: JSON.stringify(props.clusters),
       forceNodes: JSON.stringify(forceNodes),
       nodeIdCounter: JSON.stringify(props.nodeIdCounter),
-      searchString: JSON.stringify(props.searchString),
+      searchString: props.searchString,
       traversalPath: JSON.stringify(props.traversalPath),
       pathId: props.pathId,
       pathName: pathName,
@@ -61,7 +58,6 @@ export function Header(props) {
   }
 
   function handlePathInit(path){
-    console.log("PATH:", path)
     localforage.setItem("activeNodeId", parseInt(path.activeNodeId))
     localforage.setItem("algParams", JSON.parse(path.algParams))
     localforage.setItem("clusters", JSON.parse(path.clusters))
@@ -79,7 +75,6 @@ export function Header(props) {
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === parseInt(path.activeNodeId)
     })
-    console.log("MOST RECENT NODE:", mostRecentNode)
     const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
     const updateIndex = JSON.parse(path.clusters)[mostRecentNode.model.attributes.doi]
 
@@ -184,7 +179,7 @@ useEffect(()=>{
           <div id="searchbar" className="search flex-space-between">
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
               <label className="search-input-label">Searching semantic regions associated with</label>
-              <input type="text" disabled="disabled" name="searchString" placeholder={props.searchString ? props.searchString : "abstract poetry"} />
+              <input type="text" disabled="disabled" name="searchString" placeholder={parseSearchString(props.searchString)}/>
             </div>
             <Link to="/search">
               <Tooltip title="Start New Search">
@@ -231,7 +226,7 @@ useEffect(()=>{
                         <div className="icon">
                           <img src={journalIcon} alt={"Journal"} />
                         </div>
-                        <small className="small">{path.searchString}</small>
+                        <small className="small">{parseSearchString(path.searchString)}</small>
                       </div>
                     </div>
                   <div className="path-metadata-box-separator"/>
