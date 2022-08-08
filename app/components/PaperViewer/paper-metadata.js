@@ -14,16 +14,21 @@ export function PaperMetadata(props) {
 
 
   useEffect(()=>{
-    if(props.metadata.journal && props.metadata.journal?.name !== ""){
+    if(props.metadata?.journal && props.metadata.journal.name && props.metadata.journal?.name !== ""){
       if(journalToggle){
         setJournal(props.metadata.journal.name)
       }
       else{
-        setJournal(`${props.metadata.journal.name.slice(0, 14)}...`)
+        if(props.metadata.journal.name.length > 10){
+          setJournal(`${props.metadata.journal.name.slice(0, 10)}...`)
+        }
+        else{
+          setJournal(props.metadata.journal.name)
+        }
       }
     }
     else if(props.doi){
-      setJournal(doiToJournal(doi))
+      setJournal(doiToJournal(props.doi))
     }
     else{
         setJournal("Unknown Journal")

@@ -147,7 +147,7 @@ export async function findRelevantReferences(paperId){
 
 export async function handleScholarKeywordSearch(searchString, limit=1){
   // Return the fifteen papers most closely related to the search string
-  let url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${optimiseSearchString(searchString)}&limit=${limit}&fields=publicationDate,title,authors`
+  let url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${optimiseSearchString(searchString)}&limit=${limit}&fields=publicationDate,title,authors,journal`
   let res = await fetch(url, {
     method: "GET",
     headers: {
