@@ -10,20 +10,25 @@ import FlatToNested from 'flat-to-nested';
 export async function handleBibliographySearch(doiInput){
     const containsDoi = doiRegex().test(doiInput)
     if(containsDoi){
-      const extractedDoi = doiInput.match(doiRegex())[0]
-      const refData = await gatherAndFilterReferences(extractedDoi)
-      const clusteredReferences = await clusterReferences(refData.unpackedRefList)
-      const refDict = Object.assign(...refData.unpackedRefList.map((k, i) => ({[k]: refData.refList[i]})))
+      try{
+        const extractedDoi = doiInput.match(doiRegex())[0]
+        const refData = await gatherAndFilterReferences(extractedDoi)
+        const clusteredReferences = await clusterReferences(refData.unpackedRefList)
+        const refDict = Object.assign(...refData.unpackedRefList.map((k, i) => ({[k]: refData.refList[i]})))
+        return { case: "doi",
+                 doi: extractedDoi,
+                 references: refData.unpackedRefList,
+                 clusteredReferences: clusteredReferences,
+                 referencesMetadata: refData.refList,
+                 refDict: refDict
+               }
+      }
+      catch{
+        return { case: "no-match", message: "We couldn't find a valid doi in your search string"}
+      }
 
-      return { case: "doi",
-               doi: extractedDoi,
-               references: refData.unpackedRefList,
-               clusteredReferences: clusteredReferences,
-               referencesMetadata: refData.refList,
-               refDict: refDict
-             }
     }
-    else{
+    else {
       return { case: "no-match", message: "We couldn't find a doi in your search string"}
     }
 }
