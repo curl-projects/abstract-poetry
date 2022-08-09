@@ -13,6 +13,7 @@ import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import * as localforage from "localforage";
 import LinearProgress from '@mui/material/LinearProgress';
+import { useTransition } from "@remix-run/react";
 
 import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
 
@@ -52,10 +53,39 @@ export default function BibliographySearch(props){
   const data = useActionData();
   const [messageExists, setMessageExists] = useState(false);
   const [searchWidth, setSearchWidth] = useState("100%");
+  const [loadingProgress, setLoadingProgress] = useState(0)
   const coldStartFetcher = useFetcher();
   const redirectFetcher = useFetcher();
+  const referenceCountFetcher = useFetcher();
   const [url, setUrl] = useState('/');
   const searchRef = useRef();
+  const searchInputRef = useRef();
+  const transition = useTransition();
+
+  const referencesRegression = (refCount) => {
+      return (0.184*refCount + 16)*1000
+  }
+
+  useEffect(()=>{
+    console.log("TRANSITION TYPE:", transition.type)
+    console.log("TRANSITION STATE:", transition.state)
+  }, [transition.type, transition.state])
+
+  useEffect(()=>{
+    if(transition.state === 'submitting'){
+      referenceCountFetcher.submit({
+        doi: searchInputRef.current.value
+      }, {
+        method: "post",
+        action: "/get-reference-count"
+      })
+    }
+  }, [transition.state])
+
+  useEffect(()=>{
+    console.log("REFERENCE DATA:", referenceCountFetcher.data)
+
+  }, [referenceCountFetcher.data])
 
   useEffect(() => {
     if(window){
@@ -69,6 +99,26 @@ export default function BibliographySearch(props){
       action: "/warmup-bibliography-microservice"
     })
   }, []);
+
+  useEffect(()=>{
+    if(referenceCountFetcher.data?.referenceCount?.referenceCount){
+        let referenceCount = referenceCountFetcher.data.referenceCount.referenceCount
+        let updateInterval = 200
+        let updatePercent = 100 / (referencesRegression(referenceCount) / updateInterval)
+        console.log("UPDATE PERCENT", updatePercent)
+        console.log("REGRESSION", referencesRegression(referenceCount), referenceCount)
+        const timer = setInterval(() => {
+          setLoadingProgress((oldProgress) => {
+            if(oldProgress === 100){
+              return 0
+            }
+            return oldProgress + updatePercent
+          })
+        }, updateInterval);
+    }
+  }, [referenceCountFetcher.data])
+
+
 
   useEffect(()=>{
     console.warn("ACTION DATA:", data)
@@ -132,8 +182,8 @@ export default function BibliographySearch(props){
       <Form method='post' className="bibliography-form">
       <div id="searchbar" className="bib-search bib-flex-space-between" ref={searchRef}>
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
-            <input type="text" autoFocus name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
-                <LinearProgress variant="determinate" value={80} style={{width: searchWidth, height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>
+            <input type="text" autoFocus ref={searchInputRef} name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
+                {transition.state === 'submitting' && <LinearProgress variant="determinate" value={transition.state === 'loading' ? 100 : loadingProgress} style={{width: searchWidth, height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
           </div>
           {loaderData.user
             ? <Tooltip title="Start New Search">

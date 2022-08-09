@@ -104,24 +104,6 @@ export async function clusterReferences(referencesList){
   return res.json()
 }
 
-// ACTIVE NODE ID
-
-// ALG PARAMS
-
-// CLUSTERS
-
-// FORCE NODES
-
-// NODEIDCOUNTER
-
-// SEARCH STRING
-
-// TRAVERSAL PATH
-
-// PATHNAME
-
-// CLUSTER COUNTER
-
 export async function processBibliography(references, bibliographyClusters, metadataMap, seedDOI, userId){
   // DATA STRUCTURE INITIATE
   var tree = new TreeModel();
@@ -225,4 +207,15 @@ export async function processBibliography(references, bibliographyClusters, meta
     pathId: upsertPathData.pathId,
     pathName: upsertPathData.pathName
   }
+}
+
+export async function getReferenceCount(doi){
+  let url = `https://api.semanticscholar.org/graph/v1/paper/${doi}?fields=referenceCount`
+  let res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "x-api-key": process.env.SEMANTIC_SCHOLAR_API_KEY
+    }
+  })
+  return res.json()
 }
