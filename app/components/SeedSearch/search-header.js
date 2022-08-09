@@ -186,7 +186,7 @@ export function Header(props) {
           <div id="searchbar" className="search flex-space-between">
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
               <label className="search-input-label">Searching semantic regions associated with</label>
-              <input type="text" disabled="disabled" name="searchString" placeholder={parseSearchString(props.searchString)}/>
+              <input type="text" disabled="disabled" name="searchString" style={{ color: "rgb(204, 204, 204)"}} value={parseSearchString(props.searchString)}/>
             </div>
             <Link to="/search">
               <Tooltip title="Start New Search">
