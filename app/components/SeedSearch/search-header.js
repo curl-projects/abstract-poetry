@@ -84,11 +84,18 @@ export function Header(props) {
     })
   }
 
-useEffect(()=>{
-  if(props.existingPathName){
-      setPathName(props.existingPathName)
-  }
-}, [props.existingPathName])
+    useEffect(()=>{
+      if(props.existingPathName){
+          setPathName(props.existingPathName)
+      }
+    }, [props.existingPathName])
+
+    // useEffect(() => {
+    //   if(props.isSaveOpen && props.setShareModalOpen){
+    //     console.log("EXECUTED")
+    //     props.setShareModalOpen(true)
+    //   }
+    // }, [props.isSaveOpen, props.setShareModalOpen])
 
   useEffect(()=>{
     console.log("MODAL OPEN?? ", modalOpen)

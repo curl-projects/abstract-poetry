@@ -143,7 +143,7 @@ export async function processBibliography(references, bibliographyClusters, meta
                      val: 5,
                      nodeId: nodeIdCounter,
                      type: 'paper',
-                     pinned: true}
+                     pinned: false}
     let newLink = { "source": `cluster-${bibliographyClusters[ref]}`, "target": `node-${nodeIdCounter}`}
     forceNodes.nodes.push(newNode)
     forceNodes.links.push(newLink)
@@ -153,7 +153,7 @@ export async function processBibliography(references, bibliographyClusters, meta
                          attributes: {doi: ref,
                                       algParams: algParams,
                                       nodeId: nodeIdCounter,
-                                      pinned: true,
+                                      pinned: false,
                                       cluster: bibliographyClusters[ref],
                                       metadata: metadataMap[ref]}}
     mostRecentNode = mostRecentNode.addChild(tree.parse(childObject))

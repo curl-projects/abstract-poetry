@@ -63,7 +63,7 @@ export default function BibliographySearch(props){
   const transition = useTransition();
 
   const referencesRegression = (refCount) => {
-      return (0.184*refCount + 16)*1000
+      return (0.184*refCount + 12)*1000
   }
 
   useEffect(()=>{
@@ -79,6 +79,9 @@ export default function BibliographySearch(props){
         method: "post",
         action: "/get-reference-count"
       })
+    }
+    if(transition.state === 'loading'){
+      setLoadingProgress(100)
     }
   }, [transition.state])
 
@@ -105,13 +108,8 @@ export default function BibliographySearch(props){
         let referenceCount = referenceCountFetcher.data.referenceCount.referenceCount
         let updateInterval = 200
         let updatePercent = 100 / (referencesRegression(referenceCount) / updateInterval)
-        console.log("UPDATE PERCENT", updatePercent)
-        console.log("REGRESSION", referencesRegression(referenceCount), referenceCount)
         const timer = setInterval(() => {
           setLoadingProgress((oldProgress) => {
-            if(oldProgress === 100){
-              return 0
-            }
             return oldProgress + updatePercent
           })
         }, updateInterval);
@@ -159,7 +157,7 @@ export default function BibliographySearch(props){
       console.log("MOST RECENT NODE:", mostRecentNode)
       const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
       const updateIndex = data.processedBibliography.clusters[mostRecentNode.model.attributes.doi]
-      redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true&updateIndex=${updateIndex}&impression=true` :`${redirectURL}?isPathRedirect=true&updateIndex=${updateIndex}&impression=true`}, {
+      redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true&updateIndex=${updateIndex}&impression=true&isSaveOpen=true` :`${redirectURL}?isPathRedirect=true&updateIndex=${updateIndex}&impression=trueis&isSaveOpen=true`}, {
         method: "post",
         action: "/redirect-paths"
       })
@@ -182,6 +180,7 @@ export default function BibliographySearch(props){
       <Form method='post' className="bibliography-form">
       <div id="searchbar" className="bib-search bib-flex-space-between" ref={searchRef}>
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
+            {referenceCountFetcher.data?.referenceCount && <p>Parsing {referenceCountFetcher.data.referenceCount.referenceCount} references <span style={{ color: "rgba(150, 150, 150, 0.4)"}}>{Math.min(Math.round(loadingProgress, 2), 100)}%</span></p>}
             <input type="text" autoFocus ref={searchInputRef} name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
                 {transition.state === 'submitting' && <LinearProgress variant="determinate" value={transition.state === 'loading' ? 100 : loadingProgress} style={{width: searchWidth, height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
           </div>

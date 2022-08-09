@@ -92,7 +92,8 @@ export const loader = async ({
     tour: search.get('tour'),
     user: user,
     isPathRedirect: JSON.parse(search.get('isPathRedirect')),
-    urlPrefix: process.env.SHARE_URL_PREFIX
+    isSaveOpen: JSON.parse(search.get("isSaveOpen")),
+    urlPrefix: process.env.SHARE_URL_PREFIX,
   }
   return json(data)
 }
@@ -159,6 +160,12 @@ export default function PaperId() {
   const [tourOpen, setTourOpen] = useState(false)
   const [clusterCounter, setClusterCounter] = useState({})
 
+
+  useEffect(()=>{
+    if(data.isSaveOpen){
+      setShareModalOpen(true)
+    }
+  }, [data.isSaveOpen])
 
   const controlTourState = (curr) => {
     switch(curr){
@@ -290,7 +297,6 @@ export default function PaperId() {
         user={data.user}
         urlPrefix={data.urlPrefix}
         setPathId={setPathId}
-
         saveModalOpen={saveModalOpen}
         setSaveModalOpen={setSaveModalOpen}
 
