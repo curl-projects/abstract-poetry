@@ -73,6 +73,7 @@ export default function BibliographySearch(props){
 
   useEffect(()=>{
     if(transition.state === 'submitting'){
+      setLoadingProgress(0)
       referenceCountFetcher.submit({
         doi: searchInputRef.current.value
       }, {
