@@ -173,9 +173,6 @@ export default function PaperId() {
         setTraversalState(false)
     }
   }
-  useEffect(()=>{
-    console.log("TRAVERSAL PATH", traversalPath)
-  }, [traversalPath])
 
   useEffect(() => {
     if(data.tour){
@@ -220,13 +217,11 @@ export default function PaperId() {
     const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
       return clusterCount > 2
     })
-    console.log("THRESHOLD INDEX:", thresholdIndex)
 
     if(thresholdIndex !== -1){
         let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
         let clusters = await localforage.getItem('clusters')
         let doiList = getClusterPapers(clusters, clusterKey)
-        console.log("DOI LIST:", doiList)
     }
 
   }, [params.paperId, data.search, data.isPathRedirect])
@@ -237,34 +232,14 @@ export default function PaperId() {
     const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
       return clusterCount > 2
     })
-    console.log("THRESHOLD INDEX:", thresholdIndex)
 
     if(thresholdIndex !== -1){
         let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
         let clusters = await localforage.getItem('clusters')
         let doiList = getClusterPapers(clusters, clusterKey)
-        console.log("DOI LIST:", doiList)
     }
   }, [params.paperId])
-  // useEffect(() => {
-  //   console.warn("VISITED PATH LIST:", visitedPathList)
-  // }, [visitedPathList])
 
-  useEffect(() => {
-    console.log("LOADER DATA:", data)
-  }, [data])
-  //
-  // useEffect(() => {
-  //   console.log("FORCE NODES:", forceNodes)
-  // }, [forceNodes])
-  //
-  useEffect(() => {
-    console.log("DATA:", data)
-  }, [data])
-
-  useEffect(()=>{
-    console.log("FORCE NODES:", forceNodes)
-  }, [forceNodes])
 
   useEffect(()=>{
     // Handle info messages passed from search
@@ -280,9 +255,6 @@ export default function PaperId() {
     }
   }, [data.searchString])
 
-  useEffect(()=>{
-    console.log("CLUSTER SIZE:", clusters ? Object.keys(clusters).length : 0)
-  }, [clusters])
 
   return (
     <div className="container grid-view">

@@ -31,7 +31,9 @@ export function ClusterViewer(props) {
   }, [graphData])
 
   useEffect(async () => {
-    const forceNodeData = await localStorage.getItem("forceNodes");
+    console.log("HELLO!")
+    const forceNodeData = await localforage.getItem("forceNodes");
+    console.log("FORCE NODE DATA:", forceNodeData)
     setGraphData(forceNodeData)
   }, [props.forceNodes, props.isPathRedirect])
 
@@ -62,7 +64,7 @@ export function ClusterViewer(props) {
         { method: "post", action: "/redirect-cluster-node" }
       );
     }
-    else if (node.type === 'cluster') {
+    else if (node.type === 'cluster'){
 
     }
   }
@@ -110,8 +112,7 @@ export function ClusterViewer(props) {
       <Form ref={formRef} method="post" onSubmit={handleRedirectSubmit} />
 
       {(typeof window !== "undefined") &&
-        <ClientOnly>
-          {()=><ForceGraph2D
+        <ForceGraph2D
             graphData={(props.forceNodes && graphData) ? props.forceNodes : { nodes: [], links: [] }}
             ref={fgRef}
             forceEngine="d3"
@@ -128,8 +129,7 @@ export function ClusterViewer(props) {
             onNodeClick={handleRedirectSubmit}
             nodeLabel={resolveNodeLabel}
             linkColor={setLinkColors}
-          />}
-      </ClientOnly>
+          />
       }
     </div>
   )
