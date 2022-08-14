@@ -114,7 +114,7 @@ export default function Search2(props){
           <div id="searchbar" className="bib-search bib-flex-space-between">
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
             <p className="search-text">{headerMessage}</p>
-              <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus/>
+              <input autoFocus type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs"/>
               {(transition.state === 'submitting' || clusterFetcher.state === 'submitting') && <LinearProgress variant="indeterminate" style={{width: "100%", height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
           </div>
           <Tooltip title="Start New Search">

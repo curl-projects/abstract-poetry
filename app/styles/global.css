@@ -1581,7 +1581,6 @@ input[type="text"]:focus::placeholder {
 
 .bib-search {
   border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
-  margin-bottom: 140px;
 }
 
 .bib-login-text {
