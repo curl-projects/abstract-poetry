@@ -5,7 +5,7 @@ import { json, redirect } from "@remix-run/node"
 import { handleSearch, handleSearchv2 } from "~/models/search.server"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 // import * as localforage from "localforage";
-import localforage from "~/utils/browser-memory.client"
+import { setItem, getItem } from "~/utils/browser-memory.client"
 
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
@@ -46,7 +46,7 @@ export default function Search(props){
   const searchBarRef = useRef();
 
   useEffect(()=>{
-    // localforage.getItem("storeName").then(function(value){
+    // getItem("storeName").then(function(value){
     //   localforage.clear().then(function(){
     //     if(value !== null){
     //       localforage.config({
@@ -62,7 +62,7 @@ export default function Search(props){
     //           storeName: `${randomId}`, // Should be alphanumeric, with underscores.
     //           description : 'Abstract Poetry value store'
     //         })
-    //         localforage.setItem('storeName', randomId)
+    //         setItem('storeName', randomId)
     //     }
     //     console.log("STORE NAME VALUE:", value)
     //   })
@@ -70,11 +70,11 @@ export default function Search(props){
 
 
     // localforage.clear().then(function(){
-    //     localforage.getItem('storeName')
+    //     getItem('storeName')
     //   }).then(function(value){
     //     console.log("STORE NAME", value)
     //   })
-      // const existingStore = await localforage.getItem("storeName")
+      // const existingStore = await getItem("storeName")
       // console.log("EXISTING STORE", existingStore)
       // if(existingStore !== null){
       //   localforage.config({
@@ -88,9 +88,9 @@ export default function Search(props){
       //     storeName : randomId, // Should be alphanumeric, with underscores.
       //     description : 'Abstract Poetry value store'
       //   })
-      //   await localforage.setItem('storeName', randomId)
+      //   await setItem('storeName', randomId)
       // }
-    // const storageId = await localforage.getItem("storageId")
+    // const storageId = await getItem("storageId")
     //
     // if(storageId){
     //   localforage.dropInstance({
@@ -103,7 +103,7 @@ export default function Search(props){
     //   storeName :`store-${randomId}`, // Should be alphanumeric, with underscores.
     //   description : 'Abstract Poetry value store'
     // })
-    // localforage.setItem("storageId", `keyvaluepairs-${randomId}`)
+    // setItem("storageId", `keyvaluepairs-${randomId}`)
 
     coldStartFetcher.submit({}, {
       method: "post",
@@ -152,7 +152,7 @@ export default function Search(props){
   useEffect(async()=>{
     if(fetcher.data){
       if(fetcher.data.cluster){
-        await localforage.setItem("clusters", fetcher.data.cluster)
+        await setItem("clusters", fetcher.data.cluster)
         ref.current.click()
       }
       else{

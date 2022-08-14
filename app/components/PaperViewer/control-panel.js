@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from "react"
 import { deslugifyDoi, slugifyDoi } from "~/utils/doi-manipulation";
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress";
-import * as localforage from "localforage";
 
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
@@ -44,14 +43,14 @@ export function ControlPanel(props) {
        setToggle(false)
      }
    }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
-
-  useEffect(()=>{
-    console.log("FETCHER DATA:", fetcher.data)
-  }, [fetcher.data])
-
-  useEffect(()=>{
-    console.log("CLUSTER PROP SIZE:", props.clusters ? Object.keys(props.clusters).length : 0, props.clusters)
-  }, [props.clusters])
+  // 
+  // useEffect(()=>{
+  //   console.log("FETCHER DATA:", fetcher.data)
+  // }, [fetcher.data])
+  //
+  // useEffect(()=>{
+  //   console.log("CLUSTER PROP SIZE:", props.clusters ? Object.keys(props.clusters).length : 0, props.clusters)
+  // }, [props.clusters])
 
   useEffect(()=>{
     // Saves prefetched doi's into state

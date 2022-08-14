@@ -6,7 +6,6 @@ import Tree from 'react-d3-tree'
 
 import { useCenteredTree } from "~/utils/tree-visualisation"
 
-import * as localforage from "localforage";
 import NoSSR from 'react-no-ssr-depup';
 
 import { traversalNode } from "~/components/PathTraversal/traversal-node"

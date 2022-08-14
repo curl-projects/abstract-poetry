@@ -1,7 +1,7 @@
 import NoSSR from 'react-no-ssr-depup';
 import loadable from '@loadable/component'
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
-import * as localforage from "localforage";
+import { getItem } from "~/utils/browser-memory.client"
 import { useParams, useSubmit, Form } from "@remix-run/react";
 import { clusterNode } from "~/components/PathTraversal/cluster-node"
 import { slugifyDoi } from "~/utils/doi-manipulation";
@@ -32,7 +32,7 @@ export function ClusterViewer(props) {
 
   useEffect(async () => {
     console.log("HELLO!")
-    const forceNodeData = await localforage.getItem("forceNodes");
+    const forceNodeData = await getItem("forceNodes");
     console.log("FORCE NODE DATA:", forceNodeData)
     setGraphData(forceNodeData)
   }, [props.forceNodes, props.isPathRedirect])

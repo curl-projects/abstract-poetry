@@ -9,7 +9,7 @@ import { Form, useParams, Link, useFetcher, useSubmit } from "@remix-run/react";
 import { useState, useEffect, useRef } from "react";
 import { SocialsProvider } from "remix-auth-socials";
 import Modal from '@mui/material/Modal';
-import * as localforage from "localforage";
+import { setItem, getItem } from "~/utils/browser-memory.client"
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
 import journalIcon from "../../../public/assets/journal.svg"
@@ -37,7 +37,7 @@ export function Header(props) {
   }, [])
 
   async function handleSaveClick(){
-    const forceNodes = await localforage.getItem('forceNodes') // bandaid because some of the server conversion changes the schema of forceNodes
+    const forceNodes = await getItem('forceNodes') // bandaid because some of the server conversion changes the schema of forceNodes
     savePathFetcher.submit({
       activeNodeId: props.activeNodeId,
       algParams: JSON.stringify(props.algParams), // otherwise it gets rid of the nested list structure
@@ -53,21 +53,21 @@ export function Header(props) {
       method: "post",
       action: "/save-path"
     })
-    localforage.setItem("pathName", pathName)
+    setItem("pathName", pathName)
     props.setExistingPathName(pathName)
   }
 
   function handlePathInit(path){
-    localforage.setItem("activeNodeId", parseInt(path.activeNodeId))
-    localforage.setItem("algParams", JSON.parse(path.algParams))
-    localforage.setItem("clusters", JSON.parse(path.clusters))
-    localforage.setItem("forceNodes", JSON.parse(path.forceNodes))
-    localforage.setItem("nodeIdCounter", parseInt(JSON.parse(path.forceNodes).links.length)) // TODO: unnecessary, maybe a bad refactor? Did so bc error conditions were ambiguous
-    localforage.setItem("pathId", path.pathId)
-    localforage.setItem("searchString", path.searchString)
-    localforage.setItem("traversalPath", JSON.parse(path.traversalPath))
-    localforage.setItem("pathName", path.pathName)
-    localforage.setItem("clusterCounter", JSON.parse(path.clusterCounter))
+    setItem("activeNodeId", parseInt(path.activeNodeId))
+    setItem("algParams", JSON.parse(path.algParams))
+    setItem("clusters", JSON.parse(path.clusters))
+    setItem("forceNodes", JSON.parse(path.forceNodes))
+    setItem("nodeIdCounter", parseInt(JSON.parse(path.forceNodes).links.length)) // TODO: unnecessary, maybe a bad refactor? Did so bc error conditions were ambiguous
+    setItem("pathId", path.pathId)
+    setItem("searchString", path.searchString)
+    setItem("traversalPath", JSON.parse(path.traversalPath))
+    setItem("pathName", path.pathName)
+    setItem("clusterCounter", JSON.parse(path.clusterCounter))
 
     const tree = new TreeModel();
     const root = tree.parse(JSON.parse(path.traversalPath))
@@ -114,7 +114,7 @@ export function Header(props) {
 
   useEffect(()=>{
     if(savePathFetcher.data){
-        localforage.setItem('pathId', savePathFetcher.data.pathId)
+        setItem('pathId', savePathFetcher.data.pathId)
         props.setPathId(savePathFetcher.data.pathId)
     }
   }, [savePathFetcher])

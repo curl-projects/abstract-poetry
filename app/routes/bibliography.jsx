@@ -12,7 +12,7 @@ import { SocialsProvider } from "remix-auth-socials";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
 // import * as localforage from "localforage";
-import localforage from "~/utils/browser-memory.client"
+import { setItem } from "~/utils/browser-memory.client"
 
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTransition } from "@remix-run/react";
@@ -137,16 +137,16 @@ export default function BibliographySearch(props){
 
   useEffect(()=>{
     if(data?.processedBibliography){
-      localforage.setItem("activeNodeId", data.processedBibliography.activeNodeId);
-      localforage.setItem("algParams", data.processedBibliography.algParams);
-      localforage.setItem("clusters", data.processedBibliography.clusters);
-      localforage.setItem("forceNodes", data.processedBibliography.forceNodes);
-      localforage.setItem("nodeIdCounter", data.processedBibliography.nodeIdCounter);
-      localforage.setItem("searchString", data.processedBibliography.searchString);
-      localforage.setItem("traversalPath", data.processedBibliography.traversalPath);
-      localforage.setItem("pathName", data.processedBibliography.pathName);
-      localforage.setItem("clusterCounter", data.processedBibliography.clusterCounter);
-      localforage.setItem("pathId", data.processedBibliography.pathId);
+      setItem("activeNodeId", data.processedBibliography.activeNodeId);
+      setItem("algParams", data.processedBibliography.algParams);
+      setItem("clusters", data.processedBibliography.clusters);
+      setItem("forceNodes", data.processedBibliography.forceNodes);
+      setItem("nodeIdCounter", data.processedBibliography.nodeIdCounter);
+      setItem("searchString", data.processedBibliography.searchString);
+      setItem("traversalPath", data.processedBibliography.traversalPath);
+      setItem("pathName", data.processedBibliography.pathName);
+      setItem("clusterCounter", data.processedBibliography.clusterCounter);
+      setItem("pathId", data.processedBibliography.pathId);
 
       const tree = new TreeModel();
       const root = tree.parse(data.processedBibliography.traversalPath)

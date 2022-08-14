@@ -17,7 +17,7 @@ import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
 // import * as localforage from "localforage";
-import localforage from "~/utils/browser-memory.client"
+import { setItem, getItem } from "~/utils/browser-memory.client"
 
 import { ClientOnly } from "remix-utils";
 
@@ -184,7 +184,7 @@ export default function PaperId() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     if (data.search) {
-      await localforage.setItem("activeNodeId", data.search)
+      await setItem("activeNodeId", data.search)
     }
     updateTraversalPath(deslugifyDoi(params.paperId),
                         data.updateIndex,
@@ -200,20 +200,20 @@ export default function PaperId() {
                         data.metadata
                       )
     setToggle(false)
-    let searchStringData = await localforage.getItem("searchString")
+    let searchStringData = await getItem("searchString")
     searchStringData ? setSearchString(searchStringData) : {}
 
-    let pathIdData = await localforage.getItem('pathId')
+    let pathIdData = await getItem('pathId')
     pathIdData ? setPathId(pathIdData) : {}
 
-    let existingPathNameData = await localforage.getItem("pathName")
+    let existingPathNameData = await getItem("pathName")
     existingPathNameData ? setExistingPathName(existingPathNameData) : {}
 
     if(data.isPathRedirect){
       setIsPathRedirect(true)
     }
 
-    let clusterCounter = await localforage.getItem('clusterCounter');
+    let clusterCounter = await getItem('clusterCounter');
 
     const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
       return clusterCount > 2
@@ -221,14 +221,14 @@ export default function PaperId() {
 
     if(thresholdIndex !== -1){
         let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
-        let clusters = await localforage.getItem('clusters')
+        let clusters = await getItem('clusters')
         let doiList = getClusterPapers(clusters, clusterKey)
     }
 
   }, [params.paperId, data.search, data.isPathRedirect])
 
   useEffect(async() => {
-    let clusterCounter = await localforage.getItem('clusterCounter');
+    let clusterCounter = await getItem('clusterCounter');
 
     const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
       return clusterCount > 2
@@ -236,7 +236,7 @@ export default function PaperId() {
 
     if(thresholdIndex !== -1){
         let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
-        let clusters = await localforage.getItem('clusters')
+        let clusters = await getItem('clusters')
         let doiList = getClusterPapers(clusters, clusterKey)
     }
   }, [params.paperId])
@@ -251,7 +251,7 @@ export default function PaperId() {
 
   useEffect(async() => {
     if(data.searchString){
-      await localforage.setItem("searchString", JSON.stringify(data.searchString))
+      await setItem("searchString", JSON.stringify(data.searchString))
       setSearchString(JSON.stringify(data.searchString))
     }
   }, [data.searchString])
