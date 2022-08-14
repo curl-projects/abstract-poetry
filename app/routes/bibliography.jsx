@@ -159,7 +159,6 @@ export default function BibliographySearch(props){
 
   return(
     <div className="bibliography-container">
-
       <BibliographyHeader
         user={loaderData.user}
         url={url}
