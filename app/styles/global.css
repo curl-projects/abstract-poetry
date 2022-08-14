@@ -700,11 +700,26 @@ h4 {
 
 .metadata-row {
     flex: 1 1 auto;
-    overflow-x: scroll;
+    overflow-x: auto;
     padding-right: var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-xs);
 }
 
+
+
 .metadata-row::-webkit-scrollbar {
+    display: none;
+}
+
+.metadata-inner-row{
+  max-width: 30%;
+  overflow-x: auto;
+}
+
+.metadata-inner-row::-webkit-scrollbar {
     display: none;
 }
 

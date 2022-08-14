@@ -98,11 +98,11 @@ export function PaperMetadata(props) {
               </div>
               <small className="small" onClick={() => setJournalToggle(prevState => !prevState)}>{journal}</small>
             </div>
-            <div className="flex-row metadata-row" onClick={() => setAuthorToggle(!authorToggle)}>
+            <div className="metadata-row" onClick={() => setAuthorToggle(!authorToggle)}>
               <div className="icon">
                 <img src={authorIcon} alt={"Authors"} />
               </div>
-
+              <div className='metadata-inner-row'>
               {authorToggle && authors ?
                 authors.map((authorObj, i) => {
                   if (i === authors.length - 1) {
@@ -115,6 +115,7 @@ export function PaperMetadata(props) {
                 ) :
                 <small className="small shrink">{authors.length !== 0 ? authors[0].name : "No authors found"} {authors.length === 1 || authors.length === 0? "": <span>et al.</span>}</small>
                 }
+                </div>
               </div>
           </div>
         </div>
