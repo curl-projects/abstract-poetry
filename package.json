@@ -25,6 +25,7 @@
     "jstat": "^1.9.5",
     "local-storage": "^2.0.0",
     "localforage": "^1.10.0",
+    "localforage-driver-session-storage": "^1.0.4",
     "react": "^17.0.2",
     "react-d3-tree": "^3.3.2",
     "react-dom": "^17.0.2",
@@ -36,6 +37,7 @@
     "remix-auth": "^3.2.2",
     "remix-auth-socials": "^1.0.2",
     "remix-utils": "^3.3.0",
+    "routes": "^2.1.0",
     "tree-model": "^1.0.7",
     "tree-util": "^1.0.7"
   },

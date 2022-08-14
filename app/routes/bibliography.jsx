@@ -11,7 +11,9 @@ import { authenticator } from "~/models/auth.server.js";
 import { SocialsProvider } from "remix-auth-socials";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
-import * as localforage from "localforage";
+// import * as localforage from "localforage";
+import localforage from "~/utils/browser-memory.client"
+
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTransition } from "@remix-run/react";
 

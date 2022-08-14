@@ -1,6 +1,7 @@
 import { readPath } from "~/models/users.server.js"
 import { useEffect, useState } from "react";
-import * as localforage from "localforage";
+// import * as localforage from "localforage";
+import localforage from "~/utils/browser-memory.client"
 import { useLoaderData, useFetcher } from "@remix-run/react";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"

@@ -16,7 +16,9 @@ import Tour from "~/components/SocialFeatures/tour.client"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
-import * as localforage from "localforage";
+// import * as localforage from "localforage";
+import localforage from "~/utils/browser-memory.client"
+
 import { ClientOnly } from "remix-utils";
 
 import Snackbar from "@mui/material/Snackbar";
@@ -160,7 +162,6 @@ export default function PaperId() {
   const [tourOpen, setTourOpen] = useState(false)
   const [clusterCounter, setClusterCounter] = useState({})
 
-
   useEffect(()=>{
     if(data.isSaveOpen){
       setShareModalOpen(true)
@@ -248,9 +249,9 @@ export default function PaperId() {
     }
   }, [data.message])
 
-  useEffect(() => {
+  useEffect(async() => {
     if(data.searchString){
-      localforage.setItem("searchString", JSON.stringify(data.searchString))
+      await localforage.setItem("searchString", JSON.stringify(data.searchString))
       setSearchString(JSON.stringify(data.searchString))
     }
   }, [data.searchString])

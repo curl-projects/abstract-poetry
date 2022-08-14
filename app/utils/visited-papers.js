@@ -1,6 +1,8 @@
 import ls from "local-storage"
 import {reactLocalStorage} from 'reactjs-localstorage';
-import * as localforage from "localforage";
+// import * as localforage from "localforage";
+import localforage from "~/utils/browser-memory.client"
+
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
@@ -169,9 +171,6 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
   }
 }
 
-export function clearTraversalPath(){
-  localforage.clear()
-}
 
 export async function getTraversalPath(setter=null){
   let root = await ls.getObject('traversalPath')
