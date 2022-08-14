@@ -1,8 +1,6 @@
 import ls from "local-storage"
 import {reactLocalStorage} from 'reactjs-localstorage';
-// import * as localforage from "localforage";
 import { setItem, getItem } from "~/utils/browser-memory.client"
-
 import { deslugifyDoi } from "~/utils/doi-manipulation"
 import TreeModel from 'tree-model';
 
@@ -181,12 +179,6 @@ export async function getTraversalPath(setter=null){
   return root
 }
 }
-
-// TODO: will we use this?
-// export async function checkIfPinned(nodeId){
-//   const activeNodeId = await getItem("activeNodeId")
-//   return activeNodeId === id
-// }
 
 export async function pinCurrentPaper(pathSetter, forceNodeSetter, pinStateSetter){
   const activeNodeId = await getItem("activeNodeId")

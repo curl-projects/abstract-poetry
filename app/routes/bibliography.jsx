@@ -11,12 +11,9 @@ import { authenticator } from "~/models/auth.server.js";
 import { SocialsProvider } from "remix-auth-socials";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
-// import * as localforage from "localforage";
-import { setItem } from "~/utils/browser-memory.client"
-
+import { setItem, clearStorage } from "~/utils/browser-memory.client"
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTransition } from "@remix-run/react";
-
 import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
 
 export async function loader({ request }){
@@ -69,11 +66,6 @@ export default function BibliographySearch(props){
   }
 
   useEffect(()=>{
-    console.log("TRANSITION TYPE:", transition.type)
-    console.log("TRANSITION STATE:", transition.state)
-  }, [transition.type, transition.state])
-
-  useEffect(()=>{
     if(transition.state === 'submitting'){
       setLoadingProgress(0)
       referenceCountFetcher.submit({
@@ -88,12 +80,8 @@ export default function BibliographySearch(props){
     }
   }, [transition.state])
 
-  useEffect(()=>{
-    console.log("REFERENCE DATA:", referenceCountFetcher.data)
-
-  }, [referenceCountFetcher.data])
-
   useEffect(() => {
+    clearStorage();
     if(window){
       setUrl(window.location.pathname)
     }
@@ -150,14 +138,10 @@ export default function BibliographySearch(props){
 
       const tree = new TreeModel();
       const root = tree.parse(data.processedBibliography.traversalPath)
-      console.log("ROOT MODEL", data.processedBibliography.traversalPath)
-      console.log("ROOT", root)
       const mostRecentNode = root.first(function(node){
-        console.log("NODE!!", node)
         return node.model.attributes.nodeId === data.processedBibliography.activeNodeId
       })
 
-      console.log("MOST RECENT NODE:", mostRecentNode)
       const redirectURL = slugifyDoi(mostRecentNode.model.attributes.doi) || ''
       const updateIndex = data.processedBibliography.clusters[mostRecentNode.model.attributes.doi]
       redirectFetcher.submit({redirectURL: data.tour ? `${redirectURL}?isPathRedirect=true&tour=true&updateIndex=${updateIndex}&impression=true&isSaveOpen=true` :`${redirectURL}?isPathRedirect=true&updateIndex=${updateIndex}&impression=trueis&isSaveOpen=true`}, {
@@ -224,13 +208,3 @@ export default function BibliographySearch(props){
     </div>
   )
 }
-//
-// {"paperId": "6a839c647650fdc4aed60e36b12d7b5cee8855c0",
-//   "title": "The role of veterans affairs in emergency management: a systematic literature review.",
-//   "abstract": "UNLABELLED\nThe Department of Veterans Affairs (VA) is a key player in emergency management for both veterans and civilians. Unfortunately, limited evidence-based research findings exist regarding the role and experience of VA during disasters. The present study is a systematic literature review of 41 published, peer-reviewed articles regarding VA and emergency management. Trained researchers utilized a data abstraction tool and conducted a qualitative content analysis. A      description of article characteristics include methodology, phase of emergency management addressed in the research, and study design. Five topic categories emerged from the review including effects of disaster on mental health status and services use, effects of disaster on general health services use, patient tracking, evacuation, and disaster planning/preparation. Findings were used to generate suggestions for future research.\n\n\nKEYWORDS\nVeterans Affairs, veterans, disaster,  emergency.",
-//   "referenceCount": 0.0,
-//   "citationCount": 2.0,
-//   "influentialCitationCount": 0.0,
-//   "fieldsOfStudy": "['Medicine']",
-//   "publicationDate": null,
-//   "authors": "[{'authorId': '34679742', 'name': 'M. Claver'}, {'authorId': '31483816', 'name': 'D. Friedman'}, {'authorId': '2290112', 'name': 'A. Dobalian'}, {'authorId': '3230661', 'name': 'K. Ricci'}, {'authorId': '51909111', 'name': 'Melanie Horn Mallers'}]"}

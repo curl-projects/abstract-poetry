@@ -5,7 +5,7 @@ import { json, redirect } from "@remix-run/node"
 import { handleSearch, handleSearchv2 } from "~/models/search.server"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 // import * as localforage from "localforage";
-import { setItem, getItem } from "~/utils/browser-memory.client"
+import { setItem, getItem, clearStorage } from "~/utils/browser-memory.client"
 
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
@@ -46,70 +46,12 @@ export default function Search(props){
   const searchBarRef = useRef();
 
   useEffect(()=>{
-    // getItem("storeName").then(function(value){
-    //   localforage.clear().then(function(){
-    //     if(value !== null){
-    //       localforage.config({
-    //         name: 'localforage',
-    //         storeName: `${value}`,
-    //         description: "Abstract Poetry value store"
-    //       })
-    //     }
-    //     else{
-    //       const randomId = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
-    //         localforage.config({
-    //           name: 'localforage',
-    //           storeName: `${randomId}`, // Should be alphanumeric, with underscores.
-    //           description : 'Abstract Poetry value store'
-    //         })
-    //         setItem('storeName', randomId)
-    //     }
-    //     console.log("STORE NAME VALUE:", value)
-    //   })
-    // })
-
-
-    // localforage.clear().then(function(){
-    //     getItem('storeName')
-    //   }).then(function(value){
-    //     console.log("STORE NAME", value)
-    //   })
-      // const existingStore = await getItem("storeName")
-      // console.log("EXISTING STORE", existingStore)
-      // if(existingStore !== null){
-      //   localforage.config({
-      //     storeName : existingStore, // Should be alphanumeric, with underscores.
-      //     description : 'Abstract Poetry value store'
-      //   })
-      // }
-      // else{
-      //   const randomId = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
-      //   localforage.config({
-      //     storeName : randomId, // Should be alphanumeric, with underscores.
-      //     description : 'Abstract Poetry value store'
-      //   })
-      //   await setItem('storeName', randomId)
-      // }
-    // const storageId = await getItem("storageId")
-    //
-    // if(storageId){
-    //   localforage.dropInstance({
-    //     name: "localforage",
-    //     storeName: storageId
-    //   })
-    // }
-
-    // localforage.config({
-    //   storeName :`store-${randomId}`, // Should be alphanumeric, with underscores.
-    //   description : 'Abstract Poetry value store'
-    // })
-    // setItem("storageId", `keyvaluepairs-${randomId}`)
-
     coldStartFetcher.submit({}, {
       method: "post",
       action: "/warmup-microservice"
     })
     // Clears local storage whenever the search page loads, resetting the algorithm
+    clearStorage();
   }, [])
 
   // useEffect(()=>{

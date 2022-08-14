@@ -1,23 +1,7 @@
 import { deslugifyDoi, doiToJournal } from "~/utils/doi-manipulation";
 import TreeModel from 'tree-model';
 
-// ACTIVE NODE ID
 
-// ALG PARAMS
-
-// CLUSTERS
-
-// FORCE NODES
-
-// NODEIDCOUNTER
-
-// SEARCH STRING
-
-// TRAVERSAL PATH
-
-// PATHNAME
-
-// CLUSTER COUNTER
 
 export function processBibliography(bibliographyClusters, metadataMap){
   // DATA STRUCTURE INIT
@@ -68,8 +52,6 @@ export function processBibliography(bibliographyClusters, metadataMap){
     // NODE ID COUNTER UPDATE
     nodeIdCounter += 1
   }
-
-
   // FINAL DATA STRUCTURE CREATION
   const activeNodeId = nodeIdCounter
 

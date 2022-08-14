@@ -5,3 +5,7 @@ export async function setItem(name, object){
 export async function getItem(name){
   return JSON.parse(window.sessionStorage.getItem(name))
 }
+
+export function clearStorage(){
+  window.sessionStorage.clear();
+}
