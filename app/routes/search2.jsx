@@ -82,7 +82,7 @@ export default function Search2(props){
       if(clusterFetcher.data.cluster){
         await setItem("clusters", clusterFetcher.data.cluster)
         const redirectURL = (clusterFetcher.data.seedDOI
-                ? `/${slugifyDoi(fetcher.data.seedDOI)}?message=${actionData.case}&searchString=${actionData.searchString}`
+                ? `/${slugifyDoi(clusterFetcher.data.seedDOI)}?message=${actionData.case}&searchString=${actionData.searchString}`
                 : `/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`)
         redirectFetcher.submit({ redirectURL: redirectURL}, {
           method: "post",
