@@ -98,7 +98,6 @@ export function Header(props) {
     // }, [props.isSaveOpen, props.setShareModalOpen])
 
   useEffect(()=>{
-    console.log("MODAL OPEN?? ", modalOpen)
     if(modalOpen){
       readPathFetcher.submit({
       }, {

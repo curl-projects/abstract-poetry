@@ -1,14 +1,19 @@
 import glass from "../../public/assets/Glass.svg";
 import { Tooltip } from "@mui/material";
-import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
-import { useLoaderData } from "@remix-run/react";
+import { SearchHeader } from "~/components/SeedSearch/search-header-v2"
+import { useLoaderData, useActionData, Form, useFetcher } from "@remix-run/react";
 import { authenticator } from "~/models/auth.server.js";
 import { json } from "@remix-run/node"
 import { useEffect, useState, useRef } from "react";
-import { clearStorage } from "~/utils/browser-memory.client"
+import { setItem, getItem, clearStorage } from "~/utils/browser-memory.client"
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
+import { PaperData } from "~/components/PaperViewer/paper-data.js"
+import { SeedPapers } from "~/components/SeedSearch/seed-papers-v2"
+import { handleSearchv2 } from "~/models/search.server"
+
 
 export async function loader({ request }){
   const user = await authenticator.isAuthenticated(request)
@@ -18,55 +23,129 @@ export async function loader({ request }){
   return json(data)
 }
 
+export async function action({ request }){
+  const formData = await request.formData();
+  const searchString = formData.get('searchString')
+  const handleSearchOutput = await handleSearchv2(searchString)
+
+  return json({...handleSearchOutput, searchString: searchString})
+
+}
 
 export default function Search2(props){
   const loaderData = useLoaderData();
+  const actionData = useActionData();
+  const coldStartFetcher = useFetcher();
+  const clusterFetcher = useFetcher();
+  const redirectFetcher = useFetcher();
   const [url, setUrl] = useState('/');
-  const [messageExists, setMessageExists] = useState(false);
+  const [paperSelection, setPaperSelection] = useState(false)
+  const [errorExists, setErrorExists] = useState(false);
+  const [headerMessage, setHeaderMessage] = useState("")
+  const searchBarRef = useRef();
 
-
-  useEffect(() => {
+  useEffect(()=>{
+    coldStartFetcher.submit({}, {
+      method: "post",
+      action: "/warmup-microservice"
+    })
+    // Clears local storage whenever the search page loads, resetting the algorithm
     clearStorage();
-    if(window){
-      setUrl(window.location.pathname)
+  }, [])
+
+  useEffect(()=>{
+    // Keeps track of search error state, opening and closing the snackbar
+    if(actionData?.action === 'error'){
+      setErrorExists(true)
+      setHeaderMessage("Start searching with a DOI or keyword")
     }
-  }, []);
+    if(actionData?.action === 'select-papers'){
+      setPaperSelection(true)
+      setHeaderMessage("Choose a paper you're interested in, and we'll find the closest match in our database")
+    }
+    else if(actionData?.action === 'redirect'){
+      setHeaderMessage("Searching for relevant papers")
+      clusterFetcher.submit({
+        doi: deslugifyDoi(actionData.doiString),
+        keywordSearch: false,
+        referencesList: actionData.referencesList
+      }, {
+        method: "post",
+        action: "/cluster-papers"
+      })
+    }
+  }, [actionData])
+
+  useEffect(async()=>{
+    if(clusterFetcher.data){
+      // separating these if statements to capture the error
+      if(clusterFetcher.data.cluster){
+        await setItem("clusters", clusterFetcher.data.cluster)
+        const redirectURL = (clusterFetcher.data.seedDOI
+                ? `/${slugifyDoi(fetcher.data.seedDOI)}?message=${actionData.case}&searchString=${actionData.searchString}`
+                : `/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`)
+        redirectFetcher.submit({ redirectURL: redirectURL}, {
+          method: "post",
+          action: "/redirect-paths"
+        })
+      }
+      else{
+        setErrorExists(true)
+      }
+    }
+  }, [clusterFetcher.data])
+
+  useEffect(()=>{
+    if(clusterFetcher.state === "submitting"){
+      setHeaderMessage("Searching for relevant papers")
+    }
+  }, [clusterFetcher.state])
 
   return(
     <div className="bibliography-container">
-      <BibliographyHeader
+      <SearchHeader
         user={loaderData.user}
-        url={url}
         />
-      <div id="searchbar" className="bib-search bib-flex-space-between">
-          <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
-            <input type="text" autoFocus name="doiInput" placeholder={"Explore all of PLOS with keywords or DOIs"} />
-      </div>
-      <Tooltip title="Start New Search">
-          <button type="submit" style = {{ cursor: "pointer"}}>
-            <img id="home-button" src={glass} alt="Home Logo" />
-          </button>
-        </Tooltip>
+      <div className="search-wrapper">
+      <Form method='post' className="bibliography-form">
+        <div id="searchbar" className="bib-search bib-flex-space-between">
+        <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
+              <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus/>
+        </div>
+        <Tooltip title="Start New Search">
+            <button type="submit" style = {{ cursor: "pointer" }}>
+              <img id="home-button" src={glass} alt="Home Logo" />
+            </button>
+          </Tooltip>
+        </div>
+      </Form>
 
-      </div>
+      {actionData?.doiList &&
+        <SeedPapers
+          paperList={actionData?.doiList ? actionData.doiList : Array(10).fill(0)}
+          fetcher={clusterFetcher}
+          />
+      }
+    </div>
 
     <Snackbar
-      open={messageExists}
+      open={errorExists}
       autoHideDuration={4000}
-      onClose={()=>setMessageExists(false)}
+      message={actionData ? actionData.message : clusterFetcher.data?.error}
+      onClose={()=>setErrorExists(false)}
       action={
         <React.Fragment>
           <IconButton
             aria-label="close"
             sx={{ p: 0.5 }}
             color="inherit"
-            onClick={() => setMessageExists(false)}
-          >
+            onClick={() => setErrorExists(false)}
+            >
             <CloseIcon />
           </IconButton>
         </React.Fragment>
       }
-      />
+    />
     </div>
   )
 }

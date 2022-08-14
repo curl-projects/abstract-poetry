@@ -20,7 +20,6 @@ import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
 import { SocialsBar } from "~/components/SocialFeatures/socials-bar"
 import { authenticator } from "~/models/auth.server.js";
 import { useMediaQuery } from 'react-responsive'
-import {isMobile} from 'react-device-detect';
 
 export const loader = async ({ request }) => {
   const user = await authenticator.isAuthenticated(request)
@@ -125,7 +124,7 @@ export default function Search(props){
     console.log("ERROR EXISTS:", errorExists)
   }, [errorExists])
 
-  if(isMobile){
+  if(isTabletOrMobile){
     return(
       <div style={{display: 'flex',
                    justifyContent: "center",
@@ -135,10 +134,11 @@ export default function Search(props){
                    textAlign: "center",
                    padding: '30px'
                  }}>
-        <p>Hey! For now, we only support bigger screens. Thanks for checking us out though :)</p>
+        Hey! For now, we only support bigger screens. Thanks for checking us out though :)
       </div>
     )
   }
+  else{
 
   return(
     <>
@@ -187,5 +187,5 @@ export default function Search(props){
                                           : `/${actionData.doiString}?message=${actionData.case}&searchString=${actionData.searchString}`} ref={ref}/>}
       </div>
     </>
-  )
+)}
 }
