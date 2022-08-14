@@ -1,7 +1,7 @@
 import glass from "../../public/assets/Glass.svg";
 import { Tooltip } from "@mui/material";
 import { SearchHeader } from "~/components/SeedSearch/search-header-v2"
-import { useLoaderData, useActionData, Form, useFetcher } from "@remix-run/react";
+import { useLoaderData, useActionData, Form, useFetcher, useTransition } from "@remix-run/react";
 import { authenticator } from "~/models/auth.server.js";
 import { json } from "@remix-run/node"
 import { useEffect, useState, useRef } from "react";
@@ -13,7 +13,8 @@ import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { SeedPapers } from "~/components/SeedSearch/seed-papers-v2"
 import { handleSearchv2 } from "~/models/search.server"
-
+import { Fade } from "react-awesome-reveal";
+import LinearProgress from '@mui/material/LinearProgress';
 
 export async function loader({ request }){
   const user = await authenticator.isAuthenticated(request)
@@ -42,7 +43,8 @@ export default function Search2(props){
   const [paperSelection, setPaperSelection] = useState(false)
   const [errorExists, setErrorExists] = useState(false);
   const [headerMessage, setHeaderMessage] = useState("")
-  const searchBarRef = useRef();
+  const transition = useTransition();
+  const searchRef = useRef();
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
@@ -61,7 +63,7 @@ export default function Search2(props){
     }
     if(actionData?.action === 'select-papers'){
       setPaperSelection(true)
-      setHeaderMessage("Choose a paper you're interested in, and we'll find the closest match in our database")
+      setHeaderMessage("Choose a paper you're interested in, and we'll find our closest match")
     }
     else if(actionData?.action === 'redirect'){
       setHeaderMessage("Searching for relevant papers")
@@ -96,10 +98,10 @@ export default function Search2(props){
   }, [clusterFetcher.data])
 
   useEffect(()=>{
-    if(clusterFetcher.state === "submitting"){
+    if(clusterFetcher.state === "submitting" || transition.state === 'submitting'){
       setHeaderMessage("Searching for relevant papers")
     }
-  }, [clusterFetcher.state])
+  }, [clusterFetcher.state, transition])
 
   return(
     <div className="bibliography-container">
@@ -108,16 +110,20 @@ export default function Search2(props){
         />
       <div className="search-wrapper">
       <Form method='post' className="bibliography-form">
-        <div id="searchbar" className="bib-search bib-flex-space-between">
-        <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
+        <Fade direction="bottom" className="bibliography-fade">
+          <div id="searchbar" className="bib-search bib-flex-space-between">
+          <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
+            <p className="search-text">{headerMessage}</p>
               <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus/>
-        </div>
-        <Tooltip title="Start New Search">
-            <button type="submit" style = {{ cursor: "pointer" }}>
-              <img id="home-button" src={glass} alt="Home Logo" />
-            </button>
-          </Tooltip>
-        </div>
+              {(transition.state === 'submitting' || clusterFetcher.state === 'submitting') && <LinearProgress variant="indeterminate" style={{width: "100%", height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
+          </div>
+          <Tooltip title="Start New Search">
+              <button type="submit" style = {{ cursor: "pointer" }}>
+                <img id="home-button" src={glass} alt="Home Logo" />
+              </button>
+            </Tooltip>
+          </div>
+        </Fade>
       </Form>
 
       {actionData?.doiList &&
