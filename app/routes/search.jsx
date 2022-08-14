@@ -19,6 +19,8 @@ import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
 import { SocialsBar } from "~/components/SocialFeatures/socials-bar"
 import { authenticator } from "~/models/auth.server.js";
+import { useMediaQuery } from 'react-responsive'
+import {isMobile} from 'react-device-detect';
 
 export const loader = async ({ request }) => {
   const user = await authenticator.isAuthenticated(request)
@@ -44,6 +46,11 @@ export default function Search(props){
   const [headerMessage, setHeaderMessage] = useState("")
   const data = useLoaderData();
   const searchBarRef = useRef();
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 800px)' })
+
+  useEffect(()=>{
+    console.log("IS TABLET OR MOBILE", isTabletOrMobile)
+  }, [isTabletOrMobile])
 
   useEffect(()=>{
     coldStartFetcher.submit({}, {
@@ -117,6 +124,21 @@ export default function Search(props){
   useEffect(()=>{
     console.log("ERROR EXISTS:", errorExists)
   }, [errorExists])
+
+  if(isMobile){
+    return(
+      <div style={{display: 'flex',
+                   justifyContent: "center",
+                   alignItems: "center",
+                   height: '100vh',
+                   width: "100vw",
+                   textAlign: "center",
+                   padding: '30px'
+                 }}>
+        <p>Hey! For now, we only support bigger screens. Thanks for checking us out though :)</p>
+      </div>
+    )
+  }
 
   return(
     <>
