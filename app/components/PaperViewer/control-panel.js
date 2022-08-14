@@ -12,6 +12,8 @@ import { Tooltip } from "@mui/material";
 import glyph from "../../../public/assets/glyph.svg";
 import read from "../../../public/assets/read.svg";
 import pin from "../../../public/assets/pin.svg";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 
 export function ControlPanel(props) {
   const params = useParams();
@@ -43,7 +45,7 @@ export function ControlPanel(props) {
        setToggle(false)
      }
    }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
-  // 
+  //
   // useEffect(()=>{
   //   console.log("FETCHER DATA:", fetcher.data)
   // }, [fetcher.data])
@@ -120,7 +122,7 @@ export function ControlPanel(props) {
           <input type="hidden" name="clusters" value={JSON.stringify(props.clusters)} />
 
           <div id="impression-buttons" className="switch flex-row" style={{ gap: "0px" }}>
-            <Tooltip title="Fewer Papers Like This (←)">
+            <Tooltip title="Fewer Papers Like This">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -128,10 +130,10 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={negativeSubmitRef}
               >
-                <div className="circle left" />
+                <HeartBrokenIcon className="left-heart" style={{height: "12px", width: "12px"}}/>
               </button>
             </Tooltip>
-            <Tooltip title="More Papers Like This (→)">
+            <Tooltip title="More Papers Like This">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -139,7 +141,7 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={positiveSubmitRef}
               >
-                <div className="circle right" />
+                <FavoriteIcon className="right-heart" style={{height: "12px", width: "12px"}}/>
               </button>
             </Tooltip>
           </div>

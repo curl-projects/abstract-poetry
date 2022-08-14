@@ -715,7 +715,7 @@ h4 {
 }
 
 .metadata-inner-row{
-  max-width: 30%;
+  max-width: 90%;
   overflow-x: auto;
 }
 
@@ -1427,6 +1427,15 @@ input[type="text"]:focus::placeholder {
 .right {
     background-color: rgb(var(--clr-grey-700));
 }
+
+.left-heart {
+    color: rgb(var(--clr-grey-100));
+}
+
+.right-heart {
+    color: rgb(var(--clr-grey-700));
+}
+
 
 
 
