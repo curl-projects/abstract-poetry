@@ -3,9 +3,9 @@ import slack from "../../../public/assets/slack.svg";
 import calendly from "../../../public/assets/calendly.svg";
 import { Tooltip } from "@mui/material";
 
-export const SocialsBar = () => {
+export const SocialsBar = (props) => {
   return(
-    <div className='socials-bar'>
+    <div className={props.horizontal ? 'horizontal-socials-bar' : 'socials-bar'}>
       <Tooltip title="Join us on Discord!">
         <div className='socials-box'>
           <a href="https://discord.gg/X8PtGHkMQc" target="_blank">

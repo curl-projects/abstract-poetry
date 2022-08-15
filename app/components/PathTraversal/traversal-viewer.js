@@ -36,7 +36,7 @@ export function TraversalViewer(props) {
   }, [containerRef.current])
 
   return (
-    <div className="traversal-viewer" ref={containerRef}>
+    <div className={props.horizontal ? "horizontal-traversal-viewer traversal-viewer" : "traversal-viewer"} ref={containerRef}>
       {params.paperId &&
         <NoSSR>
           <Tree

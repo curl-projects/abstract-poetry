@@ -92,7 +92,7 @@ export function ControlPanel(props) {
   //TODO: refactor reading list form to use fetchers and add errors
 
   return (
-    <div className="control-panel flex-column">
+    <div className={props.horizontal ? "control-panel horizontal-control-panel flex-column" : "control-panel flex-column"}>
       <div className="panel">
         <img src={glyph} alt="Glyph Logo" className="paper-portrait" />
         <div className="metadata-grid" style={{ display: toggle ? "none" : "grid" }}>

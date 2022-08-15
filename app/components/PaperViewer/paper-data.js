@@ -25,7 +25,7 @@ export function PaperData(props) {
   }, [props.paperList, props.nodeState])
 
   return (
-    <div className="paper-viewer">
+    <div className={props.horizontal ? "paper-viewer horizontal" : "paper-viewer"}>
 
       <PaperMetadata
         doi={props.doi}

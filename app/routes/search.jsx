@@ -102,6 +102,10 @@ export default function Search2(props){
   }, [clusterFetcher.data])
 
   useEffect(()=>{
+    console.log("CLUSTER FETCHER", clusterFetcher.type)
+  }, [clusterFetcher.type])
+
+  useEffect(()=>{
     if(clusterFetcher.state === "submitting" || transition.state === 'submitting'){
       setHeaderMessage("Searching for relevant papers")
     }
@@ -117,7 +121,7 @@ export default function Search2(props){
       <Form method='post' className="bibliography-form">
         <Fade direction="bottom" className="bibliography-fade">
           <div className="search-outer-wrapper">
-            <p className="search-text">{headerMessage}</p>
+            <p className="search-text" style={(actionData?.doiList && !(['actionSubmission', 'actionReload', 'done'].includes(clusterFetcher.type))) ? {color: "rgba(var(--clr-grey-200), 0.8)", fontWeight: 'bold'} : {}}>{headerMessage}</p>
           <div id="searchbar" className="bib-search bib-flex-space-between" style={(actionData?.doiList ? {} : {marginBottom: "140px"})}>
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
               <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus/>

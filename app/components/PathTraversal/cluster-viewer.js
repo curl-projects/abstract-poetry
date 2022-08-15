@@ -108,7 +108,7 @@ export function ClusterViewer(props) {
 
 
   return (
-    <div className="traversal-viewer" ref={containerRef}>
+    <div className={props.horizontal ? "traversal-viewer horizontal-cluster" : "traversal-viewer"} ref={containerRef}>
       <Form ref={formRef} method="post" onSubmit={handleRedirectSubmit} />
 
       {(typeof window !== "undefined") &&
