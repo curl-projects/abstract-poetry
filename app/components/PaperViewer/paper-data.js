@@ -11,16 +11,16 @@ export function PaperData(props) {
 
   useEffect(()=>{
     if(params.paperId){
-      let reversedPaperList = props.paperList.slice().reverse()
-      let mappedPaperList = reversedPaperList.map(function(dataObj){
+      // let reversedPaperList = props.paperList.slice().reverse()
+      let mappedPaperList = props.paperList.map(function(dataObj){
         let newObj = {...dataObj.model.attributes.metadata}
         newObj.nodeId = dataObj.model.attributes.nodeId
         newObj.doi = dataObj.model.attributes.doi
         return newObj
       })
-      let filteredPaperList = mappedPaperList.filter(node => node.nodeId !== props.nodeState)
+      // let filteredPaperList = mappedPaperList.filter(node => node.nodeId !== props.nodeState)
 
-      setPaperList(filteredPaperList)
+      setPaperList(mappedPaperList)
     }
   }, [props.paperList, props.nodeState])
 
@@ -32,6 +32,7 @@ export function PaperData(props) {
         metadata={props.metadata}
         headerMessage={props.headerMessage}
         setToggle={props.setToggle}
+        index={props.toggle ? props.nodeState-1 : null}
       />
 
     {

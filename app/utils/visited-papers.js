@@ -29,12 +29,13 @@ export async function updateTraversalPath(doi, algParamIndex, impression,
     const mostRecentNode = root.first(function(node){
       return node.model.attributes.nodeId === parseInt(mostRecentNodeId)
     })
+    var allNodes = []
+    root.walk({strategy: 'pre'}, function(node){ allNodes.push(node) })
     // If the current path (root to active node) contains a node with the active doi
     // don't update the tree
-
     const path = mostRecentNode.getPath()
 
-    visitedPathSetter(path)
+    visitedPathSetter(allNodes)
 
     const currentAlgParams = await getItem("algParams")
     const forceNodes = await getItem('forceNodes')

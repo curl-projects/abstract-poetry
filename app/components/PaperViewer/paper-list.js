@@ -9,6 +9,7 @@ export function PaperList(props){
         return (
           <PaperMetadata
             key={i}
+            index={i}
             doi={metadata.doi}
             metadata={metadata}
             fetcher={props.fetcher}

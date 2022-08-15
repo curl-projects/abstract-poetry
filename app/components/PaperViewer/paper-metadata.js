@@ -37,10 +37,6 @@ export function PaperMetadata(props) {
 
 
   useEffect(() => {
-    console.log("METADATA:", props.metadata)
-  }, [props.metadata])
-
-  useEffect(() => {
     if(props.metadata?.authors){
       // necessary because in search.jsx authors is already parsed into a list,
       // but it's not in paperId
@@ -83,7 +79,7 @@ export function PaperMetadata(props) {
     return (
       <>
         <div className="metadata flex-column paper-list" style={{ gap: "var(--space-xxs)", minWidth: 0 }}>
-          <h3 onClick={props.setToggle ? ()=>props.setToggle(prevState=>!prevState) : props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{props.metadata.title}</h3>
+          <h3 onClick={props.setToggle ? ()=>props.setToggle(prevState=>!prevState) : props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{(props.index || props.index === 0) ? <span>[{parseInt(props.index)+1}]</span> : ""} {props.metadata.title}</h3>
 
           <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch", minWidth: 0, width: "100%" }}>
             <div className="flex-row shrink">
