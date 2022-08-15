@@ -14,8 +14,9 @@ import { slugifyDoi } from "~/utils/doi-manipulation"
 import { setItem, clearStorage } from "~/utils/browser-memory.client"
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTransition } from "@remix-run/react";
-import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
+import { SearchHeader } from "~/components/SeedSearch/search-header"
 import { Fade } from "react-awesome-reveal";
+import { SocialsBar } from "~/components/SocialFeatures/socials-bar"
 
 export async function loader({ request }){
   const user = await authenticator.isAuthenticated(request)
@@ -160,7 +161,7 @@ export default function BibliographySearch(props){
 
   return(
     <div className="bibliography-container">
-      <BibliographyHeader
+      <SearchHeader
         user={loaderData.user}
         url={url}
         />
@@ -191,17 +192,32 @@ export default function BibliographySearch(props){
             }
         </div>
         {(!(transition.state==='submitting')) &&
-        <p class="small" style={{position: "relative", bottom: "120px"}}>
+        <>
+        <p className="small" style={{position: "relative", bottom: "120px"}}>
           <Link to={"/search"} style={{textDecoration:"none",
                                              color: "rgba(var(--clr-grey-500), 1)"}}>
             Click here to perform a Semantic Search instead
           </Link>
         </p>
+        <small style={{position: "relative", bottom: "110px"}}>
+          New Here?&nbsp;
+          <Link to={`/share/cl6u2hf9c0003n531p28xsbqt`} style={{color: "black"}}>
+          See an example bibliography
+          </Link>
+          &nbsp;or&nbsp;
+          <Link to={`/share/cl6df3s440000j3315oa0mkg7?tour=true`} style={{color: "black"}}>
+           take a tour
+          </Link>
+        </small>
+        </>
         }
       </div>
       </Fade>
       </Form>
     </div>
+
+    <SocialsBar />
+    
     <Snackbar
       open={messageExists}
       autoHideDuration={4000}

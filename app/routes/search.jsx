@@ -1,6 +1,6 @@
 import glass from "../../public/assets/Glass.svg";
 import { Tooltip } from "@mui/material";
-import { SearchHeader } from "~/components/SeedSearch/search-header-v2"
+import { SearchHeader } from "~/components/SeedSearch/search-header"
 import { useLoaderData, useActionData, Form, useFetcher, useTransition, Link } from "@remix-run/react";
 import { authenticator } from "~/models/auth.server.js";
 import { json } from "@remix-run/node"
@@ -15,6 +15,7 @@ import { SeedPapers } from "~/components/SeedSearch/seed-papers"
 import { handleSearchv2 } from "~/models/search.server"
 import { Fade } from "react-awesome-reveal";
 import LinearProgress from '@mui/material/LinearProgress';
+import { SocialsBar } from "~/components/SocialFeatures/socials-bar"
 
 export async function loader({ request }){
   const user = await authenticator.isAuthenticated(request)
@@ -47,6 +48,9 @@ export default function Search2(props){
   const searchRef = useRef();
 
   useEffect(()=>{
+    if(window){
+      setUrl(window.location.pathname)
+    }
     coldStartFetcher.submit({}, {
       method: "post",
       action: "/warmup-microservice"
@@ -107,6 +111,7 @@ export default function Search2(props){
     <div className="bibliography-container">
       <SearchHeader
         user={loaderData.user}
+        url={url}
         />
       <div className="search-wrapper">
       <Form method='post' className="bibliography-form">
@@ -126,12 +131,24 @@ export default function Search2(props){
 
           </div>
           {(!actionData && !(transition.state==='submitting')) &&
-          <p class="small" style={{position: "relative", bottom: "120px"}}>
+          <>
+          <p className="small" style={{position: "relative", bottom: "120px"}}>
             <Link to={"/bibliography"} style={{textDecoration:"none",
                                                color: "rgba(var(--clr-grey-500), 1)"}}>
               Click here to generate a Semantic Bibliography instead
             </Link>
           </p>
+          <small style={{position: "relative", bottom: "110px"}}>
+            New Here?&nbsp;
+            <Link to={`/share/cl6smskk000326731lifpgufc`} style={{color: "black"}}>
+              See an example search
+            </Link>
+            &nbsp;or&nbsp;
+            <Link to={`/share/cl6df3s440000j3315oa0mkg7?tour=true`} style={{color: "black"}}>
+             take a tour
+            </Link>
+          </small>
+          </>
           }
         </div>
         </Fade>
@@ -145,6 +162,7 @@ export default function Search2(props){
       }
     </div>
 
+    <SocialsBar />
     <Snackbar
       open={errorExists}
       autoHideDuration={4000}
