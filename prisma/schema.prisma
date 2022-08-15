@@ -30,4 +30,5 @@ model TraversalPath {
   nodeIdCounter Int
   searchString String
   traversalPath String
+  clusterCounter String @default("{}")
 }

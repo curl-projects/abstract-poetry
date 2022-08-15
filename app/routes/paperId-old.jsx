@@ -16,16 +16,21 @@ import Tour from "~/components/SocialFeatures/tour.client"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
+// import * as localforage from "localforage";
 import { setItem, getItem } from "~/utils/browser-memory.client"
+
 import { ClientOnly } from "remix-utils";
+
 import Snackbar from "@mui/material/Snackbar";
+
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Tooltip } from "@mui/material";
+
 import { caseToMessage } from "~/utils/messages-and-alerts"
 import { authenticator } from "~/models/auth.server.js";
+
 import { Counter, getKeyByValue, getClusterPapers } from "~/utils/cluster-manipulation";
-import { Fade } from "react-awesome-reveal";
 
 const steps = [
   {
@@ -156,7 +161,6 @@ export default function PaperId() {
   const [existingPathName, setExistingPathName] = useState(null)
   const [tourOpen, setTourOpen] = useState(false)
   const [clusterCounter, setClusterCounter] = useState({})
-  const [horizontal, setHorizontal] = useState(true)
 
   useEffect(()=>{
     if(data.isSaveOpen){
@@ -210,7 +214,7 @@ export default function PaperId() {
     }
 
     let clusterCounter = await getItem('clusterCounter');
-    console.log("CLUSTER COUNTER", clusterCounter)
+
     const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
       return clusterCount > 2
     })
@@ -226,16 +230,14 @@ export default function PaperId() {
   useEffect(async() => {
     let clusterCounter = await getItem('clusterCounter');
 
-    if(clusterCounter){
-      const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
-        return clusterCount > 2
-      })
+    const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
+      return clusterCount > 2
+    })
 
-      if(thresholdIndex !== -1){
-          let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
-          let clusters = await getItem('clusters')
-          let doiList = getClusterPapers(clusters, clusterKey)
-      }
+    if(thresholdIndex !== -1){
+        let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
+        let clusters = await getItem('clusters')
+        let doiList = getClusterPapers(clusters, clusterKey)
     }
   }, [params.paperId])
 
@@ -256,7 +258,7 @@ export default function PaperId() {
 
 
   return (
-    <div className={horizontal ? "container-horizontal grid-view" : "container grid-view"}>
+    <div className="container grid-view">
       <PaperHeader
         activeNodeId={nodeState}
         algParams={algParams}
@@ -270,7 +272,7 @@ export default function PaperId() {
         setPathId={setPathId}
         saveModalOpen={saveModalOpen}
         setSaveModalOpen={setSaveModalOpen}
-        horizontal={horizontal}
+
         shareModalOpen={shareModalOpen}
         setShareModalOpen={setShareModalOpen}
         existingPathName={existingPathName}
@@ -279,7 +281,7 @@ export default function PaperId() {
         clusterCounter={clusterCounter}
         />
 
-      {!horizontal && <div className="axis" />}
+      <div className="axis" />
 
       <ControlPanel
         actionData={actionData}
@@ -294,7 +296,6 @@ export default function PaperId() {
         saveModalOpen={saveModalOpen}
         shareModalOpen={shareModalOpen}
         tourOpen={tourOpen}
-        horizontal={horizontal}
       />
 
       <PaperData
@@ -305,7 +306,6 @@ export default function PaperId() {
         paperList={visitedPathList}
         nodeState={nodeState}
         fetcher={redirectFetcher}
-        horizontal={horizontal}
       />
 
       {traversalState ?
@@ -313,7 +313,6 @@ export default function PaperId() {
           forceNodes={forceNodes}
           nodeState={nodeState}
           isPathRedirect={isPathRedirect}
-          horizontal={horizontal}
         />
         :
         <TraversalViewer
@@ -321,24 +320,21 @@ export default function PaperId() {
           nodeState={nodeState}
           className="traversal-viewer"
           position={data.position}
-          horizontal={horizontal}
         />
       }
+
+      <Share
+        traversalPath={traversalPath}
+      />
 
       <Controls
         setTraversalState={setTraversalState}
         traversalState={traversalState}
-        horizontal={horizontal}
-        traversalPath={traversalPath}
       />
 
 
-      <Background
-        horizontal={horizontal}
-        />
-      <SocialsBar
-        horizontal={horizontal}
-        />
+      <Background />
+      <SocialsBar />
 
       <ClientOnly>
         {

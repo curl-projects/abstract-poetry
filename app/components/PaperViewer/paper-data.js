@@ -1,6 +1,6 @@
 import { PaperMetadata } from "~/components/PaperViewer/paper-metadata.js"
 import { PaperAbstract } from "~/components/PaperViewer/paper-abstract.js"
-import { SeedPapers } from "~/components/SeedSearch/seed-papers.js"
+import { PaperList } from "~/components/PaperViewer/paper-list.js"
 import { useState, useEffect } from "react"
 import { useParams} from "@remix-run/react"
 import { Introduction } from "~/components/SocialFeatures/introduction.js"
@@ -24,12 +24,8 @@ export function PaperData(props) {
     }
   }, [props.paperList, props.nodeState])
 
-  useEffect(() => {
-    console.warn("FILTERED PAPER LIST:", paperList)
-  }, [paperList])
-
   return (
-    <div className="paper-viewer">
+    <div className={props.horizontal ? "paper-viewer horizontal" : "paper-viewer"}>
 
       <PaperMetadata
         doi={props.doi}
@@ -39,26 +35,17 @@ export function PaperData(props) {
       />
 
     {
-      (props.toggle && props.paperList && params.paperId)
-      ? <SeedPapers
+      (props.toggle && props.paperList)
+      ? <PaperList
           paperList={paperList}
           fetcher={props.fetcher}
           />
-      : (props.toggle && props.paperList && !params.paperId)
-      ? <SeedPapers
-          paperList={props.paperList}
-          fetcher={props.fetcher}
-          />
-      : (params.paperId)
-      ? <PaperAbstract
+      : <PaperAbstract
           doi={props.doi}
           title={props.metadata ? props.metadata.title : ""}
           abstract={props.metadata ? props.metadata.abstract : ""}
           params={params}
         />
-      : <Introduction
-          searchBarRef={props.searchBarRef}
-      />
     }
 
     </div>

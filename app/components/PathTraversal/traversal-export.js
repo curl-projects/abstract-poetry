@@ -7,11 +7,11 @@ export function Share(props) {
   const fetcher = useFetcher();
 
   return (
-    <div className="traversal-share" style={{ pointerEvents: 'none' }}>
+    <div className={props.horizontal ? "horizontal-traversal-share": "traversal-share"} style={{ pointerEvents: 'none' }}>
         <form method="post" action="/create-reading-list">
           <input type="hidden" name="rootModel" value={JSON.stringify(props.traversalPath)} />
           <input type="hidden" name="citationStyle" value="apa" />
-            <button id="export-button" type="submit" className="abs-left toolbar panel-glass"
+            <button id="export-button" type="submit" className={props.horizontal ? "abs-left toolbar horizontal-toolbar panel-glass" : "abs-left toolbar panel-glass"}
               style={{ pointerEvents: 'auto', cursor: "pointer" }} >
               <Tooltip title="Export Reading List to .txt">
                 <img src={share} alt="Share or Export Reading List" />

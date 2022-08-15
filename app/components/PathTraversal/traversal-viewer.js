@@ -6,7 +6,6 @@ import Tree from 'react-d3-tree'
 
 import { useCenteredTree } from "~/utils/tree-visualisation"
 
-import * as localforage from "localforage";
 import NoSSR from 'react-no-ssr-depup';
 
 import { traversalNode } from "~/components/PathTraversal/traversal-node"
@@ -37,7 +36,7 @@ export function TraversalViewer(props) {
   }, [containerRef.current])
 
   return (
-    <div className="traversal-viewer" ref={containerRef}>
+    <div className={props.horizontal ? "horizontal-traversal-viewer traversal-viewer" : "traversal-viewer"} ref={containerRef}>
       {params.paperId &&
         <NoSSR>
           <Tree

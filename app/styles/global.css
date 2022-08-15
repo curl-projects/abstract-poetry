@@ -323,7 +323,7 @@ body {
   position: fixed;
   right: 0;
   top: 0;
-  height: 100%;
+  height: 42px;
   width: 150px;
   display: flex;
   align-items: center;
@@ -700,11 +700,26 @@ h4 {
 
 .metadata-row {
     flex: 1 1 auto;
-    overflow-x: scroll;
     padding-right: var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-xs);
+    overflow: scroll;
 }
 
+
+
 .metadata-row::-webkit-scrollbar {
+    display: none;
+}
+
+.metadata-inner-row{
+  max-width: 90%;
+  overflow-x: auto;
+}
+
+.metadata-inner-row::-webkit-scrollbar {
     display: none;
 }
 
@@ -1127,6 +1142,7 @@ input[type="text"]:focus::placeholder {
     justify-content: center;
     align-items: center;
     padding: 1px;
+    position: relative;
 }
 
 .button:hover {
@@ -1337,9 +1353,7 @@ input[type="text"]:focus::placeholder {
     flex: 2 1 0;
     width: 100%;
     height: 100%;
-
-
-
+    position: relative;
     border: 1px solid rgb(var(--clr-grey-200), var(--alpha-600));
     background-color: var(--glass-100);
     -webkit-backdrop-filter: blur(16px);
@@ -1414,6 +1428,15 @@ input[type="text"]:focus::placeholder {
     background-color: rgb(var(--clr-grey-700));
 }
 
+.left-heart {
+    color: rgb(var(--clr-grey-100));
+}
+
+.right-heart {
+    color: rgb(var(--clr-grey-700));
+}
+
+
 
 
 /* Scrollbar */
@@ -1479,7 +1502,7 @@ input[type="text"]:focus::placeholder {
 }
 
 .shrink {
-    flex: 1 0 0;
+    /* flex: 1 0 0; */
     flex-wrap: nowrap;
     white-space: nowrap;
 }
@@ -1521,4 +1544,190 @@ input[type="text"]:focus::placeholder {
     user-select: none;
     /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* BIBLIOGRAPHY */
+.bibliography-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.bibliography-form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bibliography-fade {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bib-flex-space-between {
+  display: flex;
+    width: 50%;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    align-items: center;
+}
+
+.bib-search {
+  border-bottom: 1px solid rgba(var(--clr-primary), var(--alpha-900));
+}
+
+.bib-login-text {
+  color: #666666;
+  cursor: pointer;
+ }
+
+ .bib-login-text:hover {
+   filter: brightness(105%);
+ }
+
+.MuiLinearProgress-bar {
+  background-color: rgb(100, 0, 236) !important;
+}
+
+/* SEARCH V2 */
+.search-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-paper-viewer {
+  width: 50vw;
+  position: relative;
+  top: -20%;
+  left: 0px;
+  height: 90%;
+  background-color: rgba(var(--bg-100));
+  border-radius: var(--br-sharp);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  overflow: auto;
+  display: block;
+}
+
+.search-paper-list {
+  height: 100%;
+}
+
+.search-text {
+  font-family: var(--ff-sansserif);
+  font-size: var(--fs-md);
+  color: rgba(var(--clr-grey-500), 1);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  padding-bottom: 4px;
+}
+
+.search-outer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+/* HORIZONTAL LAYOUT */
+.container-horizontal {
+    height: 100vh;
+    position: static;
+
+    display: grid;
+    grid-template-columns: 3rem repeat(12, 1fr);
+    grid-template-rows: 3rem 3rem 0.5fr 1fr 1fr;
+
+    grid-gap: var(--grid-gap);
+    row-gap: calc(0.5*var(--grid-gap));
+}
+
+.horizontal-search-header {
+  grid-column: 2 / 9 !important;
+  grid-row: ! !important;
+}
+
+.horizontal-search {
+  border-bottom: none !important;
+}
+
+.horizontal-left {
+  grid-column: 2 / 9 !important;
+  grid-row: 3 / 5 !important;
+  height: unset !important;
+}
+
+.horizontal {
+  grid-column: 3 / 9 !important;
+  grid-row: 3 / 5 !important;
+  height: unset !important;
+}
+
+.horizontal-cluster {
+  grid-column: 9 / -1 !important;
+  grid-row: 2 / -1 !important;
+}
+
+.horizontal-traversal-viewer {
+  grid-column: 9 / -1 !important;
+  grid-row: 2 / -1 !important;
+}
+
+.horizontal-control-panel {
+  grid-column: 2 / 3 !important;
+  grid-row: 3 /4 !important;
+  height: unset !important;
+}
+
+
+.horizontal-traversal-controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 200px;
+  height: 85px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-right: 12px;
+}
+
+.horizontal-toolbar {
+  position: unset !important;
+}
+
+.horizontal-traversal-share {
+  grid-column: 2;
+  grid-row: 3;
+  z-index: 4;
+  position: relative;
+}
+
+
+.horizontal-socials-bar {
+  position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    height: 85px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-left: 30px;
 }

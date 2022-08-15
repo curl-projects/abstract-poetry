@@ -1,7 +1,7 @@
 import NoSSR from 'react-no-ssr-depup';
 import loadable from '@loadable/component'
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
-import * as localforage from "localforage";
+import { getItem } from "~/utils/browser-memory.client"
 import { useParams, useSubmit, Form } from "@remix-run/react";
 import { clusterNode } from "~/components/PathTraversal/cluster-node"
 import { slugifyDoi } from "~/utils/doi-manipulation";
@@ -26,9 +26,14 @@ export function ClusterViewer(props) {
     setHeight(containerRef.current.clientHeight)
   }, [containerRef.current])
 
+  useEffect(() => {
+    console.log("GRAPH DATA:", graphData)
+  }, [graphData])
 
   useEffect(async () => {
-    const forceNodeData = JSON.parse(await localStorage.getItem("forceNodes"));
+    console.log("HELLO!")
+    const forceNodeData = await getItem("forceNodes");
+    console.log("FORCE NODE DATA:", forceNodeData)
     setGraphData(forceNodeData)
   }, [props.forceNodes, props.isPathRedirect])
 
@@ -59,7 +64,7 @@ export function ClusterViewer(props) {
         { method: "post", action: "/redirect-cluster-node" }
       );
     }
-    else if (node.type === 'cluster') {
+    else if (node.type === 'cluster'){
 
     }
   }
@@ -103,12 +108,11 @@ export function ClusterViewer(props) {
 
 
   return (
-    <div className="traversal-viewer" ref={containerRef}>
+    <div className={props.horizontal ? "traversal-viewer horizontal-cluster" : "traversal-viewer"} ref={containerRef}>
       <Form ref={formRef} method="post" onSubmit={handleRedirectSubmit} />
 
       {(typeof window !== "undefined") &&
-        <ClientOnly>
-          {()=><ForceGraph2D
+        <ForceGraph2D
             graphData={(props.forceNodes && graphData) ? props.forceNodes : { nodes: [], links: [] }}
             ref={fgRef}
             forceEngine="d3"
@@ -125,8 +129,7 @@ export function ClusterViewer(props) {
             onNodeClick={handleRedirectSubmit}
             nodeLabel={resolveNodeLabel}
             linkColor={setLinkColors}
-          />}
-      </ClientOnly>
+          />
       }
     </div>
   )

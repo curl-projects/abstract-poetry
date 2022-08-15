@@ -26,12 +26,21 @@ export function Introduction(props){
           <Markup key={index} content={textString} attributes={{ className: 'intro-text'}} tagName={"p"}/>
           )
         }
-        <div className="call-to-action-wrapper">
-          <Link to={`/share/cl6df3s440000j3315oa0mkg7?tour=true`} style={{textDecoration: 'none'}}>
-            <div className='call-to-action'>
-              <p className="intro-text" style={{fontWeight: "bold"}}>Take a Tour</p>
-            </div>
-          </Link>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <div className="call-to-action-wrapper">
+            <Link to={`/share/cl6df3s440000j3315oa0mkg7?tour=true`} style={{textDecoration: 'none'}}>
+              <div className='call-to-action'>
+                <p className="intro-text" style={{fontWeight: "bold"}}>Take a Tour</p>
+              </div>
+            </Link>
+          </div>
+          <div className="call-to-action-wrapper">
+            <Link to={`/share/cl6kl14a50005eshw3ouos55a`} style={{textDecoration: 'none'}}>
+              <div className='call-to-action'>
+                <p className="intro-text" style={{fontWeight: "bold"}}>See an example</p>
+              </div>
+            </Link>
+          </div>
         </div>
         <div style={{ width: "100%", height: "60px"}}/>
         </>

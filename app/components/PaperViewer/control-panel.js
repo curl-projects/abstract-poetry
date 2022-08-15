@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from "react"
 import { deslugifyDoi, slugifyDoi } from "~/utils/doi-manipulation";
 import { pinCurrentPaper } from "~/utils/visited-papers"
 import useKeyPress from "react-use-keypress";
-import * as localforage from "localforage";
 
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
@@ -13,6 +12,8 @@ import { Tooltip } from "@mui/material";
 import glyph from "../../../public/assets/glyph.svg";
 import read from "../../../public/assets/read.svg";
 import pin from "../../../public/assets/pin.svg";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 
 export function ControlPanel(props) {
   const params = useParams();
@@ -44,14 +45,14 @@ export function ControlPanel(props) {
        setToggle(false)
      }
    }, [props.traversalPath, props.mostRecentNode, props.algParams, props.clusters])
-
-  useEffect(()=>{
-    console.log("FETCHER DATA:", fetcher.data)
-  }, [fetcher.data])
-
-  useEffect(()=>{
-    console.log("CLUSTER PROP SIZE:", props.clusters ? Object.keys(props.clusters).length : 0, props.clusters)
-  }, [props.clusters])
+  //
+  // useEffect(()=>{
+  //   console.log("FETCHER DATA:", fetcher.data)
+  // }, [fetcher.data])
+  //
+  // useEffect(()=>{
+  //   console.log("CLUSTER PROP SIZE:", props.clusters ? Object.keys(props.clusters).length : 0, props.clusters)
+  // }, [props.clusters])
 
   useEffect(()=>{
     // Saves prefetched doi's into state
@@ -89,8 +90,9 @@ export function ControlPanel(props) {
 
 
   //TODO: refactor reading list form to use fetchers and add errors
+
   return (
-    <div className="control-panel flex-column">
+    <div className={props.horizontal ? "control-panel horizontal-control-panel flex-column" : "control-panel flex-column"}>
       <div className="panel">
         <img src={glyph} alt="Glyph Logo" className="paper-portrait" />
         <div className="metadata-grid" style={{ display: toggle ? "none" : "grid" }}>
@@ -121,7 +123,7 @@ export function ControlPanel(props) {
           <input type="hidden" name="clusters" value={JSON.stringify(props.clusters)} />
 
           <div id="impression-buttons" className="switch flex-row" style={{ gap: "0px" }}>
-            <Tooltip title="Fewer Papers Like This (←)">
+            <Tooltip title="Fewer Papers Like This">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -129,10 +131,10 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={negativeSubmitRef}
               >
-                <div className="circle left" />
+                <CloseIcon className="left-heart" style={{height: "26px", width: "26px", stroke: "black", strokeWidth: '2px'}}/>
               </button>
             </Tooltip>
-            <Tooltip title="More Papers Like This (→)">
+            <Tooltip title="More Papers Like This">
               <button
                 name="impression"
                 type={params.paperId ? "submit" : "button"}
@@ -140,7 +142,7 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={positiveSubmitRef}
               >
-                <div className="circle right" />
+                <FavoriteIcon className="right-heart" style={{height: "22px", width: "22px"}}/>
               </button>
             </Tooltip>
           </div>

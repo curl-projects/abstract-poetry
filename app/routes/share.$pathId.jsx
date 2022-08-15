@@ -1,6 +1,7 @@
 import { readPath } from "~/models/users.server.js"
 import { useEffect, useState } from "react";
-import * as localforage from "localforage";
+// import * as localforage from "localforage";
+import { setItem } from "~/utils/browser-memory.client"
 import { useLoaderData, useFetcher } from "@remix-run/react";
 import TreeModel from 'tree-model';
 import { slugifyDoi } from "~/utils/doi-manipulation"
@@ -25,14 +26,16 @@ export default function ShareId(){
 
   useEffect(()=>{
     if(data.path){
-      localforage.setItem("activeNodeId", parseInt(data.path.activeNodeId));
-      localforage.setItem("algParams", JSON.parse(data.path.algParams));
-      localforage.setItem("clusters", JSON.parse(data.path.clusters));
-      localforage.setItem("forceNodes", JSON.parse(data.path.forceNodes));
-      localforage.setItem("nodeIdCounter", parseInt(JSON.parse(data.path.forceNodes).links.length));
-      localforage.setItem("searchString", JSON.parse(data.path.searchString));
-      localforage.setItem("traversalPath", JSON.parse(data.path.traversalPath));
-      localforage.setItem("pathName", data.path.pathName);
+      setItem("activeNodeId", parseInt(data.path.activeNodeId));
+      setItem("algParams", JSON.parse(data.path.algParams));
+      setItem("clusters", JSON.parse(data.path.clusters));
+      setItem("forceNodes", JSON.parse(data.path.forceNodes));
+      setItem("nodeIdCounter", parseInt(JSON.parse(data.path.forceNodes).links.length));
+      setItem("searchString", data.path.searchString);
+      setItem("traversalPath", JSON.parse(data.path.traversalPath));
+      setItem("pathName", data.path.pathName);
+      setItem("clusterCounter", JSON.parse(data.path.clusterCounter));
+      setItem("pathId", data.path.pathId)
 
       const tree = new TreeModel();
       const root = tree.parse(JSON.parse(data.path.traversalPath))

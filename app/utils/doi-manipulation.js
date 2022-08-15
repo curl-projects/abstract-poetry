@@ -8,7 +8,7 @@ export function deslugifyDoi(doiSlug){
 
 export function doiToJournal(doiSlug){
   if(typeof doiSlug !== "string"){
-    throw "DOI slug must be a stringß"
+    throw "DOI slug must be a string"
   }
 
   else if(doiSlug.includes('pone')){
@@ -38,4 +38,15 @@ export function doiToJournal(doiSlug){
   else {
     return "Unknown Journal"
   }
+}
+
+export function parseSearchString(searchString){
+  if(searchString){
+    try {
+      return JSON.parse(searchString)
+    }
+    catch {
+      return searchString
+    }
+  } return "abstract poetry"
 }
