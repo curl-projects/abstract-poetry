@@ -1,7 +1,7 @@
 import glass from "../../public/assets/Glass.svg";
 import { Tooltip } from "@mui/material";
 import { SearchHeader } from "~/components/SeedSearch/search-header-v2"
-import { useLoaderData, useActionData, Form, useFetcher, useTransition } from "@remix-run/react";
+import { useLoaderData, useActionData, Form, useFetcher, useTransition, Link } from "@remix-run/react";
 import { authenticator } from "~/models/auth.server.js";
 import { json } from "@remix-run/node"
 import { useEffect, useState, useRef } from "react";
@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { PaperData } from "~/components/PaperViewer/paper-data.js"
-import { SeedPapers } from "~/components/SeedSearch/seed-papers-v2"
+import { SeedPapers } from "~/components/SeedSearch/seed-papers"
 import { handleSearchv2 } from "~/models/search.server"
 import { Fade } from "react-awesome-reveal";
 import LinearProgress from '@mui/material/LinearProgress';
@@ -113,7 +113,7 @@ export default function Search2(props){
         <Fade direction="bottom" className="bibliography-fade">
           <div className="search-outer-wrapper">
             <p className="search-text">{headerMessage}</p>
-          <div id="searchbar" className="bib-search bib-flex-space-between" style={(actionData?.doiList ? {} : {marginBottom: "300px"})}>
+          <div id="searchbar" className="bib-search bib-flex-space-between" style={(actionData?.doiList ? {} : {marginBottom: "140px"})}>
           <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
               <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus/>
               {(transition.state === 'submitting' || clusterFetcher.state === 'submitting') && <LinearProgress variant="indeterminate" style={{width: "100%", height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
@@ -123,7 +123,16 @@ export default function Search2(props){
                 <img id="home-button" src={glass} alt="Home Logo" />
               </button>
             </Tooltip>
+
           </div>
+          {(!actionData && !(transition.state==='submitting')) &&
+          <p class="small" style={{position: "relative", bottom: "120px"}}>
+            <Link to={"/bibliography"} style={{textDecoration:"none",
+                                               color: "rgba(var(--clr-grey-500), 1)"}}>
+              Click here to generate a Semantic Bibliography instead
+            </Link>
+          </p>
+          }
         </div>
         </Fade>
       </Form>

@@ -1,5 +1,5 @@
 import glass from "../../public/assets/Glass.svg";
-import { Form, useActionData, useFetcher, useLoaderData } from "@remix-run/react";
+import { Form, useActionData, useFetcher, useLoaderData, Link } from "@remix-run/react";
 import { json } from "@remix-run/node"
 import { Tooltip } from "@mui/material";
 import { useEffect, useState, useRef } from "react";
@@ -15,6 +15,7 @@ import { setItem, clearStorage } from "~/utils/browser-memory.client"
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTransition } from "@remix-run/react";
 import { BibliographyHeader } from "~/components/Bibliography/bibliography-header"
+import { Fade } from "react-awesome-reveal";
 
 export async function loader({ request }){
   const user = await authenticator.isAuthenticated(request)
@@ -163,29 +164,44 @@ export default function BibliographySearch(props){
         user={loaderData.user}
         url={url}
         />
-      <Form method='post' className="bibliography-form">
-      <div id="searchbar" className="bib-search bib-flex-space-between" ref={searchRef}>
-          <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
-            {referenceCountFetcher.data?.referenceCount && <p>Parsing {referenceCountFetcher.data.referenceCount.referenceCount} references <span style={{ color: "rgba(150, 150, 150, 0.4)"}}>{Math.min(Math.round(loadingProgress, 2), 100)}%</span></p>}
-            <input type="text" autoFocus ref={searchInputRef} name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
-                {transition.state === 'submitting' && <LinearProgress variant="determinate" value={transition.state === 'loading' ? 100 : loadingProgress} style={{width: searchWidth, height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
-          </div>
-          {loaderData.user
-            ? <Tooltip title="Start New Search">
-                <button type="submit" style = {loaderData.user ? { cursor: "pointer"} : { filter: "brightness(200%)"}}>
-                  <img id="home-button" src={glass} alt="Home Logo" />
-                </button>
-              </Tooltip>
-            : <Form
-              method="post"
-              action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
-              >
-                <input type='hidden' name="url" value={url}/>
-                <button type="submit"><p className="bib-login-text">Log in</p></button>
-              </Form>
-          }
+      <div className="search-wrapper">
+        <Form method='post' className="bibliography-form">
+          <Fade direction="bottom" className="bibliography-fade">
+            <div className="search-outer-wrapper">
+
+            <div id="searchbar" className="bib-search bib-flex-space-between" ref={searchRef} style={{marginBottom: "140px"}}>
+            <div className="search-input" style={{ display: "inline-flex", width: "100%" }}>
+              {referenceCountFetcher.data?.referenceCount && <p>Parsing {referenceCountFetcher.data.referenceCount.referenceCount} references <span style={{ color: "rgba(150, 150, 150, 0.4)"}}>{Math.min(Math.round(loadingProgress, 2), 100)}%</span></p>}
+              <input type="text" autoFocus ref={searchInputRef} name="doiInput" placeholder={loaderData.user ? "Generate bibliography from DOI" : "Please log in to generate semantic bibliographies"} />
+                  {transition.state === 'submitting' && <LinearProgress variant="determinate" value={transition.state === 'loading' ? 100 : loadingProgress} style={{width: searchWidth, height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
+            </div>
+            {loaderData.user
+              ? <Tooltip title="Start New Search">
+                  <button type="submit" style = {loaderData.user ? { cursor: "pointer"} : { filter: "brightness(200%)"}}>
+                    <img id="home-button" src={glass} alt="Home Logo" />
+                  </button>
+                </Tooltip>
+              : <Form
+                method="post"
+                action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
+                >
+                  <input type='hidden' name="url" value={url}/>
+                  <button type="submit"><p className="bib-login-text">Log in</p></button>
+                </Form>
+            }
+        </div>
+        {(!(transition.state==='submitting')) &&
+        <p class="small" style={{position: "relative", bottom: "120px"}}>
+          <Link to={"/search"} style={{textDecoration:"none",
+                                             color: "rgba(var(--clr-grey-500), 1)"}}>
+            Click here to perform a Semantic Search instead
+          </Link>
+        </p>
+        }
       </div>
-    </Form>
+      </Fade>
+      </Form>
+    </div>
     <Snackbar
       open={messageExists}
       autoHideDuration={4000}

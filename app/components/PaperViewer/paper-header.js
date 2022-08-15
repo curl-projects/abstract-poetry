@@ -18,7 +18,7 @@ import path from "../../../public/assets/path-search.svg";
 import { Tooltip } from "@mui/material";
 import { parseSearchString } from "~/utils/doi-manipulation";
 
-export function Header(props) {
+export function PaperHeader(props) {
   const params = useParams();
   const [modalOpen, setModalOpen] = useState(false)
   const [url, setUrl] = useState('/')
@@ -118,7 +118,6 @@ export function Header(props) {
     }
   }, [savePathFetcher])
 
-  if (params.paperId) {
     return (
       <>
         <div className="header-wrapper">
@@ -288,112 +287,4 @@ export function Header(props) {
         </Modal>
       </>
     )
-  }
-  else {
-    return (
-      <>
-        <div className="header-wrapper">
-          <div className="user-control-wrapper">
-            {props?.user &&
-              <>
-                  <div style={{display: "flex", alignItems: "center"}}>
-                    <Form action="/logout" method="post">
-                      <input type='hidden' name="url" value={url}/>
-                      <Tooltip title="Logout">
-                        <button type="submit" className="save-button" style={{width: "100%", height: "100%"}}>
-                          <img src={logout} alt="Logout"/>
-                        </button>
-                      </Tooltip>
-                    </Form>
-                  </div>
-              <Tooltip title="Find Saved Session">
-                <button onClick={()=>setModalOpen(true)}>
-                    <img src={path} className="account-button" fill='666666' alt="Account Button" />
-                </button>
-              </Tooltip>
-              </>
-            }
-            {!props?.user &&
-              <>
-              <div className="user-text-wrapper">
-                  <div>
-                      <input type='hidden' name="url" value={url}/>
-                      <button type="submit">
-                        <p className="logout-text"></p>
-                      </button>
-                  </div>
-              </div>
-              <Form
-                method="post"
-                action={`/auth/${SocialsProvider.GOOGLE}?returnTo=${url}`}
-                >
-                <input type='hidden' name="url" value={url}/>
-                <Tooltip title="Login">
-                  <button type='submit'>
-                      <img src={account} className="account-button" fill='666666' alt="Account Button" />
-                  </button>
-                </Tooltip>
-              </Form>
-              </>
-            }
-          </div>
-        </div>
-        <div className="header">
-          <Form method="post" className="search flex-space-between">
-            <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
-              <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus ref={props.searchBarRef}/>
-            </div>
-              <button type="submit" style={{ cursor: "pointer" }}>
-                <img src={glass} alt="Glass Logo" />
-              </button>
-          </Form>
-          {false ? <img src={account} alt="Account Login" /> : null}
-        </div>
-        <Modal
-          open={modalOpen}
-          onClose={()=>setModalOpen(false)}
-          >
-          <div className="modal-box">
-            {(readPathFetcher.state === "submitting" || readPathFetcher.state === "loading")
-              ?
-              <div className="modal-loading-box">
-                <div className="wave-center-modal">
-                  {[...Array(3)].map((e, i) => <div key={i} className="wave-modal"></div>)}
-                </div>
-              </div>
-              :
-              readPathFetcher.data?.traversalPaths.length !== 0 ?
-
-              readPathFetcher.data?.traversalPaths.sort(function(a,b){return new Date(b.createdTime) - new Date(a.createdTime)}).map((path, index) =>
-                <div key={index} className="modal-path-box" onClick={()=>handlePathInit(path)}>
-                    <div>
-                      <h2 className="modal-path-box-pathname">{path.pathName}</h2>
-                    </div>
-                    <div className='path-metadata-box'>
-                      <div className="flex-row shrink">
-                        <div className="icon">
-                          <img src={calendar} alt={"Created Date"} />
-                        </div>
-                        <small className="small">{new Date(path.createdTime).getDate()}/{new Date(path.createdTime).getMonth()}/{`${new Date(path.createdTime).getYear()}`.slice(1)}</small>
-                      </div>
-                      <div className="flex-row shrink">
-                        <div className="icon">
-                          <img src={journalIcon} alt={"Journal"} />
-                        </div>
-                        <small className="small">{path.searchString}</small>
-                      </div>
-                    </div>
-                  <div className="path-metadata-box-separator"/>
-                </div>
-              )
-              :
-              <div>
-                <p>No search paths found</p>
-              </div>
-            }
-          </div>
-        </Modal>
-      </>
-    )
-  }
 }

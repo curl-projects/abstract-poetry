@@ -9,7 +9,7 @@ import { PaperData } from "~/components/PaperViewer/paper-data.js"
 import { SocialsBar } from "~/components/SocialFeatures/socials-bar.js"
 import { nearestNewPaper, clusterDOIs } from "~/models/backend-algorithms.server.js"
 import { Background, Controls } from "~/components/PaperViewer/static.js"
-import { Header } from "~/components/SeedSearch/search-header"
+import { PaperHeader } from "~/components/PaperViewer/paper-header"
 import { Share } from "~/components/PathTraversal/traversal-export.js"
 import { getMetadataFromPaperId } from "~/models/metadata.server.js"
 import Tour from "~/components/SocialFeatures/tour.client"
@@ -259,7 +259,7 @@ export default function PaperId() {
 
   return (
     <div className="container grid-view">
-      <Header
+      <PaperHeader
         activeNodeId={nodeState}
         algParams={algParams}
         clusters={clusters}
