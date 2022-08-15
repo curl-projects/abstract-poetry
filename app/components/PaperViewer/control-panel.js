@@ -131,7 +131,7 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={negativeSubmitRef}
               >
-                <HeartBrokenIcon className="left-heart" style={{height: "12px", width: "12px"}}/>
+                <CloseIcon className="left-heart" style={{height: "26px", width: "26px", stroke: "black", strokeWidth: '2px'}}/>
               </button>
             </Tooltip>
             <Tooltip title="More Papers Like This">
@@ -142,7 +142,7 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={positiveSubmitRef}
               >
-                <FavoriteIcon className="right-heart" style={{height: "12px", width: "12px"}}/>
+                <FavoriteIcon className="right-heart" style={{height: "22px", width: "22px"}}/>
               </button>
             </Tooltip>
           </div>

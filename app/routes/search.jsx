@@ -163,6 +163,7 @@ export default function Search2(props){
     </div>
 
     <SocialsBar />
+
     <Snackbar
       open={errorExists}
       autoHideDuration={4000}
