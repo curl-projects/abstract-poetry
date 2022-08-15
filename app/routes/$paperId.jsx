@@ -216,7 +216,7 @@ export default function PaperId() {
     }
 
     let clusterCounter = await getItem('clusterCounter');
-
+    console.log("CLUSTER COUNTER", clusterCounter)
     const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
       return clusterCount > 2
     })
@@ -232,14 +232,16 @@ export default function PaperId() {
   useEffect(async() => {
     let clusterCounter = await getItem('clusterCounter');
 
-    const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
-      return clusterCount > 2
-    })
+    if(clusterCounter){
+      const thresholdIndex = Object.values(clusterCounter).findIndex(function(clusterCount){
+        return clusterCount > 2
+      })
 
-    if(thresholdIndex !== -1){
-        let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
-        let clusters = await getItem('clusters')
-        let doiList = getClusterPapers(clusters, clusterKey)
+      if(thresholdIndex !== -1){
+          let clusterKey = Object.keys(clusterCounter)[thresholdIndex]
+          let clusters = await getItem('clusters')
+          let doiList = getClusterPapers(clusters, clusterKey)
+      }
     }
   }, [params.paperId])
 
