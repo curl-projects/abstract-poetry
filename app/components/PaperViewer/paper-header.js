@@ -183,8 +183,7 @@ export function PaperHeader(props) {
         <div className={props.horizontal ? "horizontal-search-header header": "header"} >
           <div id="searchbar" className={props.horizontal ? "horizontal-search search flex-space-between" : "search flex-space-between"}>
             <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
-              <label className="search-input-label">Searching semantic regions associated with</label>
-              <input type="text" disabled="disabled" name="searchString" style={{ color: "rgb(204, 204, 204)", backgroundColor: "rgb(256, 256, 256)" }} value={parseSearchString(props.searchString)}/>
+              <input type="text" disabled="disabled" name="searchString" style={{ color: "var(--clr-grey-200)"}} value={parseSearchString(props.searchString)}/>
             </div>
             <Link to="/search">
               <Tooltip title="Start New Search">

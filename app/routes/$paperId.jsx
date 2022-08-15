@@ -156,7 +156,7 @@ export default function PaperId() {
   const [existingPathName, setExistingPathName] = useState(null)
   const [tourOpen, setTourOpen] = useState(false)
   const [clusterCounter, setClusterCounter] = useState({})
-  const [horizontal, setHorizontal] = useState(true)
+  const [horizontal, setHorizontal] = useState(false)
 
   useEffect(()=>{
     if(data.isSaveOpen){

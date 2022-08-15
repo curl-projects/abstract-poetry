@@ -165,7 +165,7 @@ body {
 
 .container {
     margin: 0 auto;
-    max-width: 820px;
+    max-width: 640px;
     height: 100vh;
     position: static;
 
@@ -190,14 +190,13 @@ body {
 
     --bg-width: 100%;
 
-
     height: var(--bg-height);
     width: var(--bg-width);
     justify-self: center;
 
     padding: calc(var(--space-unit));
 
-    background-color: rgba(var(--bg-100), 0.95);
+    background-color: rgba(var(--clr-grey-600), 0.95);
 
 }
 
@@ -230,7 +229,7 @@ body {
     width: calc(100% - var(--grid-gap));
 
 
-    background: linear-gradient(270deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
+    background: linear-gradient(270deg, #151515 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
@@ -253,7 +252,7 @@ body {
 
     z-index: 3;
 
-    background: linear-gradient(90deg, #525252 20%, rgba(37, 37, 37, 0) 154.65%);
+    background: linear-gradient(90deg, #151515 20%, rgba(37, 37, 37, 0) 154.65%);
     mix-blend-mode: screen;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
@@ -276,7 +275,7 @@ body {
 
     width: 100%;
     position: relative;
-    bottom: 0;
+    margin-top: calc(7.5 * var(--grid-gap));
 }
 
 
@@ -286,9 +285,9 @@ body {
     z-index: 2;
 
     position: relative;
-    height: calc(var(--bg-height) + var(--space-md));
+    height: calc(var(--bg-height) + var(--space-xs));
     margin-right: calc(-0.5*var(--grid-gap));
-    margin-top: calc(-1*var(--grid-gap));
+    margin-top:var(--grid-gap);
 
     border-right: 1px solid rgba(var(--clr-primary), var(--alpha-800));
 }
@@ -312,8 +311,10 @@ body {
     width: 100vw;
     height: 3rem;
 
+    /*
     background-color: rgb(var(--clr-white), var(--alpha-800));
     border-bottom: 1px solid rgba(var(--clr-grey-600));
+    */
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
     z-index: 5;
@@ -562,10 +563,9 @@ body {
     grid-column: 2 / -1;
     grid-row: 2;
 
-    max-height: 100%;
-    max-width: 60vw;
-    height: calc(100% - var(--grid-gap));
-    width: 97%;
+    
+    height: calc(100% +  3 * var(--grid-gap));
+    width: calc(100% + 12 * var(--grid-gap));
     resize: horizontal;
     z-index: 4;
 
