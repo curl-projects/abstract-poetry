@@ -16,20 +16,14 @@ import Tour from "~/components/SocialFeatures/tour.client"
 import { slugifyDoi, deslugifyDoi } from "~/utils/doi-manipulation"
 import { updateTraversalPath } from "~/utils/visited-papers"
 import { pinCurrentPaper } from "~/utils/visited-papers"
-// import * as localforage from "localforage";
 import { setItem, getItem } from "~/utils/browser-memory.client"
-
 import { ClientOnly } from "remix-utils";
-
 import Snackbar from "@mui/material/Snackbar";
-
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Tooltip } from "@mui/material";
-
 import { caseToMessage } from "~/utils/messages-and-alerts"
 import { authenticator } from "~/models/auth.server.js";
-
 import { Counter, getKeyByValue, getClusterPapers } from "~/utils/cluster-manipulation";
 import { Fade } from "react-awesome-reveal";
 

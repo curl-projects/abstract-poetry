@@ -47,7 +47,7 @@ export function PaperMetadata(props) {
       if(typeof props.metadata.authors === 'string'){
 
         //TODO: this currently removes inner-name hyphens (e.g. D'Souza): come up with a better system later
-        setAuthors(JSON.parse(props.metadata.authors.replace("None", "null").replace(/([a-zA-Z])+\'([a-zA-Z]+)/g, "$1$2").replace(/'/g, "\"")))
+        setAuthors(JSON.parse(props.metadata.authors.replace("None", "null").replace(/([a-zA-Z]){1}\'([a-zA-Z]{1})/g, "$1/\"$2").replace(/'/g, "\"").replace(/\/"/g, "\/'")))
       }
       else{
         setAuthors(props.metadata.authors)
