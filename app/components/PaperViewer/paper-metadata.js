@@ -82,7 +82,7 @@ export function PaperMetadata(props) {
   if (props.metadata && authors){
     return (
       <>
-        <div className="metadata flex-column paper-list" style={{ gap: "var(--space-xxs)" }}>
+        <div className="metadata flex-column paper-list" style={{ gap: "var(--space-xxs)", minWidth: 0 }}>
           <h3 onClick={props.setToggle ? ()=>props.setToggle(prevState=>!prevState) : props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{props.metadata.title}</h3>
 
           <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch", minWidth: 0, width: "100%" }}>
