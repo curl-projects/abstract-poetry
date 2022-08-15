@@ -70,7 +70,6 @@ export function ClusterViewer(props) {
   }
 
   const getColor = (node) => {
-
     if (node.pinned) {
       return 'rgb(178, 171, 243)'
 
@@ -94,7 +93,10 @@ export function ClusterViewer(props) {
       ctx.fillStyle = 'rgb(182, 187, 201)'
     } else if (node.pinned) {
       ctx.fillStyle = 'rgb(238, 238, 238)';
-    } else {
+    } else if (node.type === "reference"){
+      ctx.fillStyle = 'rgb(100, 100, 100, 0.7)';
+    }
+    else {
       ctx.fillStyle = 'rgb(200, 200, 200)';
     }
 

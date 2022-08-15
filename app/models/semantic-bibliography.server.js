@@ -147,7 +147,7 @@ export async function processBibliography(references, bibliographyClusters, meta
                      title: metadataMap[ref]['title'],
                      val: 5,
                      nodeId: nodeIdCounter,
-                     type: 'paper',
+                     type: 'reference',
                      pinned: false}
     let newLink = { "source": `cluster-${bibliographyClusters[ref]}`, "target": `node-${nodeIdCounter}`}
     forceNodes.nodes.push(newNode)
