@@ -85,7 +85,7 @@ export function PaperMetadata(props) {
         <div className="metadata flex-column paper-list" style={{ gap: "var(--space-xxs)" }}>
           <h3 onClick={props.setToggle ? ()=>props.setToggle(prevState=>!prevState) : props.fetcher ? handlePaperRedirect : ()=>console.log("CLICK!")}>{props.metadata.title}</h3>
 
-          <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch" }}>
+          <div className="flex-row" style={{ gap: "var(--space-unit)", alignItems: "stretch", minWidth: 0, width: "100%" }}>
             <div className="flex-row shrink">
               <div className="icon">
                 <img src={calendar} alt={"Publication Date"} style={{paddingLeft: '1px'}}/>
@@ -102,24 +102,26 @@ export function PaperMetadata(props) {
               <div className="icon">
                 <img src={authorIcon} alt={"Authors"} />
               </div>
-              <div className='metadata-inner-row'>
-              {authorToggle && authors ?
-                authors.map((authorObj, i) => {
-                  if (i === authors.length - 1) {
-                    return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name ? authorObj.name : ""}</small>)
+              {(authorToggle && authors) ?
+                <div className='metadata-inner-row' style={{ overflowX: 'auto', minWidth: 0}}>
+                  {authors.map((authorObj, i) => {
+                    if (i === authors.length - 1) {
+                      return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name ? authorObj.name : ""}</small>)
+                    }
+                    else {
+                      return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name ? authorObj.name : ""} · </small>)
+                    }
+                    })
                   }
-                  else {
-                    return (<small className="small shrink" key={authorObj.authorId}> {authorObj.name ? authorObj.name : ""} · </small>)
-                  }
-                }
-                ) :
-                <small className="small shrink">{authors.length !== 0 ? authors[0].name : "No authors found"} {authors.length === 1 || authors.length === 0? "": <span>et al.</span>}</small>
-                }
                 </div>
+                 :
+                <div className='metadata-inner-row'>
+                  <small className="small shrink">{authors.length !== 0 ? authors[0].name : "No authors found"} {authors.length === 1 || authors.length === 0? "": <span>et al.</span>}</small>
+                </div>
+                }
               </div>
           </div>
         </div>
-
       </>
     )
   }

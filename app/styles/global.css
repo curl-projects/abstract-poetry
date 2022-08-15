@@ -700,12 +700,12 @@ h4 {
 
 .metadata-row {
     flex: 1 1 auto;
-    overflow-x: auto;
     padding-right: var(--space-xl);
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: var(--space-xs);
+    overflow: scroll;
 }
 
 
@@ -1502,7 +1502,7 @@ input[type="text"]:focus::placeholder {
 }
 
 .shrink {
-    flex: 1 0 0;
+    /* flex: 1 0 0; */
     flex-wrap: nowrap;
     white-space: nowrap;
 }
@@ -1630,4 +1630,13 @@ input[type="text"]:focus::placeholder {
   font-weight: 400;
   letter-spacing: 0.05em;
   padding-bottom: 4px;
+}
+
+.search-outer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 }
