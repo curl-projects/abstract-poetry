@@ -48,5 +48,5 @@ export function parseSearchString(searchString){
     catch {
       return searchString
     }
-  } return "abstract poetry"
+  } return ""
 }

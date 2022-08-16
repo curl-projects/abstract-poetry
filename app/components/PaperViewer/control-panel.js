@@ -93,7 +93,7 @@ export function ControlPanel(props) {
 
   return (
     <div className={props.horizontal ? "control-panel horizontal-control-panel flex-column" : "control-panel flex-column"}>
-      <div className="panel">
+      <div className="panel flex-column" style = {{justifyContent: "center"}}>
         <img src={glyph} alt="Glyph Logo" className="paper-portrait" />
         <div className="metadata-grid" style={{ display: toggle ? "none" : "grid" }}>
           <div className="metadata-bit">
@@ -104,7 +104,7 @@ export function ControlPanel(props) {
             <p className="tl">{props.metadata ? props.metadata.referenceCount : ""}</p>
             <small>References</small>
           </div>
-          <div className="metadata-bit">
+          <div className="md-br">
             <p className="br">{props.metadata ? props.metadata.influentialCitationCount : ""}</p>
             <small>Influential citation{props.metadata ? props.metadata.influentialCitationCount === 1 ? "": "s" : ""}</small>
           </div>
@@ -131,7 +131,8 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={negativeSubmitRef}
               >
-                <CloseIcon className="left-heart" style={{height: "26px", width: "26px", stroke: "black", strokeWidth: '2px'}}/>
+                <div className="circle left" />
+                <CloseIcon className="left-heart" style={{stroke: "black", strokeWidth: '2px', height: "6px", width: "6px"}}/>
               </button>
             </Tooltip>
             <Tooltip title="More Papers Like This">
@@ -142,7 +143,8 @@ export function ControlPanel(props) {
                 className="impression-button"
                 ref={positiveSubmitRef}
               >
-                <FavoriteIcon className="right-heart" style={{height: "22px", width: "22px"}}/>
+                <FavoriteIcon className="right-heart" style={{height: "6px", width: "6px"}}/>
+                <div className="circle right" />
               </button>
             </Tooltip>
           </div>

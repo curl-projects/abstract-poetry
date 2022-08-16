@@ -275,7 +275,6 @@ export default function PaperId() {
         setShareModalOpen={setShareModalOpen}
         existingPathName={existingPathName}
         setExistingPathName={setExistingPathName}
-
         clusterCounter={clusterCounter}
         />
 
@@ -329,7 +328,8 @@ export default function PaperId() {
         setTraversalState={setTraversalState}
         traversalState={traversalState}
         horizontal={horizontal}
-        traversalPath={traversalPath}
+  
+        
       />
 
 
