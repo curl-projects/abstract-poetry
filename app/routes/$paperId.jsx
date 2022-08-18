@@ -294,6 +294,8 @@ export default function PaperId() {
         shareModalOpen={shareModalOpen}
         tourOpen={tourOpen}
         horizontal={horizontal}
+        toggle={toggle}
+        papers = {visitedPathList.length? visitedPathList.length : "n/a"}
       />
 
       <PaperData

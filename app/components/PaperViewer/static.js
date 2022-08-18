@@ -21,7 +21,7 @@ export function Background(props) {
 export function Controls(props) {
   return (
     <>
-      <div className={props.horizontal ? "horizontal-traversal-controls" : "traversal-controls"}>
+      <div className={props.horizontal ? "horizontal-traversal-controls" : "traversal-controls flex-row"}>
         <div className={props.horizontal ? "abs-right toolbar horizontal-toolbar panel-glass flex-row" : "abs-right toolbar panel-glass flex-row"} style={{ pointerEvents: 'auto', flexDirection: "row-reverse" }}>
           <Tooltip title={props.traversalState ? "Show Path View" : "Show Cluster View"}>
             <img src={props.traversalState ? branches : network} style={{ cursor: 'pointer', height: "100%" }} alt="Focus on a specific paper" onClick={() => props.setTraversalState(prevState => !prevState)} />

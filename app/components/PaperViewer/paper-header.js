@@ -131,7 +131,7 @@ export function PaperHeader(props) {
           <div className="flex-row"> 
             <Link to="/search">
               <Tooltip title="Start New Search">
-                <button type="submit" style={{ cursor: "pointer", paddingTop: '10px' }}>
+                <button type="submit" style={{ cursor: "pointer"}}>
                   <img id="home-button" src={glass} alt="Search" />
                 </button>
               </Tooltip>
