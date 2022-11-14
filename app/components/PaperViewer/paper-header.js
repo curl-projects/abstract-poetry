@@ -1,7 +1,7 @@
 import glass from "../../../public/assets/Glass.svg";
 import account from "../../../public/assets/account.svg";
 import save from "../../../public/assets/save.svg";
-import home from "../../../public/assets/home.svg";
+
 import copy from "../../../public/assets/copy.svg";
 import sharePath from "../../../public/assets/share-path.svg";
 import logout from "../../../public/assets/logout.svg";
@@ -136,7 +136,7 @@ export function PaperHeader(props) {
                 </button>
               </Tooltip>
             </Link>
-            <div className="user-control-wrapper" style={{display:"none"}}>
+            <div className="user-control-wrapper" style = {{"display": "none"}}>
               {props.user &&
                 <>
                   <div style={{ display: "flex", alignItems: "center" }}>

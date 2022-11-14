@@ -123,7 +123,7 @@ export default function Search2(props){
           <div className="search-outer-wrapper">
             <p className="search-text" style={(actionData?.doiList && !(['actionSubmission', 'actionReload', 'done'].includes(clusterFetcher.type))) ? {color: "rgba(var(--clr-grey-200), 0.8)", fontWeight: 'bold'} : {}}>{headerMessage}</p>
           <div id="searchbar" className="bib-search bib-flex-space-between" style={(actionData?.doiList ? {} : {marginBottom: "140px"})}>
-          <div className="search-input" style={{ display: "inline-flex", width: "100%" }} >
+          <div className="home-input" style={{ display: "inline-flex", width: "100%" }} >
               <input type="text" name="searchString" placeholder="Explore all of PLOS with keywords or DOIs" autoFocus/>
               {(transition.state === 'submitting' || clusterFetcher.state === 'submitting') && <LinearProgress variant="indeterminate" style={{width: "100%", height: "2px", color: 'rgb(100, 0, 236)', backgroundColor: 'rgba(100, 0, 236, 0.3)'}}/>}
           </div>
@@ -132,7 +132,6 @@ export default function Search2(props){
                 <img id="home-button" src={glass} alt="Home Logo" />
               </button>
             </Tooltip>
-
           </div>
           {(!actionData && !(transition.state==='submitting')) &&
           <>

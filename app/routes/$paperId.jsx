@@ -330,8 +330,8 @@ export default function PaperId() {
         setTraversalState={setTraversalState}
         traversalState={traversalState}
         horizontal={horizontal}
-  
-        
+        user = {data.user}
+
       />
 
 

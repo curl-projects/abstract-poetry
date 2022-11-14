@@ -79,6 +79,8 @@ export function PaperMetadata(props) {
     }
   }
 
+
+
   if (props.metadata && authors){
     return (
       <>

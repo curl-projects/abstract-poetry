@@ -4,6 +4,9 @@ import branches from "../../../public/assets/branches.svg";
 import { Share } from "~/components/PathTraversal/traversal-export"
 import { Tooltip } from "@mui/material";
 
+
+import { Form, useParams, useFetcher, Link } from "@remix-run/react";
+
 export function Background(props) {
 
   return (
@@ -27,54 +30,12 @@ export function Controls(props) {
             <img src={props.traversalState ? branches : network} style={{ cursor: 'pointer', height: "100%" }} alt="Focus on a specific paper" onClick={() => props.setTraversalState(prevState => !prevState)} />
           </Tooltip>
         </div>
-        <Share
+      </div>
+      <div className="traversal-share">
+      <Share
           horizontal={props.horizontal}
           traversalPath={props.traversalPath}
         />
-        {props.user &&
-          <>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Form action="/logout" method="post">
-                <input type='hidden' name="url" value={url} />
-                <Tooltip title="Logout">
-                  <button type="submit" className="save-button" style={{ width: "100%", height: "100%" }}>
-                    <img src={logout} alt="Logout" />
-                  </button>
-                </Tooltip>
-              </Form>
-            </div>
-            <div>
-              {props.pathId &&
-                <Tooltip title="Share Search">
-                  <button onClick={() => props.setShareModalOpen(true)}
-                    className="save-button">
-                    <img src={sharePath} alt="Share Search" />
-                  </button>
-                </Tooltip>
-              }
-              {!props.pathId &&
-                <Tooltip title="Save your search first to share it">
-                  <button className="save-button">
-                    <img src={sharePath} alt="Share Search" />
-                  </button>
-                </Tooltip>
-              }
-            </div>
-            <div>
-              <Tooltip title="Save Search Session">
-                <button onClick={() => props.setSaveModalOpen(true)}
-                  className="save-button">
-                  <img src={save} alt="Save Button" />
-                </button>
-              </Tooltip>
-            </div>
-            <Tooltip title="Find Saved Session">
-              <button onClick={() => setModalOpen(true)}>
-                <img src={path} className="account-button" fill='666666' alt="Account Button" />
-              </button>
-            </Tooltip>
-          </>
-        }
       </div>
     </>
   )

@@ -311,7 +311,7 @@ body {
 
 .user-control-wrapper {
 
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: flex-end;
   gap: var(--grid-gap);
@@ -479,15 +479,29 @@ body {
   grid-column: 1;
   grid-row: 3;
   z-index: 4;
+
+  align-self: flex-end;
+  justify-self: end;
+
   position: relative;
-  bottom: 0;
+
+  right: calc(0.25* var(--grid-gap));
+  
   pointer-events: none;
 }
 
 .traversal-share {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 3;
   z-index: 4;
+
+  position: relative;
+
+  left: calc(0.25* var(--grid-gap));
+  align-self: flex-end;
+  justify-self: start;
+  
+  pointer-events: none;
 }
 
 .panel-glass {
@@ -498,9 +512,10 @@ body {
 
 
 .toolbar {
-  position: absolute;
-  bottom: 0;
+  
   z-index: 6;
+
+  align-self: flex-end;
 
   height: var(--space-xxl);
   width: var(--space-xxl);
@@ -908,6 +923,20 @@ small.description {
   align-items: flex-start;
 }
 
+.home-input {
+  position: relative;
+  bottom: 0;
+
+  flex: 1 1 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-content: flex-end;
+  align-items: flex-start;
+}
+
+
 input[type="text"] {
   font-size: var(--fs-lg);
   color: rgb(var(--clr-grey-100));
@@ -915,7 +944,7 @@ input[type="text"] {
   width: 100%;
 }
 
-input[type="text"]::first-line {
+.search-input input[type="text"]::first-line {
   background-color: rgba(var(--clr-grey-600), var(--alpha-800))
 }
 
@@ -1753,6 +1782,7 @@ input[type="text"]:focus::placeholder {
   grid-row: 3;
   z-index: 4;
   position: relative;
+  
 }
 
 
